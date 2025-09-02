@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chatelio Frontend
+
+A Next.js 14 frontend application for the Chatelio multi-tenant chatbot platform.
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Auth route group
+│   │   ├── company/       # Company auth pages
+│   │   └── user/          # User auth pages
+│   ├── (dashboard)/       # Protected dashboard routes
+│   │   ├── dashboard/     # Main dashboard
+│   │   ├── chat/          # Chat interface
+│   │   ├── knowledge-base/ # Document management
+│   │   ├── profile/       # User profile
+│   │   └── settings/      # Company settings
+│   ├── (public)/          # Public chatbot routes
+│   │   └── [slug]/        # Company-specific public pages
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx           # Landing page
+├── components/            # Reusable components
+│   ├── ui/               # Base UI components
+│   ├── layout/           # Layout components
+│   ├── auth/             # Auth-related components
+│   ├── chat/             # Chat components
+│   ├── dashboard/        # Dashboard components
+│   └── forms/            # Form components
+├── store/                # Redux store
+│   └── slices/           # Redux slices
+├── types/                # TypeScript type definitions
+├── utils/                # Utility functions
+├── hooks/                # Custom React hooks
+├── lib/                  # Third-party configurations
+└── constants/            # App constants
+```
+
+## Technology Stack
+
+- **Next.js 14** with App Router
+- **TypeScript** for type safety
+- **Redux Toolkit** for state management
+- **Tailwind CSS** for styling
+- **Axios** for API calls
+- **Lucide React** for icons
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create environment file:
+```bash
+cp .env.example .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Start development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development Plan
 
-## Learn More
+This project follows a 7-day development plan:
 
-To learn more about Next.js, take a look at the following resources:
+### Day 1: Authentication Foundation
+- Landing page
+- Auth store setup
+- API client configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Day 2: Authentication Pages  
+- Company registration/login
+- User registration/login
+- Authentication middleware
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Day 3: Dashboard Layout
+- Dashboard layout and navigation
+- User profile management
+- Role-based access
 
-## Deploy on Vercel
+### Day 4: Knowledge Base Management
+- Document upload and management
+- File processing status
+- Knowledge base organization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Day 5: Chat Interface
+- Chat UI components
+- Real-time messaging
+- Chat history management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Day 6: Public Chatbot
+- Company settings
+- Public chatbot deployment
+- Guest session handling
+
+### Day 7: Polish & Testing
+- Error handling
+- Loading states
+- Responsive design
+- Testing and bug fixes
+
+## User Types
+
+1. **Company Admin**: Full dashboard access, knowledge base management, user management
+2. **Regular User**: Chat interface, chat history, profile management  
+3. **Guest User**: Public chatbot access only
+
+## API Integration
+
+The frontend integrates with the Chatelio backend API for:
+- Authentication and user management
+- Knowledge base operations
+- Real-time chat functionality
+- Company and chatbot management
+
+## State Management
+
+Redux Toolkit is used for state management with the following slices:
+- `authSlice`: User authentication and session management
+- `chatSlice`: Chat state and message handling
+- `knowledgeBaseSlice`: Document management
+- `companySlice`: Company settings and public chatbot
+- `uiSlice`: UI state and notifications
