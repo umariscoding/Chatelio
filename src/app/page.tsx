@@ -1,10 +1,48 @@
-// Landing Page - Day 1 implementation
+'use client';
+
+import React from 'react';
 import Link from "next/link";
 
 import Button from "@/components/ui/Button";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
+import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
+import { logout } from "@/store/slices/authSlice";
 
 export default function Home() {
+  const { isAuthenticated, userType } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const renderAuthButtons = () => {
+    if (isAuthenticated) {
+      return (
+        <div className="flex items-center space-x-4">
+          <Link href={userType === 'company' ? ROUTES.DASHBOARD : ROUTES.CHAT}>
+            <Button variant="ghost">
+              {userType === 'company' ? 'Dashboard' : 'Chat'}
+            </Button>
+          </Link>
+          <Button variant="outline" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center space-x-4">
+        <Link href={ROUTES.COMPANY_LOGIN}>
+          <Button variant="ghost">Login</Button>
+        </Link>
+        <Link href={ROUTES.COMPANY_REGISTER}>
+          <Button>Get Started</Button>
+        </Link>
+      </div>
+    );
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Navigation */}
@@ -16,14 +54,7 @@ export default function Home() {
                 <h1 className="text-2xl font-bold text-blue-600">{APP_CONFIG.NAME}</h1>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href={ROUTES.COMPANY_LOGIN}>
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link href={ROUTES.COMPANY_REGISTER}>
-                <Button>Get Started</Button>
-              </Link>
-            </div>
+            {renderAuthButtons()}
           </div>
         </div>
       </nav>
@@ -39,20 +70,32 @@ export default function Home() {
             {APP_CONFIG.DESCRIPTION}. Upload your knowledge base and deploy branded chatbots for your customers.
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            <div className="rounded-md shadow">
-              <Link href={ROUTES.COMPANY_REGISTER}>
-                <Button size="lg" className="w-full">
-                  Start Free Trial
-                </Button>
-              </Link>
-            </div>
-            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <Link href={ROUTES.COMPANY_LOGIN}>
-                <Button variant="outline" size="lg" className="w-full">
-                  Sign In
-                </Button>
-              </Link>
-            </div>
+            {!isAuthenticated ? (
+              <>
+                <div className="rounded-md shadow">
+                  <Link href={ROUTES.COMPANY_REGISTER}>
+                    <Button size="lg" className="w-full">
+                      Start Free Trial
+                    </Button>
+                  </Link>
+                </div>
+                <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                  <Link href={ROUTES.COMPANY_LOGIN}>
+                    <Button variant="outline" size="lg" className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="rounded-md shadow">
+                <Link href={userType === 'company' ? ROUTES.DASHBOARD : ROUTES.CHAT}>
+                  <Button size="lg" className="w-full">
+                    {userType === 'company' ? 'Go to Dashboard' : 'Start Chatting'}
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 

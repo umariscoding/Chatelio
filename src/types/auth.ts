@@ -1,4 +1,6 @@
 // Authentication related types
+export type UserType = 'company' | 'user' | 'guest';
+
 export interface User {
   user_id: string;
   company_id: string;
@@ -29,9 +31,18 @@ export interface Tokens {
 
 export interface AuthResponse {
   message: string;
-  user?: User;
   company?: Company;
+  user?: User;
   tokens: Tokens;
+}
+
+export interface VerifyTokenResponse {
+  valid: boolean;
+  user_info?: {
+    company_id: string;
+    email: string;
+    user_type: UserType;
+  };
 }
 
 export interface LoginRequest {

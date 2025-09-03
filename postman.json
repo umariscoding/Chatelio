@@ -1,0 +1,1885 @@
+{
+	"info": {
+		"_postman_id": "chatelio-api-tests",
+		"name": "Chatelio Multi-Tenant Chatbot API - Complete Test Suite",
+		"description": "Comprehensive test collection for the Chatelio multi-tenant chatbot platform covering all critical scenarios including company isolation, authentication, knowledge base management, and chat functionality.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "company_a_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "company_b_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_a_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_b_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "guest_a_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "guest_b_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "company_a_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "company_b_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "chat_id_a",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "chat_id_b",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "document_id_a",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Company (Tenant) Isolation Tests",
+			"item": [
+				{
+					"name": "Register Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains company info\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('company');",
+									"    pm.expect(responseJson).to.have.property('tokens');",
+									"    pm.expect(responseJson.company).to.have.property('company_id');",
+									"});",
+									"",
+									"// Store company A details",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"company_a_id\", responseJson.company.company_id);",
+									"pm.collectionVariables.set(\"company_a_token\", responseJson.tokens.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Company A Corp\",\n    \"email\": \"admin@companya.com\",\n    \"password\": \"securepassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Register Company B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains company info\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('company');",
+									"    pm.expect(responseJson).to.have.property('tokens');",
+									"});",
+									"",
+									"// Store company B details",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"company_b_id\", responseJson.company.company_id);",
+									"pm.collectionVariables.set(\"company_b_token\", responseJson.tokens.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Company B Ltd\",\n    \"email\": \"admin@companyb.com\",\n    \"password\": \"securepassword456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Set Company A Slug",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Slug updated successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('slug');",
+									"    pm.expect(responseJson.slug).to.equal('companya');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"slug\": \"companya\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/slug",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"slug"
+							]
+						}
+					}
+				},
+				{
+					"name": "Set Company B Slug",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Slug updated successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('slug');",
+									"    pm.expect(responseJson.slug).to.equal('companyb');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_b_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"slug\": \"companyb\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/slug",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"slug"
+							]
+						}
+					}
+				},
+				{
+					"name": "Company A Cannot Access Company B Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 or 404\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([403, 404]);",
+									"});",
+									"",
+									"pm.test(\"Access denied message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('not found');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/company/{{company_b_id}}/info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"company",
+								"{{company_b_id}}",
+								"info"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Knowledge Base Upload & Retrieval Tests",
+			"item": [
+				{
+					"name": "Upload Document to Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Document uploaded successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('document');",
+									"    pm.expect(responseJson.document).to.have.property('doc_id');",
+									"});",
+									"",
+									"// Store document ID",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"document_id_a\", responseJson.document.doc_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/test-document.txt",
+									"description": "Test document for Company A"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/upload-document",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"upload-document"
+							]
+						}
+					}
+				},
+				{
+					"name": "Upload John Cena Content to Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Text content uploaded successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.include('successfully');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"Essay on John Cena\\n\\nJohn Cena is one of the most recognizable figures in the world of professional wrestling and entertainment. His journey from an aspiring bodybuilder in Massachusetts to becoming the face of WWE and later a successful Hollywood actor is a story of determination, perseverance, and adaptability. Cena's influence extends beyond the wrestling ring; he has built a legacy as an athlete, entertainer, and humanitarian.\\n\\nEarly Life and Entry into Wrestling\\n\\nJohn Felix Anthony Cena Jr. was born on April 23, 1977, in West Newbury, Massachusetts. Growing up, Cena developed a passion for athletics, particularly football and bodybuilding. After college, where he studied exercise physiology, he moved to California to pursue a career in bodybuilding. His passion for physical fitness eventually led him to professional wrestling training at Ultimate Pro Wrestling (UPW), where he made his debut in 1999. His talent and charisma caught the attention of WWE, and in 2001, Cena signed with the company.\\n\\nRise to Stardom in WWE\\n\\nCena first gained attention in 2002 when he debuted on WWE television by answering an open challenge against Kurt Angle. His initial \\\"Doctor of Thuganomics\\\" persona, where he rapped insults and delivered promos with attitude, made him a fan favorite. Over time, Cena transitioned into a heroic figure whose image was built on positivity and resilience. His slogan \\\"Never Give Up\\\" became synonymous with his career.\\n\\nCena captured his first WWE Championship at WrestleMania 21 in 2005, defeating John \\\"Bradshaw\\\" Layfield. From that point, he became the centerpiece of WWE programming for more than a decade. He went on to win 16 recognized world championships, tying the legendary Ric Flair's record. His ability to perform consistently at the highest level and connect with audiences of all ages made him the definitive superstar of his era.\\n\\nContributions and Legacy in Wrestling\\n\\nJohn Cena's wrestling style combined strength, agility, and storytelling. He was often placed in high-stakes matches against some of WWE's greatest names, including The Rock, Randy Orton, Edge, and CM Punk. Cena headlined multiple WrestleManias and carried the company through challenging times when WWE sought to expand globally. Although sometimes criticized by fans for being portrayed as an invincible character, Cena never wavered in his dedication to entertaining the audience.\\n\\nBeyond the Ring\\n\\nOutside of wrestling, John Cena has become a cultural icon. He has starred in blockbuster films such as The Suicide Squad (2021), F9 (2021), and the HBO Max series Peacemaker (2022), which received critical acclaim. Cena also appeared on television shows, commercials, and talk shows, further cementing his mainstream appeal.\\n\\nPerhaps more importantly, Cena is celebrated for his philanthropy. He holds the record for granting the most wishes through the Make-A-Wish Foundation, with over 650 wishes granted to critically ill children. His dedication to helping others has earned him respect beyond the wrestling world.\\n\\nConclusion\\n\\nJohn Cena's career is a remarkable example of hard work, adaptability, and dedication. He went from a young man with a dream to one of the most accomplished superstars in wrestling history. His legacy is defined not only by his championships and matches but also by his contributions to popular culture and humanitarian work. Whether in the ring, on the screen, or in service to others, Cena embodies his famous catchphrase: \\\"Never Give Up.\\\"\",\n    \"filename\": \"john-cena-info.txt\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/upload-text",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"upload-text"
+							]
+						}
+					}
+				},
+				{
+					"name": "Upload Roman Reigns Content to Company B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Text content uploaded successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.include('successfully');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_b_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"Essay on Roman Reigns\\n\\nRoman Reigns, whose real name is Leati Joseph Anoa'i, has emerged as one of the most dominant figures in modern professional wrestling. Known as \\\"The Tribal Chief,\\\" Reigns has redefined what it means to be a champion in WWE. His powerful in-ring style, magnetic presence, and evolving character work have elevated him into a once-in-a-generation performer. Roman's career is not only about success but also resilience, as he has overcome personal and professional challenges to establish himself as the cornerstone of WWE.\\n\\nEarly Life and Background\\n\\nBorn on May 25, 1985, in Pensacola, Florida, Roman Reigns comes from the famous Anoa'i family, a lineage that has produced some of wrestling's most iconic figures, including The Rock, Yokozuna, and Rikishi. Before entering wrestling, Roman excelled in football, playing college football at Georgia Tech and later briefly joining the NFL and CFL. While his football career was short-lived, it set the stage for his eventual entry into professional wrestling.\\n\\nArrival in WWE\\n\\nReigns signed with WWE's developmental territory, Florida Championship Wrestling (FCW), in 2010, where he wrestled under the name Leakee. By 2012, he made his main roster debut as part of The Shield alongside Seth Rollins and Dean Ambrose. The Shield quickly became one of the most dominant factions in WWE history, known for their coordinated attacks and brutal style. Reigns stood out for his size, power, and charisma.\\n\\nSingles Career and Rise to Prominence\\n\\nAfter The Shield disbanded in 2014, Roman began his singles career. WWE positioned him as the next top star, and he won his first WWE World Heavyweight Championship in 2015. However, despite his achievements, Roman faced significant resistance from fans who felt his push was forced by management. For several years, he was booed at major events despite being portrayed as a heroic character.\\n\\nRoman's career took a pivotal turn in 2020 when he returned with a new persona, aligning with Paul Heyman and adopting the title \\\"The Tribal Chief.\\\" This transformation was one of the most successful character reinventions in WWE history. As a villainous champion, Reigns showcased new layers of his personality, combining arrogance, cunning, and dominance. His lengthy reign as Universal Champion demonstrated his ability to carry the company and elevate every storyline he was part of.\\n\\nResilience and Personal Challenges\\n\\nRoman's story is also marked by personal battles. In 2018, he revealed that he had been battling leukemia, forcing him to step away from WWE temporarily. His announcement shocked the wrestling world but also revealed his strength and courage. When he returned in 2019, he was welcomed with admiration and support. His openness about his illness inspired millions of fans worldwide and made his eventual rise as \\\"The Head of the Table\\\" even more meaningful.\\n\\nCultural Impact and Legacy\\n\\nRoman Reigns has become the defining star of WWE's modern era. His presence on weekly programming, main-event performances at WrestleMania, and leadership as \\\"The Tribal Chief\\\" have made him an irreplaceable part of WWE's identity. Beyond wrestling, Roman has appeared in films, commercials, and interviews, expanding his influence into mainstream culture.\\n\\nConclusion\\n\\nRoman Reigns represents dominance, resilience, and evolution in professional wrestling. From his early days in The Shield to his role as the Tribal Chief, he has constantly adapted and grown into the most significant star of his generation. His journey reflects both personal strength and professional excellence. Roman's story continues to unfold, but one thing is clear: he has already secured his place as one of the greatest superstars in WWE history.\",\n    \"filename\": \"roman-reigns-info.txt\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/upload-text",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"upload-text"
+							]
+						}
+					}
+				},
+				{
+					"name": "List Company A Documents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Documents list returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('documents');",
+									"    pm.expect(responseJson.documents).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"documents"
+							]
+						}
+					}
+				},
+				{
+					"name": "Company B Cannot Access Company A Documents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Company B sees only their own documents\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.documents).to.be.an('array');",
+									"    // Company B should not see Company A's documents",
+									"    const hasCompanyADoc = responseJson.documents.some(doc => doc.filename === 'company-a-info.txt');",
+									"    pm.expect(hasCompanyADoc).to.be.false;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_b_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"documents"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. User Authentication & Guest Mode Tests",
+			"item": [
+				{
+					"name": "Register User for Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User registered successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('user');",
+									"    pm.expect(responseJson).to.have.property('tokens');",
+									"});",
+									"",
+									"// Store user A token",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"user_a_token\", responseJson.tokens.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@companya.com\",\n    \"password\": \"userpassword123\",\n    \"name\": \"John Doe\",\n    \"company_id\": \"{{company_a_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Register User for Company B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User registered successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('user');",
+									"    pm.expect(responseJson).to.have.property('tokens');",
+									"});",
+									"",
+									"// Store user B token",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"user_b_token\", responseJson.tokens.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@companyb.com\",\n    \"password\": \"userpassword456\",\n    \"name\": \"Jane Smith\",\n    \"company_id\": \"{{company_b_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Guest Session for Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Guest session created\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('session');",
+									"    pm.expect(responseJson).to.have.property('tokens');",
+									"});",
+									"",
+									"// Store guest A token",
+									"const responseJson = pm.response.json();",
+									"pm.collectionVariables.set(\"guest_a_token\", responseJson.tokens.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company_id\": \"{{company_a_id}}\",\n    \"ip_address\": \"192.168.1.1\",\n    \"user_agent\": \"PostmanTestAgent/1.0\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/guest/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"guest",
+								"create"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login User for Company A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Login successful\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.equal('Login successful');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@companya.com\",\n    \"password\": \"userpassword123\",\n    \"company_id\": \"{{company_a_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "User Cannot Login to Wrong Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Login failed\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('Invalid');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@companya.com\",\n    \"password\": \"userpassword123\",\n    \"company_id\": \"{{company_b_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Chat Functionality Tests",
+			"item": [
+				{
+					"name": "Query About John Cena (Company A)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is streaming\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/event-stream');",
+									"});",
+									"",
+									"// Extract chat ID from response headers",
+									"const chatId = pm.response.headers.get('X-Chat-ID');",
+									"if (chatId) {",
+									"    pm.collectionVariables.set(\"chat_id_a\", chatId);",
+									"}",
+									"",
+									"// Check if the response contains John Cena information",
+									"pm.test(\"Response contains John Cena information\", function () {",
+									"    // This is a basic check since we can't easily parse streaming responses in Postman",
+									"    // The actual content validation will be done in the Python test script",
+									"    pm.expect(pm.response).to.not.be.empty;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"When was John Cena born and what is his background in wrestling?\",\n    \"chat_title\": \"John Cena Information\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Cross-Company Knowledge Test (Company A asking about Roman Reigns)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is streaming\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/event-stream');",
+									"});",
+									"",
+									"// This test should not return information about Roman Reigns since that's in Company B's knowledge base",
+									"// The actual content validation will be done in the Python test script"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"Tell me about Roman Reigns and his career in WWE.\",\n    \"chat_title\": \"Cross-Company Knowledge Test\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Query About Roman Reigns (Company B)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is streaming\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/event-stream');",
+									"});",
+									"",
+									"// Extract chat ID from response headers",
+									"const chatId = pm.response.headers.get('X-Chat-ID');",
+									"if (chatId) {",
+									"    pm.collectionVariables.set(\"chat_id_b\", chatId);",
+									"}",
+									"",
+									"// Check if the response contains Roman Reigns information",
+									"pm.test(\"Response contains Roman Reigns information\", function () {",
+									"    // This is a basic check since we can't easily parse streaming responses in Postman",
+									"    // The actual content validation will be done in the Python test script",
+									"    pm.expect(pm.response).to.not.be.empty;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_b_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"Tell me about Roman Reigns' career and his persona as The Tribal Chief.\",\n    \"chat_title\": \"Roman Reigns Information\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Test Empty Query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 or 400\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([422, 400]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"\",\n    \"chat_title\": \"Empty Query Test\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Test Large Input Query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is streaming\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/event-stream');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"This is a very long query that contains a lot of text to test how the system handles large inputs. I want to know about all the services, products, capabilities, technologies, and solutions that your company provides. Can you give me a comprehensive overview of everything your organization does, including your history, mission, vision, values, and future plans? I'm particularly interested in understanding your competitive advantages, unique selling propositions, and what sets you apart from other companies in your industry.\",\n    \"chat_title\": \"Large Query Test\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"send"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Chat History & Isolation Tests",
+			"item": [
+				{
+					"name": "Get Chat History for User A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chat history returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('messages');",
+									"    pm.expect(responseJson.messages).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/history/{{chat_id_a}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"history",
+								"{{chat_id_a}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "List Chats for User A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chats list returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('chats');",
+									"    pm.expect(responseJson.chats).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"list"
+							]
+						}
+					}
+				},
+				{
+					"name": "User B Cannot Access User A's Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Access denied message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('not found');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_b_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/history/{{chat_id_a}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"history",
+								"{{chat_id_a}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Chat Title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Title updated successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.include('successfully');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Service Inquiry\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/title/{{chat_id_a}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"title",
+								"{{chat_id_a}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Security & Authorization Tests",
+			"item": [
+				{
+					"name": "Access Protected Endpoint Without Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Unauthorized message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('credentials');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/chat/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"documents"
+							]
+						}
+					}
+				},
+				{
+					"name": "Access with Invalid Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Invalid token message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('Invalid');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer invalid_token_12345"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"documents"
+							]
+						}
+					}
+				},
+				{
+					"name": "Guest Cannot Access Company Endpoints",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"pm.test(\"Company access required message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('Company access required');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{guest_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"documents"
+							]
+						}
+					}
+				},
+				{
+					"name": "Test JWT Token Verification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Token is valid\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.valid).to.be.true;",
+									"    pm.expect(responseJson).to.have.property('user_info');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/verify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"verify"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Public Chatbot & Subdomain Tests",
+			"item": [
+				{
+					"name": "Publish Company A Chatbot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chatbot published successfully\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.include('published');",
+									"    pm.expect(responseJson.is_published).to.be.true;",
+									"    pm.expect(responseJson).to.have.property('public_url');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_published\": true,\n    \"chatbot_title\": \"Company A Assistant\",\n    \"chatbot_description\": \"Get help with Company A's services and products\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/publish-chatbot",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"publish-chatbot"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Public Chatbot Info (Path-based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chatbot info returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property('company_id');",
+									"    pm.expect(responseJson).to.have.property('name');",
+									"    pm.expect(responseJson).to.have.property('chatbot_title');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/public/chatbot/companya",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"chatbot",
+								"companya"
+							]
+						}
+					}
+				},
+				{
+					"name": "Send Message to Public Chatbot (Path-based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is streaming\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/event-stream');",
+									"});",
+									"",
+									"pm.test(\"Company slug in headers\", function () {",
+									"    pm.expect(pm.response.headers.get('X-Company-Slug')).to.equal('companya');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"What does this company do?\",\n    \"model\": \"OpenAI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/public/chatbot/companya/chat",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"chatbot",
+								"companya",
+								"chat"
+							]
+						}
+					}
+				},
+				{
+					"name": "Access Unpublished Chatbot (Should Fail)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Not found message\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('not found');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/public/chatbot/companyb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"chatbot",
+								"companyb"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Error Handling Tests",
+			"item": [
+				{
+					"name": "Invalid Company Registration (Duplicate Email)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Duplicate email error\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('already exists');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Duplicate Company\",\n    \"email\": \"admin@companya.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Invalid Login Credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Invalid credentials error\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('Invalid');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@companya.com\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/company/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"company",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "Upload Invalid File Type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"File type error\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('text files');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_a_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/test-image.jpg",
+									"description": "Invalid file type"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/chat/upload-document",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"upload-document"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Non-existent Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Chat not found error\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.detail).to.include('not found');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_a_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chat/nonexistent-chat-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"nonexistent-chat-id"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Health Check & System Status",
+			"item": [
+				{
+					"name": "Root Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"System is healthy\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.status).to.equal('healthy');",
+									"    pm.expect(responseJson.message).to.include('Chatelio');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Auth Service Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Auth service is healthy\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.status).to.equal('healthy');",
+									"    pm.expect(responseJson.service).to.equal('authentication');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"health"
+							]
+						}
+					}
+				},
+				{
+					"name": "Chat Service Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chat service is healthy\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.status).to.equal('healthy');",
+									"    pm.expect(responseJson.service).to.equal('chat');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/chat/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chat",
+								"health"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

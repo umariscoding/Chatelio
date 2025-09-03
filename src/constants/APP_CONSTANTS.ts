@@ -11,9 +11,9 @@ export const APP_CONFIG = {
 export const ROUTES = {
   HOME: '/',
   
-  // Auth routes
+  // Auth routes (matching folder structure)
   COMPANY_LOGIN: '/company/login',
-  COMPANY_REGISTER: '/company/register',
+  COMPANY_REGISTER: '/company/register', 
   USER_LOGIN: '/user/login',
   USER_REGISTER: '/user/register',
   
@@ -31,8 +31,8 @@ export const ROUTES = {
   KNOWLEDGE_BASE_UPLOAD: '/knowledge-base/upload',
   
   // Public routes
-  PUBLIC_CHATBOT: '/public/[slug]',
-  PUBLIC_CHAT: '/public/[slug]/chat',
+  PUBLIC_CHATBOT: '/[slug]',
+  PUBLIC_CHAT: '/[slug]/chat',
 } as const;
 
 export const FORM_VALIDATION = {

@@ -1,17 +1,18 @@
-// Custom auth hook - will be implemented in Day 1
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState, AppDispatch } from '@/store';
 
+// Typed hooks for Redux
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector = <T>(selector: (state: RootState) => T) => useSelector(selector);
+
+// Custom authentication hook
 export const useAuth = () => {
-  const auth = useSelector((state: RootState) => state.auth);
-  
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
   return {
-    user: auth.user,
-    company: auth.company,
-    isAuthenticated: auth.isAuthenticated,
-    userType: auth.userType,
-    loading: auth.loading,
-    error: auth.error,
+    ...auth,
+    dispatch,
   };
 };
 
