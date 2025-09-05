@@ -6,23 +6,27 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
-import { logout } from "@/store/slices/authSlice";
+import { logoutCompany, logoutUser } from "@/store/slices/authSlice";
 
 export default function Home() {
-  const { isAuthenticated, userType } = useAppSelector((state) => state.auth);
+  const { isCompanyAuthenticated, isUserAuthenticated, activeSession } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
-    dispatch(logout());
+    if (activeSession === 'company') {
+      dispatch(logoutCompany());
+    } else if (activeSession === 'user') {
+      dispatch(logoutUser());
+    }
   };
 
   const renderAuthButtons = () => {
-    if (isAuthenticated) {
+    if (isCompanyAuthenticated || isUserAuthenticated) {
       return (
         <div className="flex items-center space-x-4">
-          <Link href={userType === 'company' ? ROUTES.DASHBOARD : ROUTES.CHAT}>
+          <Link href={activeSession === 'company' ? ROUTES.DASHBOARD : ROUTES.DASHBOARD}>
             <Button variant="ghost">
-              {userType === 'company' ? 'Dashboard' : 'Chat'}
+              Dashboard
             </Button>
           </Link>
           <Button variant="outline" onClick={handleLogout}>
@@ -70,7 +74,7 @@ export default function Home() {
             {APP_CONFIG.DESCRIPTION}. Upload your knowledge base and deploy branded chatbots for your customers.
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            {!isAuthenticated ? (
+            {!isCompanyAuthenticated && !isUserAuthenticated ? (
               <>
                 <div className="rounded-md shadow">
                   <Link href={ROUTES.COMPANY_REGISTER}>
@@ -89,9 +93,9 @@ export default function Home() {
               </>
             ) : (
               <div className="rounded-md shadow">
-                <Link href={userType === 'company' ? ROUTES.DASHBOARD : ROUTES.CHAT}>
+                <Link href={ROUTES.DASHBOARD}>
                   <Button size="lg" className="w-full">
-                    {userType === 'company' ? 'Go to Dashboard' : 'Start Chatting'}
+                    Go to Dashboard
                   </Button>
                 </Link>
               </div>

@@ -1,9 +1,9 @@
 // Base Button component
-import React from 'react';
+import React, { memo } from 'react';
 
 import type { ButtonProps } from '@/interfaces/Button.interface';
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = memo(React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', loading, children, disabled, ...props }, ref) => {
     const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
     
@@ -40,7 +40,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </button>
     );
   }
-);
+));
 
 Button.displayName = 'Button';
 

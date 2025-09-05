@@ -91,6 +91,34 @@ export const SEMANTIC_COLORS = {
   ring: COLORS.primary[600],
 } as const;
 
+// Modern chat interface colors
+export const CHAT_COLORS = {
+  // User message colors
+  userBg: COLORS.primary[500],
+  userText: COLORS.white,
+  userBorder: COLORS.primary[600],
+  
+  // Bot message colors
+  botBg: COLORS.gray[100],
+  botText: COLORS.gray[900],
+  botBorder: COLORS.gray[200],
+  
+  // Chat interface
+  background: COLORS.white,
+  sidebarBg: COLORS.gray[50],
+  sidebarBorder: COLORS.gray[200],
+  
+  // Interactive elements
+  hoverBg: COLORS.gray[100],
+  activeBg: COLORS.primary[50],
+  selectedBg: COLORS.primary[100],
+  
+  // Input area
+  inputBg: COLORS.white,
+  inputBorder: COLORS.gray[300],
+  inputFocus: COLORS.primary[500],
+} as const;
+
 // Dark theme colors
 export const DARK_COLORS = {
   background: COLORS.gray[950] || '#020617',

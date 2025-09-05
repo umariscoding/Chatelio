@@ -11,11 +11,9 @@ export const APP_CONFIG = {
 export const ROUTES = {
   HOME: '/',
   
-  // Auth routes (matching folder structure)
+  // Company auth routes (only companies can access these directly)
   COMPANY_LOGIN: '/company/login',
-  COMPANY_REGISTER: '/company/register', 
-  USER_LOGIN: '/user/login',
-  USER_REGISTER: '/user/register',
+  COMPANY_REGISTER: '/company/register',
   
   // Dashboard routes
   DASHBOARD: '/dashboard',

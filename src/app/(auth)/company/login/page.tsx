@@ -24,7 +24,7 @@ interface FormErrors {
 export default function CompanyLoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { companyLoading, error, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -34,12 +34,12 @@ export default function CompanyLoginPage() {
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated as company
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isCompanyAuthenticated) {
       router.push(ROUTES.DASHBOARD);
     }
-  }, [isAuthenticated, router]);
+  }, [isCompanyAuthenticated, router]);
 
   // Clear error when component mounts
   useEffect(() => {
@@ -108,10 +108,10 @@ export default function CompanyLoginPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-blue-600">{APP_CONFIG.NAME}</h1>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Sign in to your company
+            Company Dashboard Login
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Access your chatbot dashboard and manage your knowledge base
+            Access your company dashboard to manage chatbots, knowledge base, and users
           </p>
         </div>
       </div>
@@ -189,8 +189,8 @@ export default function CompanyLoginPage() {
               <Button
                 type="submit"
                 className="w-full"
-                loading={loading}
-                disabled={loading}
+                loading={companyLoading}
+                disabled={companyLoading}
               >
                 Sign in
               </Button>
@@ -205,24 +205,10 @@ export default function CompanyLoginPage() {
               </span>
             </div>
 
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or</span>
-                </div>
-              </div>
-
-              <div className="mt-6 text-center">
-                <span className="text-sm text-gray-600">
-                  Are you a team member?{' '}
-                  <Link href={ROUTES.USER_LOGIN} className="font-medium text-blue-600 hover:text-blue-500">
-                    Employee Login
-                  </Link>
-                </span>
-              </div>
+            <div className="mt-6 text-center">
+              <p className="text-xs text-gray-500">
+                Looking for customer support? Visit your company's chatbot page or contact your administrator.
+              </p>
             </div>
           </form>
         </div>

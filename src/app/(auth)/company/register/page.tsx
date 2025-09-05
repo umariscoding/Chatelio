@@ -27,7 +27,7 @@ interface FormErrors {
 export default function CompanyRegisterPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { companyLoading, error, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -38,12 +38,12 @@ export default function CompanyRegisterPage() {
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated as company
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isCompanyAuthenticated) {
       router.push(ROUTES.DASHBOARD);
     }
-  }, [isAuthenticated, router]);
+  }, [isCompanyAuthenticated, router]);
 
   // Clear error when component mounts
   useEffect(() => {
@@ -230,8 +230,8 @@ export default function CompanyRegisterPage() {
               <Button
                 type="submit"
                 className="w-full"
-                loading={loading}
-                disabled={loading}
+                loading={companyLoading}
+                disabled={companyLoading}
               >
                 Create Account
               </Button>

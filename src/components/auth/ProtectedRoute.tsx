@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Loading from '@/components/ui/Loading';
@@ -20,30 +20,77 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   fallbackRoute = ROUTES.COMPANY_LOGIN
 }) => {
   const router = useRouter();
-  const { isAuthenticated, userType, loading } = useAppSelector((state) => state.auth);
+  const { 
+    isCompanyAuthenticated, 
+    isUserAuthenticated, 
+    companyLoading, 
+    userLoading, 
+    activeSession 
+  } = useAppSelector((state) => state.auth);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    if (!loading) {
-      if (!isAuthenticated) {
-        router.push(fallbackRoute);
+    // Wait for auth to initialize before making routing decisions
+    if (!companyLoading && !userLoading) {
+      setIsInitialLoad(false);
+      
+      // Check if user needs company access
+      if (requiredUserType === 'company') {
+        if (!isCompanyAuthenticated) {
+          router.push(ROUTES.COMPANY_LOGIN);
+          return;
+        }
+      }
+      
+      // Check if user needs user access  
+      if (requiredUserType === 'user') {
+        if (!isUserAuthenticated) {
+          // Users can only authenticate through company chatbot pages, redirect to home
+          router.push(ROUTES.HOME);
+          return;
+        }
+      }
+      
+      // If no specific type required, check for any authentication
+      if (!requiredUserType) {
+        if (!isCompanyAuthenticated && !isUserAuthenticated) {
+          router.push(fallbackRoute);
+          return;
+        }
+      }
+      
+      // Handle wrong user type redirects
+      if (requiredUserType && requiredUserType === 'company' && !isCompanyAuthenticated) {
+        if (isUserAuthenticated) {
+          router.push(ROUTES.CHAT); // Redirect user to their area
+        } else {
+          router.push(ROUTES.COMPANY_LOGIN);
+        }
         return;
       }
-
-      if (requiredUserType && userType !== requiredUserType) {
-        // Redirect based on user type
-        if (userType === 'company') {
-          router.push(ROUTES.DASHBOARD);
-        } else if (userType === 'user') {
-          router.push(ROUTES.CHAT);
+      
+      if (requiredUserType && requiredUserType === 'user' && !isUserAuthenticated) {
+        if (isCompanyAuthenticated) {
+          router.push(ROUTES.DASHBOARD); // Redirect company to their area
         } else {
-          router.push(fallbackRoute);
+          // Users can only authenticate through company chatbot pages, redirect to home
+          router.push(ROUTES.HOME);
         }
         return;
       }
     }
-  }, [isAuthenticated, userType, loading, requiredUserType, fallbackRoute, router]);
+  }, [
+    isCompanyAuthenticated, 
+    isUserAuthenticated, 
+    companyLoading, 
+    userLoading, 
+    requiredUserType, 
+    fallbackRoute, 
+    router
+  ]);
 
-  if (loading) {
+  // Show loading during initial auth check or while auth is loading
+  if (companyLoading || userLoading || isInitialLoad) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />
@@ -51,12 +98,30 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
+  // Check authentication based on required user type
+  if (requiredUserType === 'company' && !isCompanyAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
-
-  if (requiredUserType && userType !== requiredUserType) {
-    return null;
+  
+  if (requiredUserType === 'user' && !isUserAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+  
+  // If no specific type required, check for any authentication
+  if (!requiredUserType && !isCompanyAuthenticated && !isUserAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   return <>{children}</>;

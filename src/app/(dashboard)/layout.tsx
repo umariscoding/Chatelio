@@ -1,36 +1,57 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
+
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import Header from '@/components/layout/Header';
+import Sidebar from '@/components/layout/Sidebar';
+import { useAppSelector } from '@/hooks/useAuth';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const { activeSession } = useAppSelector((state) => state.auth);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
+  const handleMenuToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleSidebarClose = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
-        <nav className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex items-center">
-                <h1 className="text-xl font-semibold text-gray-900">
-                  Chatelio Dashboard
-                </h1>
+        <div className="flex h-screen">
+          {/* Sidebar */}
+          <Sidebar 
+            isOpen={sidebarOpen} 
+            onClose={handleSidebarClose}
+          />
+          
+          {/* Main content area */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Header */}
+            <Header 
+              onMenuToggle={handleMenuToggle}
+              showMobileMenuButton={true}
+            />
+            
+            {/* Main content */}
+            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+              <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {children}
               </div>
-              <div className="flex items-center space-x-4">
-                {/* User menu will be implemented in Phase 2 */}
-                <div className="text-sm text-gray-500">
-                  Dashboard Navigation Coming Soon
-                </div>
-              </div>
-            </div>
+            </main>
           </div>
-        </nav>
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          {children}
-        </main>
+        </div>
       </div>
     </ProtectedRoute>
   );

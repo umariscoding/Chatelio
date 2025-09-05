@@ -1,26 +1,63 @@
 // Redux store configuration
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import authSlice from './slices/authSlice';
 import chatSlice from './slices/chatSlice';
 import knowledgeBaseSlice from './slices/knowledgeBaseSlice';
 import companySlice from './slices/companySlice';
 import uiSlice from './slices/uiSlice';
 
+// Create a noop storage for server-side rendering
+const createNoopStorage = () => {
+  return {
+    getItem() {
+      return Promise.resolve(null);
+    },
+    setItem() {
+      return Promise.resolve();
+    },
+    removeItem() {
+      return Promise.resolve();
+    },
+  };
+};
+
+// Use proper storage based on environment
+const storage = typeof window !== 'undefined' 
+  ? createWebStorage('local') 
+  : createNoopStorage();
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['auth', 'company'], // Only persist auth and company data
+  blacklist: ['ui'], // Don't persist UI state
+};
+
+const rootReducer = combineReducers({
+  auth: authSlice,
+  chat: chatSlice,
+  knowledgeBase: knowledgeBaseSlice,
+  company: companySlice,
+  ui: uiSlice,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
-  reducer: {
-    auth: authSlice,
-    chat: chatSlice,
-    knowledgeBase: knowledgeBaseSlice,
-    company: companySlice,
-    ui: uiSlice,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActionsPaths: ['meta.arg', 'payload.timestamp'],
+        ignoredPaths: ['_persist'],
       },
     }),
 });
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

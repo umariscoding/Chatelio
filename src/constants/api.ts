@@ -10,12 +10,14 @@ export const API_ENDPOINTS = {
     USER_LOGIN: '/users/login',
     VERIFY: '/auth/verify',
     REFRESH: '/auth/refresh',
+    HEALTH: '/auth/health',
   },
   
   // User endpoints
   USERS: {
     PROFILE: '/users/profile',
     UPDATE_PROFILE: '/users/profile',
+    COMPANY_USERS: '/users/company',
   },
   
   // Chat endpoints
@@ -28,6 +30,7 @@ export const API_ENDPOINTS = {
     DOCUMENTS: '/chat/documents',
     UPLOAD_TEXT: '/chat/upload-text',
     UPLOAD_DOCUMENT: '/chat/upload-document',
+    HEALTH: '/chat/health',
   },
   
   // Company endpoints
@@ -41,13 +44,29 @@ export const API_ENDPOINTS = {
     CHATBOT_INFO: '/public/chatbot',
     GUEST_CREATE: '/users/guest/create',
     CHAT: '/public/chatbot',
+    COMPANIES: '/public/companies',
+  },
+
+  // Health endpoints
+  HEALTH: {
+    ROOT: '/',
+    AUTH: '/auth/health',
+    CHAT: '/chat/health',
   },
 } as const;
 
 export const STORAGE_KEYS = {
+  // Legacy keys (deprecated)
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
   USER_TYPE: 'user_type',
+  
+  // New separated keys
+  COMPANY_ACCESS_TOKEN: 'company_access_token',
+  COMPANY_REFRESH_TOKEN: 'company_refresh_token',
+  USER_ACCESS_TOKEN: 'user_access_token',
+  USER_REFRESH_TOKEN: 'user_refresh_token',
+  ACTIVE_SESSION: 'active_session',
 } as const;
 
 // HTTP Status Codes
