@@ -9,6 +9,10 @@ import Loading from '@/components/ui/Loading';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
+import MinimalInput from '@/components/ui/MinimalInput';
+import MinimalButton from '@/components/ui/MinimalButton';
+import ChatOptionsMenu from '@/components/chat/ChatOptionsMenu';
+import { MessageSquarePlus, LogOut, LogIn } from 'lucide-react';
 import type { Message, ModelType } from '@/types/chat';
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
 import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
@@ -62,6 +66,9 @@ export default function PublicChatPage() {
   // Initialize chat on mount
   useEffect(() => {
     initializeChat();
+    // Start with no default chat
+    setMessages([]);
+    setCurrentChatId(null);
   }, [slug]);
 
   // Verify user token gracefully when user appears to be logged in
@@ -361,12 +368,12 @@ export default function PublicChatPage() {
       const endpoint = authMode === 'login' ? '/users/login' : '/users/register';
       const payload = authMode === 'login' 
         ? { 
-            email: authData.email, 
+            email: authData.email.toLowerCase(), 
             password: authData.password,
             company_id: companyInfo?.company_id 
           }
         : { 
-            email: authData.email, 
+            email: authData.email.toLowerCase(), 
             password: authData.password, 
             name: authData.name,
             company_id: companyInfo?.company_id
@@ -442,6 +449,61 @@ export default function PublicChatPage() {
     }
   };
 
+  const handleRenameChat = async (chatId: string, newTitle: string) => {
+    if (!userAuth.tokens?.access_token) return;
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/title/${chatId}`, {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${userAuth.tokens.access_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title: newTitle })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to rename chat');
+      }
+      
+      // Update chat history with new title
+      setChatHistory(prev => prev.map(chat => 
+        chat.chat_id === chatId ? { ...chat, title: newTitle } : chat
+      ));
+    } catch (err) {
+      console.error('Failed to rename chat:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteChat = async (chatId: string) => {
+    if (!userAuth.tokens?.access_token) return;
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/${chatId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to delete chat');
+      }
+      
+      // Remove chat from history
+      setChatHistory(prev => prev.filter(chat => chat.chat_id !== chatId));
+      
+      // If the deleted chat was the current one, start a new chat
+      if (currentChatId === chatId) {
+        startNewChat();
+      }
+    } catch (err) {
+      console.error('Failed to delete chat:', err);
+      throw err;
+    }
+  };
+
   const handleLogout = async () => {
     try {
       // Dispatch logout action to clear user data
@@ -497,44 +559,66 @@ export default function PublicChatPage() {
   }
 
   return (
-    <div className="h-screen flex bg-white">
+    <div className="h-screen flex bg-black overflow-hidden">
       {/* Chat History Sidebar - Only for logged-in users */}
       {isUserLoggedIn && (
-        <div className="w-80 bg-gray-900 text-white flex flex-col">
-          <div className="p-4 border-b border-gray-700">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium text-gray-200">Chat History</h2>
+        <div className="w-64 bg-zinc-950 text-white flex flex-col border-r border-zinc-800">
+          <div className="p-4">
+            <div className="flex flex-col space-y-3">
+              <h2 className="text-lg font-medium text-zinc-100">
+                Hello, {userAuth.user?.name?.split(' ')[0] || 'User'}
+              </h2>
               <button 
                 onClick={startNewChat}
-                className="bg-white text-gray-900 hover:bg-gray-100 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                className="text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/90 py-2 px-3 text-sm rounded-xl transition-colors flex items-center gap-2 w-full"
               >
-                New Chat
+                <MessageSquarePlus size={16} />
+                <span>New conversation</span>
               </button>
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto">
+          <div className="px-4 pt-4 pb-2">
+            <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Chats</h3>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto overscroll-contain">
             {chatHistory.length === 0 ? (
-              <div className="p-6 text-center text-gray-500 text-sm">
-                No chat history yet
+              <div className="p-6 text-center text-zinc-500 text-sm flex flex-col items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1 opacity-60">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>No chat history yet</span>
               </div>
             ) : (
-              <div className="p-2">
+              <div className="p-3 space-y-1">
                 {chatHistory.map((chat) => (
-                  <button
+                  <div
                     key={chat.chat_id}
-                    onClick={() => selectChat(chat.chat_id)}
-                    className={`w-full text-left p-3 rounded-lg mb-2 transition-colors ${
+                    className={`group flex items-center justify-between px-3 py-2.5 mb-1 relative transition-colors rounded-xl ${
                       currentChatId === chat.chat_id 
-                        ? 'bg-gray-700 text-white' 
-                        : 'text-gray-300 hover:bg-gray-800'
+                        ? 'text-zinc-100 bg-zinc-800/90' 
+                        : 'text-zinc-400 hover:bg-zinc-800/50'
                     }`}
                   >
-                    <div className="font-medium truncate">{chat.title}</div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {new Date(chat.created_at).toLocaleDateString()}
+                    {currentChatId === chat.chat_id && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4/6 bg-blue-500 rounded-full" />
+                    )}
+                    <button
+                      onClick={() => selectChat(chat.chat_id)}
+                      className="flex-1 text-left overflow-hidden pr-2"
+                    >
+                      <div className="truncate text-sm font-medium">{chat.title}</div>
+                    </button>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ChatOptionsMenu 
+                        chatId={chat.chat_id}
+                        currentTitle={chat.title}
+                        onRename={handleRenameChat}
+                        onDelete={handleDeleteChat}
+                      />
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             )}
@@ -543,45 +627,37 @@ export default function PublicChatPage() {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="border-b border-gray-200 bg-white px-6 py-4">
+      <div className="flex-1 flex flex-col bg-zinc-950 relative">
+        {/* Transparent Header - No Separator */}
+        <div className="px-6 py-3 absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-zinc-950 to-transparent">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-lg text-zinc-200">
                 {companyInfo?.chatbot_title || 'Chat'}
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                {isUserLoggedIn ? (
-                  <span>
-                    <span className="font-medium">{userAuth.user?.name}</span> chatting with{' '}
-                    <span className="font-medium">{companyInfo?.name}</span>
-                  </span>
-                ) : (
-                  companyInfo?.chatbot_description || 'Welcome to our chatbot'
-                )}
-              </p>
             </div>
             
             <div className="flex items-center space-x-3">
               {!isUserLoggedIn && (
-                <Button
+                <MinimalButton
                   onClick={() => setShowAuthModal(true)}
-                  variant="outline"
-                  className="text-sm"
+                  variant="ghost"
+                  size="sm"
+                  className="text-zinc-300"
                 >
-                  Login
-                </Button>
+                  <LogIn size={16} className="mr-1.5" /> Login
+                </MinimalButton>
               )}
               
               {isUserLoggedIn && (
-                <Button
+                <MinimalButton
                   onClick={handleLogout}
-                  variant="outline"
-                  className="text-sm"
+                  variant="ghost"
+                  size="sm"
+                  className="text-zinc-300"
                 >
-                  Logout
-                </Button>
+                  <LogOut size={16} className="mr-1.5" /> Logout
+                </MinimalButton>
               )}
             </div>
           </div>
@@ -589,25 +665,33 @@ export default function PublicChatPage() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 mx-6 mt-4">
-            <p className="text-red-700">{error}</p>
+          <div className="bg-zinc-900 border-l-4 border-zinc-700 p-4 mx-6 mt-4">
+            <p className="text-zinc-300">{error}</p>
           </div>
         )}
 
-        {/* Messages */}
-        <div className="flex-1 overflow-hidden">
-          <MessageList
-            messages={messages}
-            streamingMessage={streamingMessage}
-          />
+        {/* Messages Container - Full height with padding for header */}
+        <div className="flex-1 overflow-y-auto pt-16">
+          <div className="min-h-full">
+            <MessageList
+              messages={messages}
+              streamingMessage={streamingMessage}
+              className="h-full pb-40 pt-4" /* Extra padding to make room for floating input and top header */
+            />
+            {/* Extra spacer at bottom to ensure visibility of last message */}
+            <div className="h-20"></div>
+          </div>
         </div>
-
-        {/* Message Input */}
-        <div className="border-t border-gray-200 p-4">
-          <MessageInput
-            onSendMessage={handleSendMessage}
-            disabled={isStreaming}
-          />
+          
+        {/* Message Input - Floating above everything */}
+        <div className="absolute bottom-8 inset-x-0 px-4 w-full max-w-4xl mx-auto z-20 pointer-events-none">
+          <div className="pointer-events-auto">
+            <MessageInput
+              onSendMessage={handleSendMessage}
+              disabled={isStreaming}
+              className="w-full shadow-lg"
+            />
+          </div>
         </div>
       </div>
 
@@ -616,47 +700,88 @@ export default function PublicChatPage() {
         <Modal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
-          title={authMode === 'login' ? 'Login' : 'Sign Up'}
+          title=""
+          theme="dark"
+          maxWidth="custom"
+          customWidth="max-w-md sm:max-w-lg"
         >
-          <form onSubmit={handleAuth} className="space-y-4">
-            {authMode === 'signup' && (
-              <Input
-                label="Name"
-                type="text"
-                value={authData.name}
-                onChange={(e) => setAuthData(prev => ({ ...prev, name: e.target.value }))}
-                required
-              />
-            )}
-            <Input
-              label="Email"
-              type="email"
-              value={authData.email}
-              onChange={(e) => setAuthData(prev => ({ ...prev, email: e.target.value }))}
-              required
-            />
-            <Input
-              label="Password"
-              type="password"
-              value={authData.password}
-              onChange={(e) => setAuthData(prev => ({ ...prev, password: e.target.value }))}
-              required
-            />
+          <div className="px-2 py-4">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-zinc-100 mb-2">
+                {authMode === 'login' ? 'Welcome back' : 'Get started'}
+              </h2>
+              <p className="text-zinc-400 text-sm">
+                {authMode === 'login' 
+                  ? 'Sign in to continue to your account' 
+                  : 'Create your account to get started'
+                }
+              </p>
+            </div>
             
-            <div className="flex justify-between items-center pt-4">
+            <form onSubmit={handleAuth} className="space-y-5">
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                  <p className="text-red-400 text-sm font-medium">{error}</p>
+                </div>
+              )}
+              
+              {authMode === 'signup' && (
+                <MinimalInput
+                  label="Full Name"
+                  type="text"
+                  value={authData.name}
+                  onChange={(e) => setAuthData(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  variant="floating"
+                />
+              )}
+              
+              <MinimalInput
+                label="Email Address"
+                type="email"
+                value={authData.email}
+                onChange={(e) => setAuthData(prev => ({ ...prev, email: e.target.value.toLowerCase() }))}
+                required
+                variant="floating"
+              />
+              
+              <MinimalInput
+                label="Password"
+                type="password"
+                value={authData.password}
+                onChange={(e) => setAuthData(prev => ({ ...prev, password: e.target.value }))}
+                required
+                variant="floating"
+              />
+              
+              <div className="pt-2">
+                <MinimalButton 
+                  type="submit" 
+                  loading={authLoading}
+                  fullWidth
+                  size="lg"
+                  variant="primary"
+                >
+                  {authMode === 'login' ? 'Sign In' : 'Create Account'}
+                </MinimalButton>
+              </div>
+            </form>
+            
+            {/* Switch Mode */}
+            <div className="mt-8 text-center">
               <button
                 type="button"
                 onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                className="text-sm text-blue-600 hover:text-blue-800"
+                className="text-zinc-400 hover:text-blue-400 text-sm transition-colors duration-200"
               >
-                {authMode === 'login' ? 'Need an account? Sign up' : 'Have an account? Login'}
+                {authMode === 'login' 
+                  ? "Don't have an account? Sign up" 
+                  : 'Already have an account? Sign in'
+                }
               </button>
-              
-              <Button type="submit" disabled={authLoading}>
-                {authLoading ? 'Loading...' : (authMode === 'login' ? 'Login' : 'Sign Up')}
-              </Button>
             </div>
-          </form>
+          </div>
         </Modal>
       )}
     </div>

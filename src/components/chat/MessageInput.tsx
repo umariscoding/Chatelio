@@ -21,8 +21,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   className = "",
 }) => {
   const [message, setMessage] = useState('');
-  const [selectedModel, setSelectedModel] = useState<ModelType>('OpenAI');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  // Always use OpenAI model as default
+  const selectedModel: ModelType = 'OpenAI';
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -49,28 +51,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
     // Auto-resize textarea
     const textarea = e.target;
     textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+    const newHeight = Math.min(textarea.scrollHeight, 150);
+    textarea.style.height = newHeight + 'px';
   }, []);
 
   return (
-    <div className={`bg-white ${className}`}>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Model Selector - Compact */}
-        <div className="flex items-center justify-center">
-          <select
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value as ModelType)}
-            disabled={loading || disabled}
-            className="text-xs bg-gray-50 border border-gray-200 rounded-full px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-600"
-          >
-            <option value="OpenAI">GPT</option>
-            <option value="Claude">Claude</option>
-          </select>
-        </div>
-
-        {/* Message Input Container */}
-        <div className="relative flex items-end space-x-3 bg-gray-50 rounded-2xl p-3 border border-gray-200 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
-          <div className="flex-1">
+    <div className={`w-full ${className}`}>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {/* Message Input Container - Floating with black theme */}
+        <div className="relative flex items-center bg-zinc-900 rounded-full p-3 border border-zinc-800 focus-within:border-zinc-700 focus-within:ring-1 focus-within:ring-zinc-700 transition-all shadow-lg shadow-black/50">
+          <div className="flex-1 flex items-center">
             <textarea
               ref={textareaRef}
               value={message}
@@ -79,15 +69,21 @@ const MessageInput: React.FC<MessageInputProps> = ({
               placeholder={placeholder}
               disabled={loading || disabled}
               rows={1}
-              className="w-full resize-none bg-transparent border-0 px-0 py-1 focus:outline-none placeholder-gray-500 text-gray-900 text-sm leading-relaxed"
-              style={{ minHeight: '24px', maxHeight: '150px' }}
+              className="w-full resize-none bg-transparent border-0 pl-3 focus:outline-none placeholder:text-zinc-500 text-zinc-200 text-sm leading-normal"
+              style={{ 
+                height: '40px',
+                minHeight: '40px',
+                maxHeight: '150px',
+                paddingTop: '10px',
+                overflow: message ? 'auto' : 'hidden'
+              }}
             />
           </div>
           
           <button
             type="submit"
             disabled={!message.trim() || loading || disabled}
-            className="flex-shrink-0 w-8 h-8 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors"
+            className="flex-shrink-0 w-8 h-8 bg-zinc-800 hover:bg-zinc-700 disabled:bg-zinc-900 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-colors"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -98,7 +94,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         </div>
 
         {/* Hint text */}
-        <div className="text-xs text-gray-400 text-center">
+        <div className="text-xs text-zinc-600 text-center">
           Press Enter to send, Shift+Enter for new line
         </div>
       </form>

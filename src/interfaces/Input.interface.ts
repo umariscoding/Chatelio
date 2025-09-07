@@ -8,4 +8,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   description?: string;
   variant?: 'default' | 'filled' | 'outlined';
   fullWidth?: boolean;
+  theme?: 'light' | 'dark';
 }

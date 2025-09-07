@@ -27,11 +27,11 @@ const formatTime = (timestamp: number): string => {
 };
 
 const TypingIndicator: React.FC = () => (
-  <div className="flex items-center space-x-1 text-gray-500">
+  <div className="flex items-center space-x-1 text-zinc-400">
     <div className="flex space-x-1">
-      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
     </div>
     <span className="text-sm">AI is typing...</span>
   </div>
@@ -41,34 +41,26 @@ const MessageBubble: React.FC<MessageBubbleProps> = memo(({ message, isStreaming
   const isUser = message.role === 'human';
   
   return (
-    <div className={`group max-w-4xl mx-auto px-4 py-6 ${className}`}>
-      <div className="flex items-start space-x-4">
-        {/* Avatar */}
-        <div className="flex-shrink-0">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            isUser 
-              ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white' 
-              : 'bg-gray-100 border border-gray-200 text-gray-600'
-          }`}>
-            {isUser ? <UserIcon className="w-4 h-4" /> : <BotIcon className="w-4 h-4" />}
-          </div>
-        </div>
-
+    <div className={`group max-w-4xl mx-auto px-4 py-3 ${className}`}>
+      <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
         {/* Message Content */}
-        <div className="flex-1 min-w-0">
-          <div className="prose prose-sm max-w-none">
-            <div className={`whitespace-pre-wrap break-words leading-relaxed ${
-              isUser ? 'text-gray-900 font-medium' : 'text-gray-800'
-            }`}>
-              {message.content}
-              {isStreaming && (
-                <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse rounded-sm" />
-              )}
+        <div className={`max-w-[80%]`}>
+          {isUser ? (
+            <div className="bg-zinc-800 text-zinc-200 rounded-full px-4 py-2">
+              <div className="whitespace-pre-wrap break-words leading-relaxed">
+                {message.content}
+              </div>
             </div>
-          </div>
-          <div className="mt-2 text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
-            {formatTime(message.timestamp)}
-          </div>
+          ) : (
+            <div className="text-zinc-300 px-1 py-1">
+              <div className="whitespace-pre-wrap break-words leading-relaxed">
+                {message.content}
+                {isStreaming && (
+                  <span className="inline-block w-2 h-5 bg-zinc-600 ml-1 animate-pulse rounded-sm" />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -94,7 +86,7 @@ const MessageList: React.FC<MessageListProps> = memo(({
       <div className={`flex-1 flex items-center justify-center p-8 ${className}`}>
         <div className="text-center">
           <Loading />
-          <p className="mt-4 text-gray-600">Loading conversation...</p>
+          <p className="mt-4 text-zinc-400">Loading conversation...</p>
         </div>
       </div>
     );
@@ -107,16 +99,36 @@ const MessageList: React.FC<MessageListProps> = memo(({
     >
       {messages.length === 0 && !streamingMessage ? (
         <div className="flex items-center justify-center h-full">
-          <div className="text-center max-w-md mx-auto px-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <BotIcon className="w-8 h-8 text-white" />
+          <div className="max-w-4xl mx-auto px-4 py-3">
+            <div className="flex justify-start">
+              <div className="text-zinc-300 px-1 py-1">
+                <div className="whitespace-pre-wrap break-words leading-relaxed">
+                  <div className="py-2 animated-text text-lg">
+                    <span className="char1">A</span>
+                    <span className="char2">s</span>
+                    <span className="char3">k</span>
+                    <span className="char4"> </span>
+                    <span className="char5">a</span>
+                    <span className="char6">n</span>
+                    <span className="char7">y</span>
+                    <span className="char8">t</span>
+                    <span className="char9">h</span>
+                    <span className="char10">i</span>
+                    <span className="char11">n</span>
+                    <span className="char12">g</span>
+                    <span className="char13"> </span>
+                    <span className="char14">a</span>
+                    <span className="char15">b</span>
+                    <span className="char16">o</span>
+                    <span className="char17">u</span>
+                    <span className="char18">t</span>
+                    <span className="char19"> </span>
+                    <span className="char20 text-zinc-400">{window.location.pathname.split('/')[1]}</span>
+                    <div className="cursor"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              How can I help you today?
-            </h3>
-            <p className="text-gray-500 leading-relaxed">
-              I'm here to help answer questions and provide information. Just start typing your message below.
-            </p>
           </div>
         </div>
       ) : (
@@ -143,17 +155,10 @@ const MessageList: React.FC<MessageListProps> = memo(({
           
           {/* Typing indicator when no streaming message */}
           {loading && !streamingMessage && (
-            <div className="max-w-4xl mx-auto px-4 py-6">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 text-gray-600 flex items-center justify-center">
-                    <BotIcon className="w-4 h-4" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="bg-gray-50 rounded-lg px-4 py-3 max-w-xs">
-                    <TypingIndicator />
-                  </div>
+            <div className="max-w-4xl mx-auto px-4 py-3">
+              <div className="flex justify-start">
+                <div className="px-1 py-1">
+                  <TypingIndicator />
                 </div>
               </div>
             </div>

@@ -32,7 +32,7 @@ export default function SettingsPage() {
   
   const [publishData, setPublishData] = useState({
     isPublished: companyAuth.company?.is_published || false,
-    chatbotTitle: companyAuth.company?.name ? `${companyAuth.company.name} Assistant` : '',
+    chatbotTitle: companyAuth.company?.name ? `${companyAuth.company.name}` : '',
     chatbotDescription: 'Get help with our services and products',
   });
   
@@ -46,7 +46,7 @@ export default function SettingsPage() {
       dispatch(setCompany(companyAuth.company));
       setPublishData({
         isPublished: companyAuth.company.is_published || false,
-        chatbotTitle: companyAuth.company.name ? `${companyAuth.company.name} Assistant` : '',
+        chatbotTitle: companyAuth.company.name ? `${companyAuth.company.name}` : '',
         chatbotDescription: 'Get help with our services and products',
       });
       setSlugData({
