@@ -3,7 +3,7 @@ import type { Message, ModelType } from '@/types/chat';
 import { useAppSelector } from './useAuth';
 
 export const useCompanyGuestChat = () => {
-  const { company } = useAppSelector((state) => state.auth);
+  const { company } = useAppSelector((state) => state.companyAuth);
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] = useState('');

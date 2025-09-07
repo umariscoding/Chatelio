@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
 import { publishChatbot, updateCompanySlug, setCompany, clearError } from '@/store/slices/companySlice';
-import { updateCompanyInfo } from '@/store/slices/authSlice';
+import { updateCompanyInfo } from '@/store/slices/companyAuthSlice';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
@@ -27,33 +27,33 @@ const CogIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) =>
 export default function SettingsPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { activeSession, company, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
   const { publicUrl, loading, error } = useAppSelector((state) => state.company);
   
   const [publishData, setPublishData] = useState({
-    isPublished: company?.is_published || false,
-    chatbotTitle: company?.name ? `${company.name} Assistant` : '',
+    isPublished: companyAuth.company?.is_published || false,
+    chatbotTitle: companyAuth.company?.name ? `${companyAuth.company.name} Assistant` : '',
     chatbotDescription: 'Get help with our services and products',
   });
   
   const [slugData, setSlugData] = useState({
-    slug: company?.slug || '',
+    slug: companyAuth.company?.slug || '',
   });
 
   // Initialize company data in company slice
   useEffect(() => {
-    if (company) {
-      dispatch(setCompany(company));
+    if (companyAuth.company) {
+      dispatch(setCompany(companyAuth.company));
       setPublishData({
-        isPublished: company.is_published || false,
-        chatbotTitle: company.name ? `${company.name} Assistant` : '',
+        isPublished: companyAuth.company.is_published || false,
+        chatbotTitle: companyAuth.company.name ? `${companyAuth.company.name} Assistant` : '',
         chatbotDescription: 'Get help with our services and products',
       });
       setSlugData({
-        slug: company.slug || '',
+        slug: companyAuth.company.slug || '',
       });
     }
-  }, [company, dispatch]);
+  }, [companyAuth.company, dispatch]);
 
   const handlePublishToggle = async () => {
     try {
@@ -68,8 +68,8 @@ export default function SettingsPage() {
       setPublishData(prev => ({ ...prev, isPublished: !prev.isPublished }));
       
       // Update auth slice with new publish status
-      if (company) {
-        const updatedCompany = { ...company, is_published: result.is_published };
+      if (companyAuth.company) {
+        const updatedCompany = { ...companyAuth.company, is_published: result.is_published };
         dispatch(updateCompanyInfo(updatedCompany));
       }
       
@@ -91,9 +91,9 @@ export default function SettingsPage() {
       })).unwrap();
       
       // Update auth slice with new chatbot info
-      if (company) {
+      if (companyAuth.company) {
         const updatedCompany = { 
-          ...company, 
+          ...companyAuth.company, 
           is_published: result.is_published,
           chatbot_title: publishData.chatbotTitle,
           chatbot_description: publishData.chatbotDescription,
@@ -122,8 +122,8 @@ export default function SettingsPage() {
       })).unwrap();
       
       // Update both auth slice and company slice immediately
-      if (company) {
-        const updatedCompany = { ...company, slug: result.slug };
+      if (companyAuth.company) {
+        const updatedCompany = { ...companyAuth.company, slug: result.slug };
         dispatch(setCompany(updatedCompany));
         dispatch(updateCompanyInfo(updatedCompany));
       }
@@ -136,13 +136,13 @@ export default function SettingsPage() {
   };
 
   const handleVisitPublicChatbot = () => {
-    if (company?.slug && typeof window !== 'undefined') {
-      const publicChatbotUrl = `${window.location.origin}/${company.slug}`;
+    if (companyAuth.company?.slug && typeof window !== 'undefined') {
+      const publicChatbotUrl = `${window.location.origin}/${companyAuth.company.slug}`;
       window.open(publicChatbotUrl, '_blank');
     }
   };
 
-  if (activeSession !== 'company' || !isCompanyAuthenticated) {
+  if (!companyAuth.isAuthenticated) {
     return (
       <div className="space-y-6">
         <div>
@@ -220,17 +220,17 @@ export default function SettingsPage() {
                 <Button
                   onClick={handleUpdateSlug}
                   loading={loading}
-                  disabled={!slugData.slug.trim() || slugData.slug === company?.slug}
+                  disabled={!slugData.slug.trim() || slugData.slug === companyAuth.company?.slug}
                 >
                   Update Slug
                 </Button>
               </div>
             </div>
 
-            {company?.slug && (
+            {companyAuth.company?.slug && (
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-sm text-gray-600">
-                  Your public URL: <code className="text-blue-600">{typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{company.slug}</code>
+                  Your public URL: <code className="text-blue-600">{typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{companyAuth.company.slug}</code>
                 </p>
               </div>
             )}
@@ -269,13 +269,13 @@ export default function SettingsPage() {
                 onClick={handlePublishToggle}
                 loading={loading}
                 variant={publishData.isPublished ? 'outline' : 'primary'}
-                disabled={!company?.slug}
+                disabled={!companyAuth.company?.slug}
               >
                 {publishData.isPublished ? 'Unpublish' : 'Publish'}
               </Button>
             </div>
 
-            {!company?.slug && (
+            {!companyAuth.company?.slug && (
               <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800">
                   ⚠️ You need to set a company slug before publishing your chatbot.
@@ -284,19 +284,19 @@ export default function SettingsPage() {
             )}
 
             {/* Public URL with Visit Button */}
-            {company?.slug && publishData.isPublished && (
+            {companyAuth.company?.slug && publishData.isPublished && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <h4 className="text-sm font-medium text-green-900 mb-3">🎉 Your chatbot is live!</h4>
                 <div className="flex items-center space-x-3">
                   <code className="flex-1 bg-white px-3 py-2 rounded border text-sm">
-                    {typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{company.slug}
+                    {typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{companyAuth.company.slug}
                   </code>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => {
                       if (typeof window !== 'undefined') {
-                        navigator.clipboard.writeText(`${window.location.origin}/${company.slug}`);
+                        navigator.clipboard.writeText(`${window.location.origin}/${companyAuth.company?.slug}`);
                         alert('URL copied to clipboard!');
                       }
                     }}

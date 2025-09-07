@@ -125,15 +125,19 @@ const NavigationItemComponent: React.FC<NavigationItemComponentProps> = ({ item,
 
 const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClose }) => {
   const pathname = usePathname();
-  const { activeSession } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const navigationSections = getNavigationSections();
 
+  // Determine current user type
+  const currentUserType = companyAuth.isAuthenticated ? 'company' : userAuth.isAuthenticated ? 'user' : null;
+  
   // Filter navigation items based on user type
   const filteredSections = navigationSections
     .map((section) => ({
       ...section,
       items: section.items.filter((item) =>
-        activeSession && item.allowedUserTypes.includes(activeSession)
+        currentUserType && item.allowedUserTypes.includes(currentUserType)
       ),
     }))
     .filter((section) => section.items.length > 0);

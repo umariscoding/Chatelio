@@ -11,7 +11,7 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import type { Message, ModelType } from '@/types/chat';
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { setActiveSessionUser, setUserData, logoutUser } from '@/store/slices/authSlice';
+import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
 
 interface CompanyInfo {
   company_id: string;
@@ -34,9 +34,9 @@ export default function PublicChatPage() {
   const dispatch = useAppDispatch();
   const slug = params.slug as string;
   
-  // Check if user is logged in
-  const { isUserAuthenticated, activeSession, user, userTokens } = useAppSelector((state) => state.auth);
-  const isUserLoggedIn = isUserAuthenticated && activeSession === 'user';
+  // Check if user is logged in - now using simplified auth
+  const userAuth = useAppSelector((state) => state.userAuth);
+  const isUserLoggedIn = userAuth.isAuthenticated;
   
   // Common state for both guest and logged-in users
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
@@ -62,7 +62,67 @@ export default function PublicChatPage() {
   // Initialize chat on mount
   useEffect(() => {
     initializeChat();
-  }, [slug, isUserLoggedIn]);
+  }, [slug]);
+
+  // Verify user token gracefully when user appears to be logged in
+  useEffect(() => {
+    const verifyUserAuth = async () => {
+      if (userAuth.tokens?.access_token && !userAuth.user) {
+        try {
+          const result = await dispatch(verifyUserTokenGraceful()).unwrap();
+          if (!result.valid) {
+            console.warn('User token verification failed:', result.reason);
+            // Token is invalid but we don't log out - let user continue as guest
+            // They can re-authenticate if needed
+          }
+        } catch (error) {
+          console.warn('Token verification error:', error);
+          // Continue as guest if verification fails
+        }
+      }
+    };
+    
+    verifyUserAuth();
+  }, [dispatch, userAuth.tokens, userAuth.user]);
+
+  // Handle user authentication state changes - fetch chat history when user logs in
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      if (isUserLoggedIn && userAuth.tokens?.access_token && companyInfo) {
+        await fetchChatHistory();
+      }
+    };
+    
+    loadChatHistory();
+  }, [isUserLoggedIn, userAuth.tokens?.access_token, companyInfo]);
+
+  // Create guest token when not logged in and company info is available
+  useEffect(() => {
+    const createGuestToken = async () => {
+      if (!isUserLoggedIn && !guestToken && companyInfo) {
+        try {
+          const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              company_id: companyInfo.company_id,
+              ip_address: 'frontend-client',
+              user_agent: navigator.userAgent,
+            }),
+          });
+          
+          if (tokenResponse.ok) {
+            const tokenData = await tokenResponse.json();
+            setGuestToken(tokenData.tokens.access_token);
+          }
+        } catch (err) {
+          console.error('Failed to create guest token:', err);
+        }
+      }
+    };
+    
+    createGuestToken();
+  }, [isUserLoggedIn, guestToken, companyInfo]);
 
   const initializeChat = async () => {
     try {
@@ -75,28 +135,6 @@ export default function PublicChatPage() {
       const companyData = await companyResponse.json();
       setCompanyInfo(companyData);
 
-      // If user is logged in, fetch chat history
-      if (isUserLoggedIn && userTokens?.access_token) {
-        await fetchChatHistory();
-      }
-      
-      // If guest, create guest token
-      if (!isUserLoggedIn) {
-        const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            company_id: companyData.company_id,
-            ip_address: 'frontend-client',
-            user_agent: navigator.userAgent,
-          }),
-        });
-        
-        if (tokenResponse.ok) {
-          const tokenData = await tokenResponse.json();
-          setGuestToken(tokenData.tokens.access_token);
-        }
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initialize chat');
     } finally {
@@ -105,11 +143,11 @@ export default function PublicChatPage() {
   };
 
   const fetchChatHistory = async () => {
-    if (!userTokens?.access_token) return;
+    if (!userAuth.tokens?.access_token) return;
     
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/list`, {
-        headers: { 'Authorization': `Bearer ${userTokens.access_token}` }
+        headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
       });
       
       if (response.ok) {
@@ -137,7 +175,7 @@ export default function PublicChatPage() {
 
     try {
       // Prepare request
-      const token = isUserLoggedIn ? userTokens?.access_token : guestToken;
+      const token = isUserLoggedIn ? userAuth.tokens?.access_token : guestToken;
       const payload: any = {
         message,
         model,
@@ -165,6 +203,92 @@ export default function PublicChatPage() {
         headers,
         body: JSON.stringify(payload),
       });
+
+      // If user token is invalid, gracefully fall back to guest mode
+      if (!response.ok && response.status === 401 && isUserLoggedIn) {
+        console.warn('User token invalid, falling back to guest mode');
+        // Create guest session and retry
+        if (companyInfo) {
+          const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              company_id: companyInfo.company_id,
+              ip_address: 'frontend-client',
+              user_agent: navigator.userAgent,
+            }),
+          });
+          
+          if (tokenResponse.ok) {
+            const tokenData = await tokenResponse.json();
+            setGuestToken(tokenData.tokens.access_token);
+            
+            // Retry with guest token
+            const retryPayload = {
+              message,
+              model,
+              chat_title: 'Guest Chat Session'
+            };
+            
+            const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${slug}/chat`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${tokenData.tokens.access_token}`,
+              },
+              body: JSON.stringify(retryPayload),
+            });
+            
+            if (retryResponse.ok) {
+              // Use the retry response instead
+              const reader = retryResponse.body?.getReader();
+              if (!reader) throw new Error('No response body');
+
+              let fullMessage = '';
+              const decoder = new TextDecoder();
+
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    try {
+                      const data = JSON.parse(line.slice(6));
+                      
+                      if (data.type === 'start' && data.chat_id) {
+                        setCurrentChatId(data.chat_id);
+                      } else if (data.type === 'chunk' && data.content) {
+                        fullMessage += data.content;
+                        setStreamingMessage(fullMessage);
+                      } else if (data.type === 'end') {
+                        // Add AI message
+                        const aiMessage: Message = {
+                          id: `ai-${Date.now()}`,
+                          role: 'ai',
+                          content: fullMessage,
+                          timestamp: Date.now(),
+                        };
+                        setMessages(prev => [...prev, aiMessage]);
+                        setStreamingMessage('');
+                        setIsStreaming(false);
+                        return;
+                      }
+                    } catch (parseError) {
+                      console.warn('Failed to parse streaming data:', parseError);
+                    }
+                  }
+                }
+              }
+              return;
+            }
+          }
+        }
+        throw new Error('Authentication failed and could not create guest session');
+      }
 
       if (!response.ok) throw new Error('Failed to send message');
 
@@ -261,7 +385,6 @@ export default function PublicChatPage() {
       // For both signup and login, the response contains user data and tokens
       // Use direct action to set user data without making another API call
       dispatch(setUserData({ user: data.user, tokens: data.tokens }));
-      dispatch(setActiveSessionUser());
       
       // Clear guest state and modal
       setShowAuthModal(false);
@@ -270,6 +393,9 @@ export default function PublicChatPage() {
       setCurrentChatId(null);
       setStreamingMessage('');
       setError(null);
+      
+      // Reset auth form
+      setAuthData({ email: '', password: '', name: '' });
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
@@ -286,7 +412,7 @@ export default function PublicChatPage() {
   };
 
   const selectChat = async (chatId: string) => {
-    if (!userTokens?.access_token) return;
+    if (!userAuth.tokens?.access_token) return;
     
     try {
       setCurrentChatId(chatId);
@@ -296,7 +422,7 @@ export default function PublicChatPage() {
       
       // Load chat history
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/history/${chatId}`, {
-        headers: { 'Authorization': `Bearer ${userTokens.access_token}` }
+        headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
       });
       
       if (response.ok) {
@@ -428,7 +554,7 @@ export default function PublicChatPage() {
               <p className="text-sm text-gray-600 mt-1">
                 {isUserLoggedIn ? (
                   <span>
-                    <span className="font-medium">{user?.name}</span> chatting with{' '}
+                    <span className="font-medium">{userAuth.user?.name}</span> chatting with{' '}
                     <span className="font-medium">{companyInfo?.name}</span>
                   </span>
                 ) : (

@@ -14,7 +14,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { activeSession } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
 

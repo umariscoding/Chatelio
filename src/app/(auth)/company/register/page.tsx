@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
-import { registerCompany, clearError } from '@/store/slices/authSlice';
+import { registerCompany, clearError } from '@/store/slices/companyAuthSlice';
 import { APP_CONFIG, ROUTES, FORM_VALIDATION } from '@/constants/APP_CONSTANTS';
 
 interface FormData {
@@ -27,7 +27,7 @@ interface FormErrors {
 export default function CompanyRegisterPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { companyLoading, error, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
+  const { loading: companyLoading, error, isAuthenticated: isCompanyAuthenticated } = useAppSelector((state) => state.companyAuth);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',

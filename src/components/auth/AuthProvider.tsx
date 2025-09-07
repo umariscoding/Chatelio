@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
-import { loadTokensFromStorage, verifyCompanyToken, verifyUserToken, setActiveSessionCompany, setActiveSessionUser } from '@/store/slices/authSlice';
+import { loadFromStorage as loadCompanyFromStorage, verifyCompanyToken } from '@/store/slices/companyAuthSlice';
+import { loadFromStorage as loadUserFromStorage, verifyUserToken, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
 import Loading from '@/components/ui/Loading';
 
 interface AuthProviderProps {
@@ -11,58 +13,57 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const dispatch = useAppDispatch();
-  const { 
-    isCompanyAuthenticated, 
-    isUserAuthenticated, 
-    companyLoading, 
-    userLoading, 
-    activeSession 
-  } = useAppSelector((state) => state.auth);
+  const pathname = usePathname();
+  
+  // Get independent auth states
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
+  
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
     const initializeAuth = async () => {
-      // Load tokens from localStorage first
-      dispatch(loadTokensFromStorage());
+      // Load tokens from localStorage for both auth systems independently
+      dispatch(loadCompanyFromStorage());
+      dispatch(loadUserFromStorage());
       
-      // Check which tokens we have and verify them
-      const companyToken = localStorage.getItem('company_access_token');
-      const userToken = localStorage.getItem('user_access_token');
-      const storedActiveSession = localStorage.getItem('active_session');
+      // Check if current route is a public chatbot route
+      const isPublicRoute = pathname?.match(/^\/[^/]+$/) || pathname?.match(/^\/[^/]+\/chat$/);
+      const isDashboardRoute = pathname?.startsWith('/dashboard') || pathname?.startsWith('/settings') || pathname?.startsWith('/profile') || pathname?.startsWith('/knowledge-base') || pathname?.startsWith('/users');
       
       try {
-        // Verify company token if available
-        if (companyToken) {
-          dispatch(setActiveSessionCompany());
-          await dispatch(verifyCompanyToken()).unwrap();
+        // Handle company authentication (for dashboard routes)
+        const companyToken = localStorage.getItem('company_access_token');
+        if (companyToken && isDashboardRoute) {
+          // Strict verification for dashboard routes
+          await dispatch(verifyCompanyToken());
         }
         
-        // Verify user token if available
+        // Handle user authentication
+        const userToken = localStorage.getItem('user_access_token');
         if (userToken) {
-          dispatch(setActiveSessionUser());
-          await dispatch(verifyUserToken()).unwrap();
-        }
-        
-        // If we have a stored active session, set it
-        if (storedActiveSession === 'company' && companyToken) {
-          dispatch(setActiveSessionCompany());
-        } else if (storedActiveSession === 'user' && userToken) {
-          dispatch(setActiveSessionUser());
+          if (isPublicRoute) {
+            // Graceful verification for public routes (doesn't log out on failure)
+            await dispatch(verifyUserTokenGraceful());
+          } else if (isDashboardRoute) {
+            // Strict verification for dashboard routes
+            await dispatch(verifyUserToken());
+          }
         }
         
       } catch (error) {
-        console.error('Token verification failed:', error);
-        // Token verification will clear invalid tokens automatically
+        console.warn('Token verification failed:', error);
+        // Errors are handled by individual slices
       }
       
       setIsInitializing(false);
     };
 
     initializeAuth();
-  }, [dispatch]);
+  }, [dispatch, pathname]);
 
-  // Show loading while initializing auth state
-  if (isInitializing || companyLoading || userLoading) {
+  // Show loading while initializing
+  if (isInitializing || companyAuth.loading || userAuth.loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />

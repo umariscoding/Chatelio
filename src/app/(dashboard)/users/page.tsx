@@ -46,7 +46,7 @@ interface CompanyUser {
 }
 
 export default function UsersPage() {
-  const { activeSession, company, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
   const [users, setUsers] = useState<CompanyUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +54,7 @@ export default function UsersPage() {
 
   // Fetch company users
   const fetchUsers = async () => {
-      if (!company?.company_id) {
+      if (!companyAuth.company?.company_id) {
         setError('Company information not available');
         setLoading(false);
         return;
@@ -64,7 +64,7 @@ export default function UsersPage() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${API_ENDPOINTS.USERS.COMPANY_USERS}/${company.company_id}/users`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${API_ENDPOINTS.USERS.COMPANY_USERS}/${companyAuth.company.company_id}/users`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('company_access_token')}`,
           },
@@ -96,16 +96,16 @@ export default function UsersPage() {
 
   useEffect(() => {
     // Only fetch if we have company data and are authenticated as company
-    if (company?.company_id && activeSession === 'company' && isCompanyAuthenticated) {
+    if (companyAuth.company?.company_id && companyAuth.isAuthenticated) {
       fetchUsers();
-    } else if (activeSession === 'company' && isCompanyAuthenticated && !company?.company_id) {
+    } else if (companyAuth.isAuthenticated && !companyAuth.company?.company_id) {
       // If we're a company user but don't have company data, wait for it to load
       setLoading(true);
     }
-  }, [company?.company_id, activeSession, isCompanyAuthenticated]);
+  }, [companyAuth.company?.company_id, companyAuth.isAuthenticated]);
 
   // Access control check - render this if not authorized
-  if (activeSession !== 'company' || !isCompanyAuthenticated) {
+  if (!companyAuth.isAuthenticated) {
     return (
       <div className="space-y-6">
         <div>

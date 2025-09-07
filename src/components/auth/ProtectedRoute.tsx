@@ -20,23 +20,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   fallbackRoute = ROUTES.COMPANY_LOGIN
 }) => {
   const router = useRouter();
-  const { 
-    isCompanyAuthenticated, 
-    isUserAuthenticated, 
-    companyLoading, 
-    userLoading, 
-    activeSession 
-  } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     // Wait for auth to initialize before making routing decisions
-    if (!companyLoading && !userLoading) {
+    if (!companyAuth.loading && !userAuth.loading) {
       setIsInitialLoad(false);
       
       // Check if user needs company access
       if (requiredUserType === 'company') {
-        if (!isCompanyAuthenticated) {
+        if (!companyAuth.isAuthenticated) {
           router.push(ROUTES.COMPANY_LOGIN);
           return;
         }
@@ -44,7 +39,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       
       // Check if user needs user access  
       if (requiredUserType === 'user') {
-        if (!isUserAuthenticated) {
+        if (!userAuth.isAuthenticated) {
           // Users can only authenticate through company chatbot pages, redirect to home
           router.push(ROUTES.HOME);
           return;
@@ -53,15 +48,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       
       // If no specific type required, check for any authentication
       if (!requiredUserType) {
-        if (!isCompanyAuthenticated && !isUserAuthenticated) {
+        if (!companyAuth.isAuthenticated && !userAuth.isAuthenticated) {
           router.push(fallbackRoute);
           return;
         }
       }
       
       // Handle wrong user type redirects
-      if (requiredUserType && requiredUserType === 'company' && !isCompanyAuthenticated) {
-        if (isUserAuthenticated) {
+      if (requiredUserType && requiredUserType === 'company' && !companyAuth.isAuthenticated) {
+        if (userAuth.isAuthenticated) {
           router.push(ROUTES.CHAT); // Redirect user to their area
         } else {
           router.push(ROUTES.COMPANY_LOGIN);
@@ -69,8 +64,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         return;
       }
       
-      if (requiredUserType && requiredUserType === 'user' && !isUserAuthenticated) {
-        if (isCompanyAuthenticated) {
+      if (requiredUserType && requiredUserType === 'user' && !userAuth.isAuthenticated) {
+        if (companyAuth.isAuthenticated) {
           router.push(ROUTES.DASHBOARD); // Redirect company to their area
         } else {
           // Users can only authenticate through company chatbot pages, redirect to home
@@ -80,17 +75,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       }
     }
   }, [
-    isCompanyAuthenticated, 
-    isUserAuthenticated, 
-    companyLoading, 
-    userLoading, 
+    companyAuth.isAuthenticated, 
+    userAuth.isAuthenticated, 
+    companyAuth.loading, 
+    userAuth.loading, 
     requiredUserType, 
     fallbackRoute, 
     router
   ]);
 
   // Show loading during initial auth check or while auth is loading
-  if (companyLoading || userLoading || isInitialLoad) {
+  if (companyAuth.loading || userAuth.loading || isInitialLoad) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />
@@ -99,7 +94,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Check authentication based on required user type
-  if (requiredUserType === 'company' && !isCompanyAuthenticated) {
+  if (requiredUserType === 'company' && !companyAuth.isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />
@@ -107,7 +102,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
   
-  if (requiredUserType === 'user' && !isUserAuthenticated) {
+  if (requiredUserType === 'user' && !userAuth.isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />
@@ -116,7 +111,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
   
   // If no specific type required, check for any authentication
-  if (!requiredUserType && !isCompanyAuthenticated && !isUserAuthenticated) {
+  if (!requiredUserType && !companyAuth.isAuthenticated && !userAuth.isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loading />

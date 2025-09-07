@@ -8,7 +8,8 @@ import Card from '@/components/ui/Card';
 import type { ProfileFormData, CompanyProfileFormData } from '@/interfaces/Profile.interface';
 
 export default function ProfilePage() {
-  const { user, company, activeSession, isCompanyAuthenticated, isUserAuthenticated } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const [loading, setLoading] = useState(false);
 
   const handleUserProfileSubmit = async (data: ProfileFormData) => {
@@ -49,9 +50,13 @@ export default function ProfilePage() {
     }
   };
 
-  const displayName = activeSession === 'company' 
-    ? company?.name || 'Company' 
-    : user?.name || 'User';
+  // Determine which auth is active
+  const isCompanyUser = companyAuth.isAuthenticated;
+  const isRegularUser = userAuth.isAuthenticated;
+  
+  const displayName = isCompanyUser 
+    ? companyAuth.company?.name || 'Company' 
+    : userAuth.user?.name || 'User';
 
   return (
     <div className="space-y-6">
@@ -59,7 +64,7 @@ export default function ProfilePage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Manage your {activeSession === 'company' ? 'company' : 'personal'} information and account settings.
+          Manage your {isCompanyUser ? 'company' : 'personal'} information and account settings.
         </p>
       </div>
 
@@ -77,10 +82,10 @@ export default function ProfilePage() {
             <div>
               <h3 className="text-lg font-medium text-gray-900">{displayName}</h3>
               <p className="text-sm text-gray-600">
-                {activeSession === 'company' ? company?.email : user?.email}
+                {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                {activeSession === 'company' ? 'Company Account' : 'Team Member'}
+                {isCompanyUser ? 'Company Account' : 'Team Member'}
               </p>
             </div>
           </div>
@@ -88,14 +93,14 @@ export default function ProfilePage() {
       </Card>
 
       {/* Profile Forms */}
-      {activeSession === 'company' ? (
+      {isCompanyUser ? (
         <CompanyProfileForm
           onSubmit={handleCompanyProfileSubmit}
           loading={loading}
           initialData={{
-            name: company?.name || '',
-            email: company?.email || '',
-            slug: company?.slug || '',
+            name: companyAuth.company?.name || '',
+            email: companyAuth.company?.email || '',
+            slug: companyAuth.company?.slug || '',
           }}
         />
       ) : (
@@ -103,8 +108,8 @@ export default function ProfilePage() {
           onSubmit={handleUserProfileSubmit}
           loading={loading}
           initialData={{
-            name: user?.name || '',
-            email: user?.email || '',
+            name: userAuth.user?.name || '',
+            email: userAuth.user?.email || '',
           }}
         />
       )}
@@ -126,7 +131,7 @@ export default function ProfilePage() {
               </button>
             </div>
             
-            {activeSession === 'company' && (
+            {isCompanyUser && (
               <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                 <div>
                   <h4 className="text-sm font-medium text-red-900">Delete Company Account</h4>

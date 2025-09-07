@@ -10,21 +10,17 @@ export const api = axios.create({
   },
 });
 
-// Request interceptor for auth - now handles both company and user tokens
+// Request interceptor for auth - simplified for independent auth system
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      const activeSession = localStorage.getItem('active_session');
-      let token = null;
+      // Try company token first, then user token
+      const companyToken = localStorage.getItem('company_access_token');
+      const userToken = localStorage.getItem('user_access_token');
       
-      if (activeSession === 'company') {
-        token = localStorage.getItem('company_access_token');
-      } else if (activeSession === 'user') {
-        token = localStorage.getItem('user_access_token');
-      } else {
-        // Fallback: try to get any available token
-        token = localStorage.getItem('company_access_token') || localStorage.getItem('user_access_token');
-      }
+      // Use company token for company operations, user token for user operations
+      // For knowledge base operations, prioritize company token
+      const token = companyToken || userToken;
       
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -37,7 +33,7 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for token refresh - now handles both company and user tokens
+// Response interceptor for token refresh - simplified for independent auth system
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -47,29 +43,16 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       
       if (typeof window !== 'undefined') {
-        const activeSession = localStorage.getItem('active_session');
-        let refreshToken = null;
-        let accessTokenKey = '';
-        let refreshTokenKey = '';
-        
-        if (activeSession === 'company') {
-          refreshToken = localStorage.getItem('company_refresh_token');
-          accessTokenKey = 'company_access_token';
-          refreshTokenKey = 'company_refresh_token';
-        } else if (activeSession === 'user') {
-          refreshToken = localStorage.getItem('user_refresh_token');
-          accessTokenKey = 'user_access_token';
-          refreshTokenKey = 'user_refresh_token';
-        }
-        
-        if (refreshToken) {
+        // Try to refresh company token first
+        const companyRefreshToken = localStorage.getItem('company_refresh_token');
+        if (companyRefreshToken) {
           try {
             const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
-              refresh_token: refreshToken,
+              refresh_token: companyRefreshToken,
             });
             
             const { access_token } = response.data;
-            localStorage.setItem(accessTokenKey, access_token);
+            localStorage.setItem('company_access_token', access_token);
             
             // Retry the original request with new token
             if (originalRequest.headers) {
@@ -78,35 +61,39 @@ api.interceptors.response.use(
             
             return api(originalRequest);
           } catch (refreshError) {
-            // Refresh failed, clear tokens and redirect to appropriate login
-            localStorage.removeItem(accessTokenKey);
-            localStorage.removeItem(refreshTokenKey);
-            
-            if (activeSession === 'company') {
-              localStorage.removeItem('active_session');
-              if (typeof window !== 'undefined') {
-                window.location.href = '/company/login';
-              }
-            } else if (activeSession === 'user') {
-              localStorage.removeItem('active_session');
-              if (typeof window !== 'undefined') {
-                window.location.href = '/user/login';
-              }
-            }
-            
-            return Promise.reject(refreshError);
+            // Company refresh failed, clear company tokens
+            localStorage.removeItem('company_access_token');
+            localStorage.removeItem('company_refresh_token');
           }
-        } else {
-          // No refresh token, redirect to appropriate login
-          if (activeSession === 'company') {
-            if (typeof window !== 'undefined') {
-              window.location.href = '/company/login';
+        }
+        
+        // Try to refresh user token
+        const userRefreshToken = localStorage.getItem('user_refresh_token');
+        if (userRefreshToken) {
+          try {
+            const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
+              refresh_token: userRefreshToken,
+            });
+            
+            const { access_token } = response.data;
+            localStorage.setItem('user_access_token', access_token);
+            
+            // Retry the original request with new token
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${access_token}`;
             }
-          } else if (activeSession === 'user') {
-            if (typeof window !== 'undefined') {
-              window.location.href = '/user/login';
-            }
+            
+            return api(originalRequest);
+          } catch (refreshError) {
+            // User refresh failed, clear user tokens
+            localStorage.removeItem('user_access_token');
+            localStorage.removeItem('user_refresh_token');
           }
+        }
+        
+        // Both refresh attempts failed, redirect to company login
+        if (typeof window !== 'undefined') {
+          window.location.href = '/company/login';
         }
       }
     }

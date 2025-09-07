@@ -6,25 +6,29 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
-import { logoutCompany, logoutUser } from "@/store/slices/authSlice";
+import { logout as logoutCompany } from "@/store/slices/companyAuthSlice";
+import { logout as logoutUser } from "@/store/slices/userAuthSlice";
 
 export default function Home() {
-  const { isCompanyAuthenticated, isUserAuthenticated, activeSession } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
-    if (activeSession === 'company') {
+    // Since auth is now independent, logout both if authenticated
+    if (companyAuth.isAuthenticated) {
       dispatch(logoutCompany());
-    } else if (activeSession === 'user') {
+    }
+    if (userAuth.isAuthenticated) {
       dispatch(logoutUser());
     }
   };
 
   const renderAuthButtons = () => {
-    if (isCompanyAuthenticated || isUserAuthenticated) {
+    if (companyAuth.isAuthenticated || userAuth.isAuthenticated) {
       return (
         <div className="flex items-center space-x-4">
-          <Link href={activeSession === 'company' ? ROUTES.DASHBOARD : ROUTES.DASHBOARD}>
+          <Link href={ROUTES.DASHBOARD}>
             <Button variant="ghost">
               Dashboard
             </Button>
@@ -74,7 +78,7 @@ export default function Home() {
             {APP_CONFIG.DESCRIPTION}. Upload your knowledge base and deploy branded chatbots for your customers.
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            {!isCompanyAuthenticated && !isUserAuthenticated ? (
+            {!companyAuth.isAuthenticated && !userAuth.isAuthenticated ? (
               <>
                 <div className="rounded-md shadow">
                   <Link href={ROUTES.COMPANY_REGISTER}>

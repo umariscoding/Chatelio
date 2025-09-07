@@ -7,11 +7,14 @@ export const useAppSelector = <T>(selector: (state: RootState) => T) => useSelec
 
 // Custom authentication hook
 export const useAuth = () => {
-  const auth = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
 
   return {
-    ...auth,
+    companyAuth,
+    userAuth,
+    isAuthenticated: companyAuth.isAuthenticated || userAuth.isAuthenticated,
     dispatch,
   };
 };

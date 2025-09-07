@@ -2,7 +2,8 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-import authSlice from './slices/authSlice';
+import companyAuthSlice from './slices/companyAuthSlice';
+import userAuthSlice from './slices/userAuthSlice';
 import chatSlice from './slices/chatSlice';
 import knowledgeBaseSlice from './slices/knowledgeBaseSlice';
 import companySlice from './slices/companySlice';
@@ -31,12 +32,13 @@ const storage = typeof window !== 'undefined'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'company'], // Only persist auth and company data
+  whitelist: ['companyAuth', 'userAuth', 'company'], // Only persist auth and company data
   blacklist: ['ui'], // Don't persist UI state
 };
 
 const rootReducer = combineReducers({
-  auth: authSlice,
+  companyAuth: companyAuthSlice,
+  userAuth: userAuthSlice,
   chat: chatSlice,
   knowledgeBase: knowledgeBaseSlice,
   company: companySlice,

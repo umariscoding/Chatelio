@@ -36,11 +36,16 @@ const UserIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) =
 );
 
 export default function DashboardPage() {
-  const { user, company, activeSession } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
 
-  const displayName = activeSession === 'company' 
-    ? company?.name || 'Company' 
-    : user?.name || 'User';
+  // Determine which auth is active and display name
+  const isCompanyUser = companyAuth.isAuthenticated;
+  const isRegularUser = userAuth.isAuthenticated;
+  
+  const displayName = isCompanyUser 
+    ? companyAuth.company?.name || 'Company' 
+    : userAuth.user?.name || 'User';
 
   return (
     <div className="space-y-8">
@@ -50,7 +55,7 @@ export default function DashboardPage() {
           Welcome back, {displayName}
         </h1>
         <p className="mt-2 text-gray-600">
-          {activeSession === 'company' 
+          {isCompanyUser 
             ? 'Manage your chatbot, knowledge base, and team members from your dashboard.' 
             : 'Access your team\'s chatbot and view your conversation history.'
           }
@@ -59,7 +64,7 @@ export default function DashboardPage() {
 
       {/* Quick Actions Cards */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {activeSession === 'company' ? (
+        {isCompanyUser ? (
           <>
             
             <Card>
@@ -177,51 +182,51 @@ export default function DashboardPage() {
         <div className="lg:col-span-1">
           <Card>
             <div className="p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                {activeSession === 'company' ? 'Company Info' : 'Account Info'}
-              </h3>
-              <div className="space-y-3">
-                {activeSession === 'company' && company && (
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              {isCompanyUser ? 'Company Info' : 'Account Info'}
+            </h3>
+            <div className="space-y-3">
+              {isCompanyUser && companyAuth.company && (
                   <>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Company:</span>
-                      <p className="text-sm text-gray-900">{company.name}</p>
+                      <p className="text-sm text-gray-900">{companyAuth.company.name}</p>
                     </div>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Email:</span>
-                      <p className="text-sm text-gray-900">{company.email}</p>
+                      <p className="text-sm text-gray-900">{companyAuth.company.email}</p>
                     </div>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Plan:</span>
-                      <p className="text-sm text-gray-900 capitalize">{company.plan}</p>
+                      <p className="text-sm text-gray-900 capitalize">{companyAuth.company.plan}</p>
                     </div>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Status:</span>
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        company.status === 'active' 
+                        companyAuth.company.status === 'active' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-gray-100 text-gray-800'
                       }`}>
-                        {company.status}
+                        {companyAuth.company.status}
                       </span>
                     </div>
-                    {company.slug && (
+                    {companyAuth.company.slug && (
                       <div>
                         <span className="text-sm font-medium text-gray-500">Public URL:</span>
-                        <p className="text-sm text-blue-600 break-all">{typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{company.slug}</p>
+                        <p className="text-sm text-blue-600 break-all">{typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{companyAuth.company.slug}</p>
                       </div>
                     )}
                   </>
                 )}
-                {activeSession === 'user' && user && (
+                {isRegularUser && userAuth.user && (
                   <>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Name:</span>
-                      <p className="text-sm text-gray-900">{user.name}</p>
+                      <p className="text-sm text-gray-900">{userAuth.user.name}</p>
                     </div>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Email:</span>
-                      <p className="text-sm text-gray-900">{user.email}</p>
+                      <p className="text-sm text-gray-900">{userAuth.user.email}</p>
                     </div>
                     <div>
                       <span className="text-sm font-medium text-gray-500">Role:</span>

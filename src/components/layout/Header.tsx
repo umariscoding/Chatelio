@@ -4,7 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { logoutCompany, logoutUser } from '@/store/slices/authSlice';
+import { logout as logoutCompany } from '@/store/slices/companyAuthSlice';
+import { logout as logoutUser } from '@/store/slices/userAuthSlice';
 import type { HeaderProps, UserMenuProps, UserMenuItemProps } from '@/interfaces/Header.interface';
 
 // Icons (simple SVG components)
@@ -53,7 +54,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { user, company, activeSession } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -82,25 +84,29 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
   const handleLogout = () => {
     setIsOpen(false);
     
-    // Logout the appropriate session
-    if (activeSession === 'company') {
+    // Logout the appropriate session based on which auth is active
+    if (companyAuth.isAuthenticated) {
       dispatch(logoutCompany());
       router.push('/company/login');
-    } else if (activeSession === 'user') {
+    } else if (userAuth.isAuthenticated) {
       dispatch(logoutUser());
-      router.push('/user/login');
+      router.push('/');
     } else {
       router.push('/');
     }
   };
 
-  const displayName = activeSession === 'company' 
-    ? company?.name || 'Company' 
-    : user?.name || 'User';
+  // Determine which auth is active and get display info
+  const isCompanyUser = companyAuth.isAuthenticated;
+  const isRegularUser = userAuth.isAuthenticated;
   
-  const displayEmail = activeSession === 'company' 
-    ? company?.email || '' 
-    : user?.email || '';
+  const displayName = isCompanyUser 
+    ? companyAuth.company?.name || 'Company' 
+    : userAuth.user?.name || 'User';
+  
+  const displayEmail = isCompanyUser 
+    ? companyAuth.company?.email || '' 
+    : userAuth.user?.email || '';
 
   return (
     <div className={`relative ${className}`} ref={menuRef}>

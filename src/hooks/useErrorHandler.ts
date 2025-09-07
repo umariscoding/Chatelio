@@ -3,7 +3,8 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from './useAuth';
-import { logout } from '@/store/slices/authSlice';
+import { logout as logoutCompany } from '@/store/slices/companyAuthSlice';
+import { logout as logoutUser } from '@/store/slices/userAuthSlice';
 
 export interface ErrorContext {
   component?: string;
@@ -83,8 +84,9 @@ const useErrorHandler = () => {
       // Handle specific error cases
       switch (status) {
         case 401:
-          // Unauthorized - redirect to login
-          dispatch(logout());
+          // Unauthorized - logout both and redirect to login
+          dispatch(logoutCompany());
+          dispatch(logoutUser());
           router.push('/company/login');
           apiError.message = 'Your session has expired. Please log in again.';
           break;

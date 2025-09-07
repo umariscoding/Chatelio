@@ -77,6 +77,10 @@ export default function PublicChatbotPage() {
     }
   }, [companyInfo, router, slug]);
 
+  const handleStartChat = () => {
+    router.push(`/${slug}/chat`);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -117,9 +121,14 @@ export default function PublicChatbotPage() {
     );
   }
 
+  // This component shows a landing page but immediately redirects to chat
+  // Only render if we have company info
   if (!companyInfo) {
     return null;
   }
+
+  // Type assertion to help TypeScript understand companyInfo is not null here
+  const company = companyInfo as CompanyInfo;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -135,9 +144,9 @@ export default function PublicChatbotPage() {
               </div>
               <div>
                 <h1 className="text-xl font-semibold text-gray-900">
-                  {companyInfo.chatbot_title}
+                  {company.chatbot_title}
                 </h1>
-                <p className="text-sm text-gray-600">by {companyInfo.name}</p>
+                <p className="text-sm text-gray-600">by {company.name}</p>
               </div>
             </div>
             <div className="text-xs text-gray-500">
@@ -156,10 +165,10 @@ export default function PublicChatbotPage() {
               <ChatIcon className="h-10 w-10 text-blue-600" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Welcome to {companyInfo.chatbot_title}
+              Welcome to {company.chatbot_title}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              {companyInfo.chatbot_description}
+              {company.chatbot_description}
             </p>
           </div>
 
@@ -240,7 +249,7 @@ export default function PublicChatbotPage() {
       <footer className="bg-white border-t border-gray-200 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} {companyInfo.name}. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} {company.name}. All rights reserved.</p>
             <p className="mt-1">
               Powered by{' '}
               <a 

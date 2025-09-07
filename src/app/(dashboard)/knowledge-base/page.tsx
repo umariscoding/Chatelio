@@ -21,10 +21,10 @@ const BookOpenIcon: React.FC<{ className?: string }> = ({ className = "h-8 w-8" 
 );
 
 export default function KnowledgeBasePage() {
-  const { activeSession, isCompanyAuthenticated } = useAppSelector((state) => state.auth);
+  const companyAuth = useAppSelector((state) => state.companyAuth);
 
   // Only company accounts can access knowledge base management
-  if (activeSession !== 'company' || !isCompanyAuthenticated) {
+  if (!companyAuth.isAuthenticated) {
     return (
       <div className="space-y-6">
         <div>
