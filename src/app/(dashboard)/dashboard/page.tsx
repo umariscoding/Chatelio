@@ -1,39 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
-import { useAppSelector } from '@/hooks/useAuth';
-import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
-import RecentActivity from '@/components/dashboard/RecentActivity';
-
-// Icons for stats
-const ChatIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-  </svg>
-);
-
-const DocumentIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>
-);
-
-
-const CogIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-  </svg>
-);
-
-const UserIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-  </svg>
-);
+import { useAppSelector } from "@/hooks/useAuth";
+import MinimalButton from "@/components/ui/MinimalButton";
+import Card from "@/components/ui/Card";
+import { Icons } from "@/components/ui";
 
 export default function DashboardPage() {
   const companyAuth = useAppSelector((state) => state.companyAuth);
@@ -42,206 +15,230 @@ export default function DashboardPage() {
   // Determine which auth is active and display name
   const isCompanyUser = companyAuth.isAuthenticated;
   const isRegularUser = userAuth.isAuthenticated;
-  
-  const displayName = isCompanyUser 
-    ? companyAuth.company?.name || 'Company' 
-    : userAuth.user?.name || 'User';
+
+  const displayName = isCompanyUser
+    ? companyAuth.company?.name || "Company"
+    : userAuth.user?.name || "User";
 
   return (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {displayName}
-        </h1>
-        <p className="mt-2 text-gray-600">
-          {isCompanyUser 
-            ? 'Manage your chatbot, knowledge base, and team members from your dashboard.' 
-            : 'Access your team\'s chatbot and view your conversation history.'
-          }
-        </p>
-      </div>
-
-      {/* Quick Actions Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {isCompanyUser ? (
-          <>
-            
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <DocumentIcon className="h-8 w-8 text-green-600" />
-                  </div>
-                  <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">Knowledge Base</h3>
-                    <p className="text-sm text-gray-600">Upload and manage your documents</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Link href="/knowledge-base">
-                    <Button className="w-full" variant="outline">
-                      Manage Documents
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <CogIcon className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">Chatbot Settings</h3>
-                    <p className="text-sm text-gray-600">Configure and publish your chatbot</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Link href="/settings">
-                    <Button className="w-full" variant="outline">
-                      Open Settings
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-          </>
-        ) : (
-          <>
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <ChatIcon className="h-8 w-8 text-blue-600" />
-                  </div>
-                  <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">Start Chatting</h3>
-                    <p className="text-sm text-gray-600">Begin a new conversation with AI</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Link href="/chat">
-                    <Button className="w-full" variant="primary">
-                      New Chat
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <ChatIcon className="h-8 w-8 text-green-600" />
-                  </div>
-                  <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">Chat History</h3>
-                    <p className="text-sm text-gray-600">View your previous conversations</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Link href="/chat">
-                    <Button className="w-full" variant="outline">
-                      View History
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <UserIcon className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">Profile</h3>
-                    <p className="text-sm text-gray-600">Manage your account settings</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Link href="/profile">
-                    <Button className="w-full" variant="outline">
-                      Edit Profile
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-          </>
-        )}
-      </div>
-
-      {/* Account Info Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
-          <Card>
-            <div className="p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              {isCompanyUser ? 'Company Info' : 'Account Info'}
-            </h3>
-            <div className="space-y-3">
-              {isCompanyUser && companyAuth.company && (
-                  <>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Company:</span>
-                      <p className="text-sm text-gray-900">{companyAuth.company.name}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Email:</span>
-                      <p className="text-sm text-gray-900">{companyAuth.company.email}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Plan:</span>
-                      <p className="text-sm text-gray-900 capitalize">{companyAuth.company.plan}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Status:</span>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        companyAuth.company.status === 'active' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {companyAuth.company.status}
-                      </span>
-                    </div>
-                    {companyAuth.company.slug && (
-                      <div>
-                        <span className="text-sm font-medium text-gray-500">Public URL:</span>
-                        <p className="text-sm text-blue-600 break-all">{typeof window !== 'undefined' ? window.location.origin : 'https://yoursite.com'}/{companyAuth.company.slug}</p>
-                      </div>
-                    )}
-                  </>
-                )}
-                {isRegularUser && userAuth.user && (
-                  <>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Name:</span>
-                      <p className="text-sm text-gray-900">{userAuth.user.name}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Email:</span>
-                      <p className="text-sm text-gray-900">{userAuth.user.email}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">Role:</span>
-                      <p className="text-sm text-gray-900">Team Member</p>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </Card>
+    <div className="min-h-screen bg-page-bg">
+      <div className="max-w-7xl mx-auto space-y-8 p-8">
+        {/* Welcome Section */}
+        <div className="text-center py-8">
+          <h1 className="text-3xl font-bold text-secondary-100 mb-3">
+            Welcome back, {displayName}
+          </h1>
+          <p className="text-secondary-400 max-w-2xl mx-auto">
+            {isCompanyUser
+              ? "Manage your chatbot, knowledge base, and team members from your dashboard."
+              : "Access your team's chatbot and view your conversation history."}
+          </p>
         </div>
 
-        {/* Recent Activity */}
-        <div className="lg:col-span-2">
-          <RecentActivity />
+        {/* Quick Actions Cards */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          {isCompanyUser ? (
+            <>
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                  <div className="p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-3 rounded-2xl bg-secondary-900 hover:bg-secondary-700 transition-colors">
+                        <Icons.Document className="h-8 w-8 text-success-600" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Knowledge Base
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    Upload and manage your documents
+                  </p>
+                  <Link href="/knowledge-base">
+                    <MinimalButton variant="secondary" size="md" fullWidth>
+                      Manage Documents
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                  <div className="p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-3 rounded-2xl bg-secondary-900 hover:bg-secondary-700 transition-colors">
+                        <Icons.Settings className="h-8 w-8 text-primary-400" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Settings
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    Configure and publish your chatbot
+                  </p>
+                  <Link href="/settings">
+                    <MinimalButton variant="secondary" size="md" fullWidth>
+                      Open Settings
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                <div className="p-8 text-center">
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 rounded-2xl bg-primary-800 hover:bg-primary-700 transition-colors">
+                      <Icons.User className="h-8 w-8 text-primary-400" />
+                    </div>
+                  </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Users
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    Manage team members and access
+                  </p>
+                  <Link href="/users">
+                    <MinimalButton variant="secondary" size="md" fullWidth>
+                      Manage Users
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                <div className="p-8 text-center">
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 rounded-2xl bg-primary-800 hover:bg-primary-700 transition-colors">
+                      <Icons.Chat className="h-8 w-8 text-primary-400" />
+                    </div>
+                  </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Start Chatting
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    Begin a new conversation with AI
+                  </p>
+                  <Link href="/chat">
+                    <MinimalButton variant="primary" size="md" fullWidth>
+                      New Chat
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                  <div className="p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-3 rounded-2xl bg-secondary-900 hover:bg-secondary-700 transition-colors">
+                        <Icons.Chat className="h-8 w-8 text-success-600" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Chat History
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    View your previous conversations
+                  </p>
+                  <Link href="/chat">
+                    <MinimalButton variant="outline" size="md" fullWidth>
+                      View History
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all duration-200 border border-secondary-700 bg-secondary-800">
+                  <div className="p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-3 rounded-2xl bg-secondary-900 hover:bg-secondary-700 transition-colors">
+                        <Icons.User className="h-8 w-8 text-primary-400" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-secondary-100 mb-2">
+                      Profile
+                    </h3>
+                    <p className="text-sm text-secondary-300 mb-6">
+                    Manage your account settings
+                  </p>
+                  <Link href="/profile">
+                    <MinimalButton variant="outline" size="md" fullWidth>
+                      Edit Profile
+                    </MinimalButton>
+                  </Link>
+                </div>
+              </Card>
+            </>
+          )}
+        </div>
+
+        {/* Account Info and Recent Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {/* Company Info Card */}
+          {isCompanyUser && (
+            <div className="lg:col-span-1">
+              <Card className="h-fit border border-secondary-700 bg-secondary-800">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-secondary-100 mb-6">
+                    Company Overview
+                  </h3>
+                  {companyAuth.company && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between py-2 border-b border-secondary-700">
+                        <span className="text-sm font-medium text-secondary-300">
+                          Company
+                        </span>
+                        <span className="text-sm font-medium text-secondary-100">
+                          {companyAuth.company.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 border-b border-secondary-700">
+                        <span className="text-sm font-medium text-secondary-300">
+                          Email
+                        </span>
+                        <span className="text-sm text-secondary-100">
+                          {companyAuth.company.email}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 border-b border-secondary-700">
+                        <span className="text-sm font-medium text-secondary-300">
+                          Plan
+                        </span>
+                        <span className="text-sm font-medium capitalize text-secondary-100">
+                          {companyAuth.company.plan}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 border-b border-secondary-700">
+                        <span className="text-sm font-medium text-secondary-300">
+                          Status
+                        </span>
+                        <span
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            companyAuth.company.status === "active"
+                              ? "bg-success-100 text-success-700"
+                              : "bg-secondary-800 text-secondary-600"
+                          }`}
+                        >
+                          {companyAuth.company.status}
+                        </span>
+                      </div>
+                      {companyAuth.company.slug && (
+                        <div className="pt-2">
+                          <span className="text-sm font-medium text-secondary-300 block mb-2">
+                            Public URL
+                          </span>
+                          <p className="text-xs text-primary-600 bg-primary-50 p-2 rounded border-secondary-200 break-all">
+                            {typeof window !== "undefined"
+                              ? window.location.origin
+                              : "https://yoursite.com"}
+                            /{companyAuth.company.slug}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </Card>
+            </div>
+          )}
         </div>
       </div>
     </div>

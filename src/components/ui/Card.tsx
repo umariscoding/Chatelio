@@ -5,7 +5,7 @@ import type { CardProps } from '@/interfaces/Card.interface';
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, children, ...props }, ref) => {
-    const baseClasses = 'rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm';
+    const baseClasses = 'rounded-lg border border-secondary-200 bg-secondary-50 text-secondary-900 shadow-sm';
     const classes = `${baseClasses} ${className || ''}`;
 
     return (

@@ -5,6 +5,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
 import MinimalInput from '@/components/ui/MinimalInput';
 import MinimalButton from '@/components/ui/MinimalButton';
+import { Icons } from '@/components/ui';
 
 interface ChatOptionsMenuProps {
   chatId: string;
@@ -62,24 +63,13 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
         setNewTitle(currentTitle);
         setShowRenameModal(true);
       },
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 20h9"></path>
-          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-        </svg>
-      )
+      icon: <Icons.Edit className="w-3.5 h-3.5" />
     },
     {
       label: 'Delete',
       onClick: () => setShowDeleteModal(true),
       className: 'text-red-400 hover:text-red-300',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 6h18"></path>
-          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-        </svg>
-      )
+      icon: <Icons.Trash className="w-3.5 h-3.5" />
     }
   ];
 
@@ -88,11 +78,7 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
       <Dropdown
         trigger={
           <div className="text-zinc-500 hover:text-zinc-300 p-1.5 rounded-full hover:bg-zinc-800 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="19" r="1" />
-            </svg>
+            <Icons.MoreVertical className="w-3.5 h-3.5" />
           </div>
         }
         items={menuItems}

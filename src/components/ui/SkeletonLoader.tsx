@@ -17,7 +17,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   rounded = false,
   animate = true,
 }) => {
-  const baseClasses = 'bg-gray-200';
+  const baseClasses = 'bg-secondary-200';
   const animationClasses = animate ? 'animate-pulse' : '';
   const roundedClasses = rounded ? 'rounded-full' : 'rounded';
   
@@ -52,7 +52,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
 );
 
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`p-4 border border-gray-200 rounded-lg ${className}`}>
+  <div className={`p-4 border border-secondary-200 rounded-lg ${className}`}>
     <div className="flex items-center space-x-3 mb-4">
       <Skeleton width={40} height={40} rounded />
       <div className="flex-1">
@@ -168,7 +168,7 @@ export const SkeletonMessage: React.FC<{ isUser?: boolean; className?: string }>
   className = '' 
 }) => (
   <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} ${className}`}>
-    <div className={`max-w-xs lg:max-w-md ${isUser ? 'bg-blue-100' : 'bg-gray-100'} rounded-lg p-3`}>
+    <div className={`max-w-xs lg:max-w-md ${isUser ? 'bg-primary-100' : 'bg-secondary-100'} rounded-lg p-3`}>
       <SkeletonText lines={2} />
     </div>
   </div>
@@ -180,7 +180,7 @@ export const SkeletonChatList: React.FC<{ items?: number; className?: string }> 
 }) => (
   <div className={`space-y-2 ${className}`}>
     {Array.from({ length: items }, (_, i) => (
-      <div key={i} className="p-3 rounded-lg border">
+      <div key={i} className="p-3 rounded-lg border border-secondary-200">
         <Skeleton height="1rem" width="80%" />
         <Skeleton height="0.75rem" width="60%" className="mt-2" />
         <Skeleton height="0.75rem" width="40%" className="mt-1" />
@@ -191,7 +191,7 @@ export const SkeletonChatList: React.FC<{ items?: number; className?: string }> 
 
 // Dashboard-specific skeletons
 export const SkeletonStatsCard: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`p-6 bg-white rounded-lg border ${className}`}>
+  <div className={`p-6 bg-secondary-50 rounded-lg border border-secondary-200 ${className}`}>
     <div className="flex items-center justify-between">
       <div className="flex-1">
         <Skeleton height="0.875rem" width="60%" />

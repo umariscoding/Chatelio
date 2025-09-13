@@ -3,15 +3,9 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 import Button from '@/components/ui/Button';
+import { Icons } from '@/components/ui';
 import type { MessageInputProps } from '@/interfaces/Chat.interface';
 import type { ModelType } from '@/types/chat';
-
-// Icons
-const SendIcon: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-  </svg>
-);
 
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
@@ -88,7 +82,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             {loading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
-              <SendIcon className="w-4 h-4 text-white" />
+              <Icons.Send className="w-4 h-4 text-white" />
             )}
           </button>
         </div>

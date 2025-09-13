@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
 import { loadFromStorage as loadCompanyFromStorage, verifyCompanyToken } from '@/store/slices/companyAuthSlice';
 import { loadFromStorage as loadUserFromStorage, verifyUserToken, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
-import Loading from '@/components/ui/Loading';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -59,14 +58,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsInitializing(false);
     };
 
+    // Only initialize auth once on mount, not on every pathname change
     initializeAuth();
-  }, [dispatch, pathname]);
+  }, [dispatch]); // Removed pathname from dependencies
 
   // Show loading while initializing
   if (isInitializing || companyAuth.loading || userAuth.loading) {
+    // Check if we're in company context (dashboard routes or company is authenticated)
+    const isCompanyContext = pathname.startsWith('/dashboard') || 
+                             pathname.startsWith('/knowledge-base') || 
+                             pathname.startsWith('/users') || 
+                             pathname.startsWith('/settings') || 
+                             pathname.startsWith('/profile') ||
+                             companyAuth.isAuthenticated;
+
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loading />
+      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+        <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );
   }

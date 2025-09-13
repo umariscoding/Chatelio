@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import MinimalInput from '@/components/ui/MinimalInput';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
 import { loginCompany, clearError } from '@/store/slices/companyAuthSlice';
 import { APP_CONFIG, ROUTES, FORM_VALIDATION } from '@/constants/APP_CONSTANTS';
@@ -103,64 +103,60 @@ export default function CompanyLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-blue-600">{APP_CONFIG.NAME}</h1>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h1 className="text-3xl font-bold text-primary-600">{APP_CONFIG.NAME}</h1>
+          <h2 className="mt-6 text-3xl font-extrabold text-secondary-900">
             Company Dashboard Login
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-secondary-600">
             Access your company dashboard to manage chatbots, knowledge base, and users
           </p>
         </div>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-secondary-50 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-secondary-200">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              <div className="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md text-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="Enter your email"
-                  error={formErrors.email}
-                />
-              </div>
+              <MinimalInput
+                id="email"
+                label="Email Address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                error={formErrors.email}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-                  error={formErrors.password}
-                />
-              </div>
+              <MinimalInput
+                id="password"
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Enter your password"
+                error={formErrors.password}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div className="flex items-center justify-between">
@@ -171,15 +167,15 @@ export default function CompanyLoginPage() {
                   type="checkbox"
                   checked={formData.rememberMe}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
                 />
-                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="rememberMe" className="ml-2 block text-sm text-secondary-700">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
                   Forgot your password?
                 </a>
               </div>
@@ -197,16 +193,16 @@ export default function CompanyLoginPage() {
             </div>
 
             <div className="text-center">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-secondary-600">
                 Don't have an account?{' '}
-                <Link href={ROUTES.COMPANY_REGISTER} className="font-medium text-blue-600 hover:text-blue-500">
+                <Link href={ROUTES.COMPANY_REGISTER} className="font-medium text-primary-600 hover:text-primary-500">
                   Sign up
                 </Link>
               </span>
             </div>
 
             <div className="mt-6 text-center">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-secondary-500">
                 Looking for customer support? Visit your company's chatbot page or contact your administrator.
               </p>
             </div>

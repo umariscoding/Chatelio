@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import MinimalButton from '@/components/ui/MinimalButton';
+import MinimalInput from '@/components/ui/MinimalInput';
 import Card from '@/components/ui/Card';
 import type { ProfileFormProps, ProfileFormData, CompanyProfileFormProps, CompanyProfileFormData } from '@/interfaces/Profile.interface';
 
@@ -13,12 +13,12 @@ const ProfileSection: React.FC<{ title: string; description?: string; children: 
   children,
   className = ""
 }) => (
-  <Card className={className}>
-    <div className="p-6">
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+  <Card className={`border border-secondary-700 bg-secondary-800 shadow-lg ${className}`}>
+    <div className="p-8">
+      <div className="mb-8 text-center">
+        <h3 className="text-xl font-semibold text-secondary-100 mb-2">{title}</h3>
         {description && (
-          <p className="mt-1 text-sm text-gray-600">{description}</p>
+          <p className="text-secondary-300">{description}</p>
         )}
       </div>
       {children}
@@ -90,7 +90,7 @@ export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading 
         description="Update your personal details and email address."
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
+          <MinimalInput
             label="Full Name"
             type="text"
             value={formData.name}
@@ -98,9 +98,11 @@ export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading 
             error={errors.name}
             placeholder="Enter your full name"
             required
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="Email Address"
             type="email"
             value={formData.email}
@@ -108,12 +110,14 @@ export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading 
             error={errors.email}
             placeholder="Enter your email address"
             required
+            variant="floating"
+            theme="light"
           />
 
-          <div className="pt-4">
-            <Button type="submit" loading={loading} className="w-full sm:w-auto">
+          <div className="pt-6 flex justify-center">
+            <MinimalButton type="submit" loading={loading} variant="primary" size="lg">
               Update Profile
-            </Button>
+            </MinimalButton>
           </div>
         </form>
       </ProfileSection>
@@ -123,42 +127,48 @@ export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading 
         description="Update your password to keep your account secure."
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
+          <MinimalInput
             label="Current Password"
             type="password"
             value={formData.currentPassword || ''}
             onChange={handleInputChange('currentPassword')}
             error={errors.currentPassword}
             placeholder="Enter your current password"
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="New Password"
             type="password"
             value={formData.newPassword || ''}
             onChange={handleInputChange('newPassword')}
             error={errors.newPassword}
             placeholder="Enter your new password"
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="Confirm New Password"
             type="password"
             value={formData.confirmPassword || ''}
             onChange={handleInputChange('confirmPassword')}
             error={errors.confirmPassword}
             placeholder="Confirm your new password"
+            variant="floating"
+            theme="light"
           />
 
-          <div className="pt-4">
-            <Button 
+          <div className="pt-6 flex justify-center">
+            <MinimalButton 
               type="submit" 
               loading={loading} 
-              className="w-full sm:w-auto"
+              variant="secondary" size="lg"
               disabled={!formData.newPassword}
             >
               Change Password
-            </Button>
+            </MinimalButton>
           </div>
         </form>
       </ProfileSection>
@@ -236,7 +246,7 @@ export const CompanyProfileForm: React.FC<CompanyProfileFormProps> = ({ onSubmit
         description="Update your company details and public settings."
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
+          <MinimalInput
             label="Company Name"
             type="text"
             value={formData.name}
@@ -244,9 +254,11 @@ export const CompanyProfileForm: React.FC<CompanyProfileFormProps> = ({ onSubmit
             error={errors.name}
             placeholder="Enter your company name"
             required
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="Email Address"
             type="email"
             value={formData.email}
@@ -254,22 +266,26 @@ export const CompanyProfileForm: React.FC<CompanyProfileFormProps> = ({ onSubmit
             error={errors.email}
             placeholder="Enter your company email"
             required
+            variant="floating"
+            theme="light"
           />
 
-          <Input
+          <MinimalInput
             label="Public Slug"
             type="text"
             value={formData.slug || ''}
             onChange={handleInputChange('slug')}
             error={errors.slug}
             placeholder="your-company"
-            description="This will be your public chatbot URL: your-company.chatelio.com"
+            variant="floating"
+            theme="light"
           />
+          <p className="mt-1 text-sm text-secondary-300">This will be your public chatbot URL: your-company.chatelio.com</p>
 
-          <div className="pt-4">
-            <Button type="submit" loading={loading} className="w-full sm:w-auto">
+          <div className="pt-6 flex justify-center">
+            <MinimalButton type="submit" loading={loading} variant="primary" size="lg">
               Update Company
-            </Button>
+            </MinimalButton>
           </div>
         </form>
       </ProfileSection>
@@ -279,42 +295,48 @@ export const CompanyProfileForm: React.FC<CompanyProfileFormProps> = ({ onSubmit
         description="Update your password to keep your account secure."
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
+          <MinimalInput
             label="Current Password"
             type="password"
             value={formData.currentPassword || ''}
             onChange={handleInputChange('currentPassword')}
             error={errors.currentPassword}
             placeholder="Enter your current password"
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="New Password"
             type="password"
             value={formData.newPassword || ''}
             onChange={handleInputChange('newPassword')}
             error={errors.newPassword}
             placeholder="Enter your new password"
+            variant="floating"
+            theme="light"
           />
           
-          <Input
+          <MinimalInput
             label="Confirm New Password"
             type="password"
             value={formData.confirmPassword || ''}
             onChange={handleInputChange('confirmPassword')}
             error={errors.confirmPassword}
             placeholder="Confirm your new password"
+            variant="floating"
+            theme="light"
           />
 
-          <div className="pt-4">
-            <Button 
+          <div className="pt-6 flex justify-center">
+            <MinimalButton 
               type="submit" 
               loading={loading} 
-              className="w-full sm:w-auto"
+              variant="secondary" size="lg"
               disabled={!formData.newPassword}
             >
               Change Password
-            </Button>
+            </MinimalButton>
           </div>
         </form>
       </ProfileSection>

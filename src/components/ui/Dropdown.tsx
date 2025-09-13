@@ -44,7 +44,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       {isOpen && (
         <div
-          className={`fixed z-[9999] mt-1 bg-zinc-800 rounded-md shadow-xl border border-zinc-700 overflow-hidden ${
+          className={`fixed z-[9999] mt-1 bg-secondary-800 rounded-md shadow-xl border border-secondary-700 overflow-hidden ${
             position === 'right' ? 'right-0' : 'left-0'
           }`}
           style={{ 
@@ -70,7 +70,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   e.stopPropagation();
                   handleItemClick(item.onClick);
                 }}
-                className={`px-4 py-2.5 text-sm text-zinc-200 hover:bg-zinc-700 cursor-pointer flex items-center transition-colors ${
+                className={`px-4 py-2.5 text-sm text-secondary-50 hover:bg-secondary-700 cursor-pointer flex items-center transition-colors ${
                   item.className || ''
                 }`}
               >

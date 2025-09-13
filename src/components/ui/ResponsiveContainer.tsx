@@ -145,9 +145,9 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   className = '',
 }) => {
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 active:bg-gray-400',
-    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 active:bg-gray-200',
+    primary: 'bg-primary-600 text-secondary-50 hover:bg-primary-700 active:bg-primary-800',
+    secondary: 'bg-secondary-200 text-secondary-900 hover:bg-secondary-300 active:bg-secondary-400',
+    ghost: 'bg-transparent text-secondary-700 hover:bg-secondary-100 active:bg-secondary-200',
   };
 
   const sizes = {
@@ -218,18 +218,18 @@ export const ResponsiveModal: React.FC<ResponsiveModalProps> = ({
         
         {/* Modal */}
         <div className={`
-          relative bg-white rounded-lg shadow-xl transform transition-all
+          relative bg-secondary-50 rounded-lg shadow-xl transform transition-all border border-secondary-200
           ${sizeClasses[size]} ${mobileClasses}
           w-full overflow-hidden
         `}>
           {title && (
-            <div className="border-b border-gray-200 px-4 sm:px-6 py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+            <div className="border-b border-secondary-200 px-4 sm:px-6 py-4">
+              <h3 className="text-lg sm:text-xl font-semibold text-secondary-900">
                 {title}
               </h3>
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 sm:top-6 sm:right-6"
+                className="absolute top-4 right-4 text-secondary-400 hover:text-secondary-600 sm:top-6 sm:right-6"
               >
                 <span className="sr-only">Close</span>
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

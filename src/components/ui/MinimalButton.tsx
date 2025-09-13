@@ -8,6 +8,7 @@ interface MinimalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
   fullWidth?: boolean;
   children: React.ReactNode;
+  theme?: 'default' | 'auth';
 }
 
 const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
@@ -19,6 +20,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
     className = '', 
     children, 
     disabled,
+    theme = 'default',
     ...props 
   }, ref) => {
     
@@ -29,27 +31,51 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
       ${fullWidth ? 'w-full' : ''}
     `;
 
-    const variants = {
+    const defaultVariants = {
       primary: `
-        bg-zinc-700 hover:bg-zinc-600 text-zinc-100
-        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1 focus:ring-offset-zinc-900
+        bg-primary-600 hover:bg-primary-700 text-secondary-50
+        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
         shadow-sm
       `,
       secondary: `
-        bg-zinc-800 hover:bg-zinc-700 text-zinc-100
-        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1 focus:ring-offset-zinc-900
-        border border-zinc-700 hover:border-zinc-600
+        bg-secondary-200 hover:bg-secondary-300 text-secondary-900
+        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
+        border border-secondary-300 hover:border-secondary-400
       `,
       ghost: `
-        bg-transparent hover:bg-zinc-800/50 text-zinc-300 hover:text-zinc-100
-        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1 focus:ring-offset-zinc-900
+        bg-transparent hover:bg-secondary-800/50 text-secondary-300 hover:text-secondary-100
+        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
       `,
       outline: `
-        bg-transparent border border-zinc-700 hover:border-zinc-600
-        text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/30
-        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1 focus:ring-offset-zinc-900
+        bg-transparent border border-secondary-300 hover:border-secondary-400
+text-secondary-900 hover:text-secondary-50 hover:bg-secondary-800/30
+        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
       `
     };
+
+    const authVariants = {
+      primary: `
+        bg-auth-700 hover:bg-auth-600 text-auth-100
+        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+        shadow-sm
+      `,
+      secondary: `
+        bg-auth-800 hover:bg-auth-700 text-auth-200
+        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+        border border-auth-700 hover:border-auth-600
+      `,
+      ghost: `
+        bg-transparent hover:bg-auth-800/50 text-auth-300 hover:text-auth-100
+        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+      `,
+      outline: `
+        bg-transparent border border-auth-700 hover:border-auth-600
+        text-auth-300 hover:text-auth-100 hover:bg-auth-800/30
+        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+      `
+    };
+
+    const variants = theme === 'auth' ? authVariants : defaultVariants;
 
     const sizes = {
       sm: 'px-3 py-2 text-sm',
@@ -67,29 +93,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
         {...props}
       >
         {loading ? (
-          <div className="flex items-center">
-            <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Loading...
-          </div>
+          <span>Loading...</span>
         ) : (
           children
         )}

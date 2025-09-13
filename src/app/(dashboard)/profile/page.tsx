@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useAppSelector } from '@/hooks/useAuth';
 import { UserProfileForm, CompanyProfileForm } from '@/components/profile/ProfileForm';
 import Card from '@/components/ui/Card';
+import { Icons } from '@/components/ui';
 import type { ProfileFormData, CompanyProfileFormData } from '@/interfaces/Profile.interface';
 
 export default function ProfilePage() {
@@ -59,94 +60,66 @@ export default function ProfilePage() {
     : userAuth.user?.name || 'User';
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Manage your {isCompanyUser ? 'company' : 'personal'} information and account settings.
-        </p>
-      </div>
-
-      {/* Current User Info */}
-      <Card>
-        <div className="p-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <div className="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
-                <svg className="h-8 w-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium text-gray-900">{displayName}</h3>
-              <p className="text-sm text-gray-600">
-                {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {isCompanyUser ? 'Company Account' : 'Team Member'}
-              </p>
-            </div>
+    <div className="min-h-screen bg-page-bg">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="text-center py-8">
+            <h1 className="text-4xl font-bold text-secondary-100 mb-4">Profile Settings</h1>
+            <p className="text-lg text-secondary-400 max-w-2xl mx-auto">
+              Manage your {isCompanyUser ? 'company' : 'personal'} information and account settings.
+            </p>
           </div>
-        </div>
-      </Card>
 
-      {/* Profile Forms */}
-      {isCompanyUser ? (
-        <CompanyProfileForm
-          onSubmit={handleCompanyProfileSubmit}
-          loading={loading}
-          initialData={{
-            name: companyAuth.company?.name || '',
-            email: companyAuth.company?.email || '',
-            slug: companyAuth.company?.slug || '',
-          }}
-        />
-      ) : (
-        <UserProfileForm
-          onSubmit={handleUserProfileSubmit}
-          loading={loading}
-          initialData={{
-            name: userAuth.user?.name || '',
-            email: userAuth.user?.email || '',
-          }}
-        />
-      )}
-
-      {/* Account Actions */}
-      <Card>
-        <div className="p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Account Actions</h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900">Download Your Data</h4>
-                <p className="text-sm text-gray-600">
-                  Export all your chat history and account data.
-                </p>
-              </div>
-              <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 border border-blue-600 hover:border-blue-800 rounded-md">
-                Download
-              </button>
-            </div>
-            
-            {isCompanyUser && (
-              <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                <div>
-                  <h4 className="text-sm font-medium text-red-900">Delete Company Account</h4>
-                  <p className="text-sm text-gray-600">
-                    Permanently delete your company and all associated data.
-                  </p>
+          {/* Current User Info */}
+          <Card className="border border-secondary-700 bg-secondary-800 shadow-lg">
+            <div className="p-10">
+              <div className="flex flex-col items-center space-y-6">
+                <div className="flex-shrink-0">
+                  <div className="h-24 w-24 rounded-full bg-gradient-to-br from-secondary-900 to-secondary-800 flex items-center justify-center shadow-inner ring-4 ring-secondary-700">
+                    <Icons.User className="h-12 w-12 text-primary-400" />
+                  </div>
                 </div>
-                <button className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 border border-red-600 hover:border-red-800 rounded-md">
-                  Delete Account
-                </button>
+                <div className="text-center space-y-3">
+                  <h3 className="text-2xl font-semibold text-secondary-100">{displayName}</h3>
+                  <p className="text-lg text-secondary-300">
+                    {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
+                  </p>
+                  <span className={`inline-flex px-4 py-2 text-sm font-medium rounded-full ${
+                    isCompanyUser 
+                      ? 'bg-secondary-900 text-primary-400' 
+                      : 'bg-secondary-900 text-secondary-200'
+                  }`}>
+                    {isCompanyUser ? 'Company Account' : 'Team Member'}
+                  </span>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+          </Card>
+
+          {/* Profile Forms */}
+          {isCompanyUser ? (
+            <CompanyProfileForm
+              onSubmit={handleCompanyProfileSubmit}
+              loading={loading}
+              initialData={{
+                name: companyAuth.company?.name || '',
+                email: companyAuth.company?.email || '',
+                slug: companyAuth.company?.slug || '',
+              }}
+            />
+          ) : (
+            <UserProfileForm
+              onSubmit={handleUserProfileSubmit}
+              loading={loading}
+              initialData={{
+                name: userAuth.user?.name || '',
+                email: userAuth.user?.email || '',
+              }}
+            />
+          )}
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

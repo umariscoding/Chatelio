@@ -3,7 +3,6 @@
 import React from 'react';
 
 import Card from '@/components/ui/Card';
-import Loading from '@/components/ui/Loading';
 import type { StatsCardProps } from '@/interfaces/StatsCard.interface';
 
 const TrendUpIcon: React.FC<{ className?: string }> = ({ className = "h-4 w-4" }) => (
@@ -31,14 +30,14 @@ const StatsCard: React.FC<StatsCardProps> = ({
     return (
       <Card className={className}>
         <div className="p-6">
-          <div className="animate-pulse">
-            <div className="flex items-center justify-between">
-              <div className="space-y-3 flex-1">
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-              </div>
-              <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+            <div className="animate-pulse">
+              <div className="flex items-center justify-between">
+                <div className="space-y-3 flex-1">
+                  <div className="h-4 bg-secondary-200 rounded w-1/2"></div>
+                  <div className="h-8 bg-secondary-200 rounded w-3/4"></div>
+                  <div className="h-3 bg-secondary-200 rounded w-1/3"></div>
+                </div>
+                <div className="h-12 w-12 bg-secondary-200 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -46,15 +45,15 @@ const StatsCard: React.FC<StatsCardProps> = ({
     );
   }
 
-  const getChangeColor = (type: 'increase' | 'decrease' | 'neutral') => {
+  const getChangeColorClass = (type: 'increase' | 'decrease' | 'neutral') => {
     switch (type) {
       case 'increase':
-        return 'text-green-600';
+        return 'text-success-600';
       case 'decrease':
-        return 'text-red-600';
+        return 'text-error-600';
       case 'neutral':
       default:
-        return 'text-gray-600';
+        return 'text-secondary-600';
     }
   };
 
@@ -75,22 +74,22 @@ const StatsCard: React.FC<StatsCardProps> = ({
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-600 truncate">
+            <p className="text-sm font-medium text-secondary-600 truncate">
               {title}
             </p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">
+            <p className="mt-2 text-3xl font-bold text-secondary-900">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
             
             {change && (
-              <div className={`mt-2 flex items-center text-sm ${getChangeColor(change.type)}`}>
+              <div className={`mt-2 flex items-center text-sm ${getChangeColorClass(change.type)}`}>
                 {getChangeIcon(change.type)}
                 <span className="ml-1">{change.value}</span>
               </div>
             )}
             
             {description && (
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-secondary-500">
                 {description}
               </p>
             )}
@@ -98,8 +97,8 @@ const StatsCard: React.FC<StatsCardProps> = ({
           
           {Icon && (
             <div className="flex-shrink-0">
-              <div className="p-3 bg-blue-50 rounded-full">
-                <Icon className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-primary-50 rounded-full">
+                <Icon className="h-6 w-6 text-primary-600" />
               </div>
             </div>
           )}

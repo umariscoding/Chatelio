@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
-import Loading from '@/components/ui/Loading';
 
 // Icons
 const ChatIcon: React.FC<{ className?: string }> = ({ className = "h-8 w-8" }) => (
@@ -84,10 +83,7 @@ export default function PublicChatbotPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loading />
-          <p className="mt-4 text-gray-600">Loading chatbot...</p>
-        </div>
+        <p className="text-lg text-gray-600">Loading...</p>
       </div>
     );
   }
@@ -95,10 +91,7 @@ export default function PublicChatbotPage() {
   if (companyInfo) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loading />
-          <p className="mt-4 text-gray-600">Redirecting to chat...</p>
-        </div>
+        <p className="text-lg text-gray-600">Loading...</p>
       </div>
     );
   }

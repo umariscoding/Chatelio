@@ -3,15 +3,9 @@
 import React, { useState } from 'react';
 
 import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import MinimalInput from '@/components/ui/MinimalInput';
+import { Icons } from '@/components/ui';
 import type { TextUploadProps } from '@/interfaces/KnowledgeBase.interface';
-
-// Icons
-const DocumentTextIcon: React.FC<{ className?: string }> = ({ className = "h-8 w-8" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>
-);
 
 const TextUpload: React.FC<TextUploadProps> = ({
   onUpload,
@@ -75,11 +69,11 @@ const TextUpload: React.FC<TextUploadProps> = ({
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
       <div className="text-center">
-        <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-4 text-lg font-medium text-gray-900">
+        <Icons.Document className="mx-auto h-12 w-12 text-secondary-400" />
+        <h3 className="mt-4 text-lg font-medium text-secondary-100">
           Add Text Content
         </h3>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-secondary-300">
           Paste or type your content directly to add it to your knowledge base.
         </p>
       </div>
@@ -88,22 +82,24 @@ const TextUpload: React.FC<TextUploadProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Filename Input */}
         <div>
-          <Input
+          <MinimalInput
             label="Filename"
             type="text"
             value={filename}
             onChange={handleFilenameChange}
             error={errors.filename}
             placeholder="e.g., company-policy.txt"
-            description="Enter a descriptive filename for your content"
             required
             disabled={loading}
+            variant="floating"
+            theme="light"
           />
+          <p className="mt-1 text-sm text-secondary-300">Enter a descriptive filename for your content</p>
         </div>
 
         {/* Content Textarea */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-secondary-200 mb-2">
             Content *
           </label>
           <textarea
@@ -111,18 +107,18 @@ const TextUpload: React.FC<TextUploadProps> = ({
             onChange={handleContentChange}
             placeholder="Paste or type your content here..."
             rows={12}
-            className={`w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed ${
-              errors.content ? 'border-red-500 focus:ring-red-500' : ''
+            className={`w-full rounded-md border border-secondary-700 bg-secondary-900 text-secondary-100 placeholder-secondary-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed ${
+              errors.content ? 'border-error-500 focus:ring-error-500' : ''
             }`}
             disabled={loading}
             required
           />
           {errors.content && (
-            <p className="mt-1 text-sm text-red-600">{errors.content}</p>
+            <p className="mt-1 text-sm text-error-600">{errors.content}</p>
           )}
           
           {/* Character and Word Count */}
-          <div className="mt-2 flex justify-between text-xs text-gray-500">
+          <div className="mt-2 flex justify-between text-xs text-secondary-300">
             <span>{wordCount} words</span>
             <span>{charCount} characters</span>
           </div>
@@ -141,9 +137,9 @@ const TextUpload: React.FC<TextUploadProps> = ({
       </form>
 
       {/* Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-blue-900 mb-2">Tips for better results:</h4>
-        <ul className="text-sm text-blue-800 space-y-1">
+      <div className="bg-primary-900 border border-primary-700 rounded-lg p-4">
+        <h4 className="text-sm font-medium text-primary-200 mb-2">Tips for better results:</h4>
+        <ul className="text-sm text-primary-300 space-y-1">
           <li>• Use clear, descriptive filenames</li>
           <li>• Include relevant context and details</li>
           <li>• Break up very long content into separate documents</li>

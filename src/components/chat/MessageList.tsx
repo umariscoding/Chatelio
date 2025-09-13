@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, memo, useMemo } from 'react';
 
-import Loading from '@/components/ui/Loading';
 import type { MessageListProps, MessageBubbleProps } from '@/interfaces/Chat.interface';
 import type { Message } from '@/types/chat';
 
@@ -84,10 +83,7 @@ const MessageList: React.FC<MessageListProps> = memo(({
   if (loading && messages.length === 0) {
     return (
       <div className={`flex-1 flex items-center justify-center p-8 ${className}`}>
-        <div className="text-center">
-          <Loading />
-          <p className="mt-4 text-zinc-400">Loading conversation...</p>
-        </div>
+        <p className="text-lg text-gray-600">Loading...</p>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Icons } from '@/components/ui';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,7 +10,7 @@ interface ModalProps {
   children: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'custom';
   customWidth?: string;
-  theme?: 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'auth';
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -33,15 +34,21 @@ const Modal: React.FC<ModalProps> = ({
 
   const themeClasses = {
     light: {
-      background: 'bg-white',
-      text: 'text-gray-900',
-      closeButton: 'text-gray-400 hover:text-gray-500',
-      closeButtonBg: 'bg-white',
+      background: 'bg-secondary-50',
+      text: 'text-secondary-900',
+      closeButton: 'text-secondary-600 hover:text-secondary-900',
+      closeButtonBg: 'bg-secondary-50',
     },
     dark: {
-      background: 'bg-zinc-900',
-      text: 'text-zinc-100',
-      closeButton: 'text-zinc-600 hover:text-zinc-500',
+      background: 'bg-secondary-900',
+      text: 'text-secondary-50',
+      closeButton: 'text-secondary-600 hover:text-secondary-500',
+      closeButtonBg: 'bg-transparent',
+    },
+    auth: {
+      background: 'bg-auth-950',
+      text: 'text-auth-100',
+      closeButton: 'text-auth-400 hover:text-auth-300',
       closeButtonBg: 'bg-transparent',
     },
   };
@@ -60,7 +67,7 @@ const Modal: React.FC<ModalProps> = ({
           className={`
             relative transform overflow-hidden rounded-3xl ${currentTheme.background} 
             px-6 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full 
-            ${maxWidthClasses[maxWidth]} sm:px-8 sm:py-6 border border-zinc-800
+            ${maxWidthClasses[maxWidth]} sm:px-8 sm:py-6 border ${theme === 'light' ? 'border-secondary-200' : theme === 'auth' ? 'border-auth-800' : 'border-secondary-800'}
           `}
           style={{ 
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
@@ -81,9 +88,7 @@ const Modal: React.FC<ModalProps> = ({
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
-              <svg className="h-5 w-5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <Icons.Close className="h-5 w-5 opacity-50" />
             </button>
           </div>
           

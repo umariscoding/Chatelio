@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import MinimalInput from '@/components/ui/MinimalInput';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
 import { registerCompany, clearError } from '@/store/slices/companyAuthSlice';
 import { APP_CONFIG, ROUTES, FORM_VALIDATION } from '@/constants/APP_CONSTANTS';
@@ -128,102 +128,94 @@ export default function CompanyRegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-blue-600">{APP_CONFIG.NAME}</h1>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h1 className="text-3xl font-bold text-primary-600">{APP_CONFIG.NAME}</h1>
+          <h2 className="mt-6 text-3xl font-extrabold text-secondary-900">
             Create your company account
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-secondary-600">
             Start building your custom chatbot today
           </p>
         </div>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-secondary-50 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-secondary-200">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              <div className="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md text-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Company Name
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="organization"
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter your company name"
-                  error={formErrors.name}
-                />
-              </div>
+              <MinimalInput
+                id="name"
+                label="Company Name"
+                name="name"
+                type="text"
+                autoComplete="organization"
+                required
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Enter your company name"
+                error={formErrors.name}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="Enter your email"
-                  error={formErrors.email}
-                />
-              </div>
+              <MinimalInput
+                id="email"
+                label="Email Address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                error={formErrors.email}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Create a strong password"
-                  error={formErrors.password}
-                />
-              </div>
+              <MinimalInput
+                id="password"
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Create a strong password"
+                error={formErrors.password}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="Confirm your password"
-                  error={formErrors.confirmPassword}
-                />
-              </div>
+              <MinimalInput
+                id="confirmPassword"
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="Confirm your password"
+                error={formErrors.confirmPassword}
+                variant="floating"
+                theme="light"
+              />
             </div>
 
             <div>
@@ -238,9 +230,9 @@ export default function CompanyRegisterPage() {
             </div>
 
             <div className="text-center">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-secondary-600">
                 Already have an account?{' '}
-                <Link href={ROUTES.COMPANY_LOGIN} className="font-medium text-blue-600 hover:text-blue-500">
+                <Link href={ROUTES.COMPANY_LOGIN} className="font-medium text-primary-600 hover:text-primary-500">
                   Sign in
                 </Link>
               </span>

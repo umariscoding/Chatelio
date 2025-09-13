@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
-import Loading from '@/components/ui/Loading';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
@@ -542,7 +541,7 @@ export default function PublicChatPage() {
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <Loading />
+        <p className="text-lg text-gray-600">Loading...</p>
       </div>
     );
   }
@@ -643,7 +642,7 @@ export default function PublicChatPage() {
                   onClick={() => setShowAuthModal(true)}
                   variant="ghost"
                   size="sm"
-                  className="text-zinc-300"
+                  className="text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/50"
                 >
                   <LogIn size={16} className="mr-1.5" /> Login
                 </MinimalButton>
@@ -654,7 +653,7 @@ export default function PublicChatPage() {
                   onClick={handleLogout}
                   variant="ghost"
                   size="sm"
-                  className="text-zinc-300"
+                  className="text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/50"
                 >
                   <LogOut size={16} className="mr-1.5" /> Logout
                 </MinimalButton>
@@ -701,17 +700,17 @@ export default function PublicChatPage() {
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
           title=""
-          theme="dark"
+          theme="auth"
           maxWidth="custom"
           customWidth="max-w-md sm:max-w-lg"
         >
           <div className="px-2 py-4">
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-zinc-100 mb-2">
+              <h2 className="text-2xl font-bold text-auth-100 mb-2">
                 {authMode === 'login' ? 'Welcome back' : 'Get started'}
               </h2>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-auth-400 text-sm">
                 {authMode === 'login' 
                   ? 'Sign in to continue to your account' 
                   : 'Create your account to get started'
@@ -721,8 +720,8 @@ export default function PublicChatPage() {
             
             <form onSubmit={handleAuth} className="space-y-5">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <p className="text-red-400 text-sm font-medium">{error}</p>
+                <div className="bg-error-500/10 border border-error-500/20 rounded-lg p-4">
+                  <p className="text-error-400 text-sm font-medium">{error}</p>
                 </div>
               )}
               
@@ -734,6 +733,7 @@ export default function PublicChatPage() {
                   onChange={(e) => setAuthData(prev => ({ ...prev, name: e.target.value }))}
                   required
                   variant="floating"
+                  theme="auth"
                 />
               )}
               
@@ -744,6 +744,7 @@ export default function PublicChatPage() {
                 onChange={(e) => setAuthData(prev => ({ ...prev, email: e.target.value.toLowerCase() }))}
                 required
                 variant="floating"
+                theme="auth"
               />
               
               <MinimalInput
@@ -753,6 +754,7 @@ export default function PublicChatPage() {
                 onChange={(e) => setAuthData(prev => ({ ...prev, password: e.target.value }))}
                 required
                 variant="floating"
+                theme="auth"
               />
               
               <div className="pt-2">
@@ -762,6 +764,7 @@ export default function PublicChatPage() {
                   fullWidth
                   size="lg"
                   variant="primary"
+                  theme="auth"
                 >
                   {authMode === 'login' ? 'Sign In' : 'Create Account'}
                 </MinimalButton>
@@ -773,7 +776,7 @@ export default function PublicChatPage() {
               <button
                 type="button"
                 onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                className="text-zinc-400 hover:text-blue-400 text-sm transition-colors duration-200"
+                className="text-auth-400 hover:text-auth-600 text-sm transition-colors duration-200"
               >
                 {authMode === 'login' 
                   ? "Don't have an account? Sign up" 

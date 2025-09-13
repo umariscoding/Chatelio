@@ -3,26 +3,8 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 import Button from '@/components/ui/Button';
+import { Icons } from '@/components/ui';
 import type { FileUploadProps } from '@/interfaces/KnowledgeBase.interface';
-
-// Icons
-const CloudUploadIcon: React.FC<{ className?: string }> = ({ className = "h-8 w-8" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-  </svg>
-);
-
-const DocumentIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>
-);
-
-const XIcon: React.FC<{ className?: string }> = ({ className = "h-4 w-4" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-  </svg>
-);
 
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes';
@@ -145,32 +127,32 @@ const FileUpload: React.FC<FileUploadProps> = ({
       <div
         className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
           dragActive
-            ? 'border-blue-400 bg-blue-50'
-            : 'border-gray-300 hover:border-gray-400'
+            ? 'border-primary-400 bg-primary-50'
+            : 'border-secondary-300 hover:border-secondary-400'
         } ${loading ? 'opacity-50 pointer-events-none' : ''}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <CloudUploadIcon className="mx-auto h-12 w-12 text-gray-400" />
+        <Icons.CloudUpload className="mx-auto h-12 w-12 text-secondary-400" />
         <div className="mt-4">
-          <p className="text-lg font-medium text-gray-900">
+          <p className="text-lg font-medium text-secondary-100">
             Drop files here to upload
           </p>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-secondary-300">
             or{' '}
             <button
               type="button"
               onClick={openFileDialog}
-              className="text-blue-600 hover:text-blue-500 font-medium"
+              className="text-primary-400 hover:text-primary-300 font-medium"
               disabled={loading}
             >
               browse files
             </button>
           </p>
         </div>
-        <div className="mt-4 text-xs text-gray-500">
+        <div className="mt-4 text-xs text-secondary-400">
           <p>Supported formats: {accept}</p>
           <p>Maximum file size: {formatFileSize(maxSize)}</p>
           {multiple && <p>You can upload multiple files</p>}
@@ -192,8 +174,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
       {errors.length > 0 && (
         <div className="space-y-2">
           {errors.map((error, index) => (
-            <div key={index} className="p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error}</p>
+            <div key={index} className="p-3 bg-error-50 border border-error-200 rounded-md">
+              <p className="text-sm text-error-600">{error}</p>
             </div>
           ))}
         </div>
@@ -202,28 +184,28 @@ const FileUpload: React.FC<FileUploadProps> = ({
       {/* Selected Files */}
       {selectedFiles.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-gray-900">Selected Files:</h4>
+          <h4 className="text-sm font-medium text-secondary-100">Selected Files:</h4>
           <div className="space-y-2">
             {selectedFiles.map((file, index) => (
               <div
                 key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-md"
+                className="flex items-center justify-between p-3 bg-secondary-900 border border-secondary-700 rounded-md"
               >
                 <div className="flex items-center space-x-3">
-                  <DocumentIcon className="h-5 w-5 text-gray-400" />
+                  <Icons.Document className="h-5 w-5 text-secondary-400" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm font-medium text-secondary-100">{file.name}</p>
+                    <p className="text-xs text-secondary-300">
                       {formatFileSize(file.size)} • {file.type || 'Unknown type'}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => removeFile(index)}
-                  className="p-1 text-gray-400 hover:text-gray-600"
+                  className="p-1 text-secondary-400 hover:text-secondary-200"
                   disabled={loading}
                 >
-                  <XIcon className="h-4 w-4" />
+                  <Icons.Close className="h-4 w-4" />
                 </button>
               </div>
             ))}
