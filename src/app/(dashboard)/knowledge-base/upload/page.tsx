@@ -65,7 +65,7 @@ export default function UploadPage() {
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-secondary-800 mb-4">
             <Icons.Check className="h-8 w-8 text-primary-400" />
           </div>
-          <h1 className="text-2xl font-bold text-secondary-100">Upload Successful!</h1>
+          <h1 className="text-2xl font-bold text-text-primary">Upload Successful!</h1>
           <p className="mt-2 text-secondary-400">
             Your document has been uploaded and is being processed. You'll be redirected to the knowledge base shortly.
           </p>
@@ -87,7 +87,7 @@ export default function UploadPage() {
           <span>Back</span>
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-secondary-100">
+          <h1 className="text-2xl font-bold text-text-primary">
             {uploadMode === 'choose' && 'Upload Document'}
             {uploadMode === 'file' && 'Upload File'}
             {uploadMode === 'text' && 'Upload Text Content'}
@@ -104,13 +104,13 @@ export default function UploadPage() {
       {uploadMode === 'choose' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* File Upload Option */}
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow border border-secondary-700 bg-secondary-800" onClick={() => setUploadMode('file')}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setUploadMode('file')}>
             <div className="p-8 text-center">
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-secondary-900 mb-4">
                 <Icons.CloudUpload className="h-8 w-8 text-primary-400" />
               </div>
-              <h3 className="text-lg font-medium text-secondary-100 mb-2">Upload Files</h3>
-              <p className="text-secondary-300 mb-4">
+              <h3 className="text-lg font-medium text-text-primary mb-2">Upload Files</h3>
+              <p className="text-text-secondary mb-4">
                 Upload documents from your computer. Supports PDF, DOC, TXT, and more.
               </p>
               <div className="text-sm text-primary-400">
@@ -122,13 +122,13 @@ export default function UploadPage() {
           </Card>
 
           {/* Text Upload Option */}
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow border border-secondary-700 bg-secondary-800" onClick={() => setUploadMode('text')}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setUploadMode('text')}>
             <div className="p-8 text-center">
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-secondary-900 mb-4">
                 <Icons.Document className="h-8 w-8 text-primary-400" />
               </div>
-              <h3 className="text-lg font-medium text-secondary-100 mb-2">Add Text Content</h3>
-              <p className="text-secondary-300 mb-4">
+              <h3 className="text-lg font-medium text-text-primary mb-2">Add Text Content</h3>
+              <p className="text-text-secondary mb-4">
                 Type or paste content directly. Perfect for policies, FAQs, or quick notes.
               </p>
               <div className="text-sm text-primary-400">
@@ -143,7 +143,7 @@ export default function UploadPage() {
 
       {/* File Upload Mode */}
       {uploadMode === 'file' && (
-        <Card className="border border-secondary-700 bg-secondary-800">
+        <Card className="">
           <div className="p-6">
             <FileUpload
               onUpload={handleFileUpload}
@@ -158,7 +158,7 @@ export default function UploadPage() {
 
       {/* Text Upload Mode */}
       {uploadMode === 'text' && (
-        <Card className="border border-secondary-700 bg-secondary-800">
+        <Card className="">
           <div className="p-6">
             <TextUpload
               onUpload={handleTextUpload}

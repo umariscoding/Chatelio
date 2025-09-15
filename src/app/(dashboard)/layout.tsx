@@ -37,15 +37,17 @@ export default function DashboardLayout({
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-page-bg">
-        <div className="flex h-screen">
-          {/* Sidebar */}
-          <Sidebar 
-            isOpen={sidebarOpen} 
-            onClose={handleSidebarClose}
-          />
+        <div className="flex min-h-screen">
+          {/* Sidebar - Fixed/Sticky */}
+          <div className="sticky top-0 self-start">
+            <Sidebar 
+              isOpen={sidebarOpen} 
+              onClose={handleSidebarClose}
+            />
+          </div>
           
           {/* Main content area */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 bg-bg-secondary min-h-screen">
             {/* Header */}
             <Header 
               onMenuToggle={handleMenuToggle}
@@ -53,7 +55,7 @@ export default function DashboardLayout({
             />
             
             {/* Main content */}
-            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-page-bg">
+            <main>
               <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 {children}
               </div>

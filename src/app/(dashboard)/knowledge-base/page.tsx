@@ -14,21 +14,21 @@ export default function KnowledgeBasePage() {
   // Only company accounts can access knowledge base management
   if (!companyAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg p-8">
+      <div className="p-8">
         <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-secondary-100">Knowledge Base</h1>
-          <p className="mt-1 text-secondary-400">
+          <h1 className="text-2xl font-bold text-text-primary">Knowledge Base</h1>
+          <p className="mt-1 text-text-secondary">
             Access to knowledge base management is restricted to company accounts.
           </p>
         </div>
         
         <div className="text-center py-12">
-          <Icons.BookOpen className="mx-auto h-12 w-12 text-secondary-400" />
-            <h3 className="mt-4 text-lg font-medium text-secondary-100">
-              Access Restricted
-            </h3>
-            <p className="mt-2 text-secondary-400">
+          <Icons.BookOpen className="mx-auto h-12 w-12 text-text-tertiary" />
+            <h3 className="mt-4 text-lg font-medium text-text-primary">
+            Access Restricted
+          </h3>
+            <p className="mt-2 text-text-secondary">
             Only company administrators can manage the knowledge base.
           </p>
         </div>
@@ -38,12 +38,11 @@ export default function KnowledgeBasePage() {
 }
 
   return (
-    <div className="min-h-screen bg-page-bg">
-      <div className="max-w-7xl mx-auto space-y-8 p-8">
+    <div className="space-y-8">
         {/* Header */}
         <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-secondary-100 mb-3">Knowledge Base</h1>
-          <p className="text-secondary-400 mb-6">
+          <h1 className="text-3xl font-bold text-text-primary mb-3">Knowledge Base</h1>
+          <p className="text-text-secondary mb-6">
             Manage your documents and content that powers your chatbot's responses.
           </p>
           <Link href="/knowledge-base/upload">
@@ -56,7 +55,6 @@ export default function KnowledgeBasePage() {
 
         {/* Document List */}
         <DocumentList />
-      </div>
     </div>
   );
 }

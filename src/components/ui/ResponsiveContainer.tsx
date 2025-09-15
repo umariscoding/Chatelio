@@ -145,7 +145,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   className = '',
 }) => {
   const variants = {
-    primary: 'bg-primary-600 text-secondary-50 hover:bg-primary-700 active:bg-primary-800',
+    primary: 'bg-primary-600 text-text-white hover:bg-primary-700 active:bg-primary-800',
     secondary: 'bg-secondary-200 text-secondary-900 hover:bg-secondary-300 active:bg-secondary-400',
     ghost: 'bg-transparent text-secondary-700 hover:bg-secondary-100 active:bg-secondary-200',
   };

@@ -38,7 +38,7 @@ const getStatusIcon = (status: Document['embeddings_status']) => {
     case 'failed':
       return <Icons.AlertCircle className="h-5 w-5 text-error-600" />;
     default:
-      return <Icons.Clock className="h-5 w-5 text-secondary-400" />;
+      return <Icons.Clock className="h-5 w-5 text-text-tertiary" />;
   }
 };
 
@@ -70,17 +70,17 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
   };
 
   return (
-    <div className={`bg-secondary-800 border border-secondary-700 rounded-lg p-4 hover:shadow-md transition-shadow ${className}`}>
+    <div className={`bg-bg-primary border border-border-light rounded-lg p-4 hover:shadow-lg transition-shadow shadow-sm ${className}`}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 flex-1">
           <div className="flex-shrink-0 mt-1">
-            <Icons.Document className="h-6 w-6 text-secondary-400" />
+            <Icons.Document className="h-6 w-6 text-text-tertiary" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-medium text-secondary-100 truncate">
+            <h4 className="text-sm font-medium text-text-primary truncate">
               {document.filename}
             </h4>
-            <div className="mt-1 flex items-center space-x-4 text-sm text-secondary-300">
+            <div className="mt-1 flex items-center space-x-4 text-sm text-text-secondary">
               <span>{formatFileSize(document.file_size)}</span>
               <span>{document.content_type}</span>
               <span>{formatDate(document.created_at)}</span>
@@ -133,7 +133,7 @@ const DocumentSearch: React.FC<{ onSearch: (query: string) => void; onFilter: (s
       <div className="flex-1">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-            <Icons.Search className="h-4 w-4 text-secondary-400" />
+            <Icons.Search className="h-4 w-4 text-text-tertiary" />
           </div>
           <MinimalInput
             label="Search documents..."
@@ -151,7 +151,7 @@ const DocumentSearch: React.FC<{ onSearch: (query: string) => void; onFilter: (s
         <select
           value={statusFilter}
           onChange={handleFilterChange}
-          className="w-full h-10 rounded-md border border-secondary-300 bg-secondary-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full h-10 rounded-md border border-border-medium bg-bg-primary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="all">All Status</option>
           <option value="completed">Completed</option>
@@ -173,21 +173,21 @@ const DocumentStats: React.FC<{ documents: Document[] }> = ({ documents }) => {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-      <div className="bg-secondary-800 rounded-lg border border-secondary-700 p-4">
-        <div className="text-2xl font-bold text-secondary-100">{stats.total}</div>
-        <div className="text-sm text-secondary-300">Total Documents</div>
+      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
+        <div className="text-2xl font-bold text-text-primary">{stats.total}</div>
+        <div className="text-sm text-text-secondary">Total Documents</div>
       </div>
-      <div className="bg-secondary-800 rounded-lg border border-secondary-700 p-4">
-        <div className="text-2xl font-bold text-success-400">{stats.completed}</div>
-        <div className="text-sm text-secondary-300">Completed</div>
+      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
+        <div className="text-2xl font-bold text-success-600">{stats.completed}</div>
+        <div className="text-sm text-text-secondary">Completed</div>
       </div>
-      <div className="bg-secondary-800 rounded-lg border border-secondary-700 p-4">
-        <div className="text-2xl font-bold text-warning-400">{stats.pending}</div>
-        <div className="text-sm text-secondary-300">Processing</div>
+      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
+        <div className="text-2xl font-bold text-warning-600">{stats.pending}</div>
+        <div className="text-sm text-text-secondary">Processing</div>
       </div>
-      <div className="bg-secondary-800 rounded-lg border border-secondary-700 p-4">
-        <div className="text-2xl font-bold text-error-400">{stats.failed}</div>
-        <div className="text-sm text-secondary-300">Failed</div>
+      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
+        <div className="text-2xl font-bold text-error-600">{stats.failed}</div>
+        <div className="text-sm text-text-secondary">Failed</div>
       </div>
     </div>
   );
@@ -238,9 +238,9 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
     return (
       <div className={`space-y-6 ${className}`}>
         <DocumentStats documents={[]} />
-        <Card className="border border-secondary-700 bg-secondary-800">
+        <Card>
           <div className="p-8 text-center">
-            <p className="text-lg text-secondary-300">Loading...</p>
+            <p className="text-lg text-text-secondary">Loading...</p>
           </div>
         </Card>
       </div>
@@ -251,7 +251,7 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
     <div className={`space-y-6 ${className}`}>
       <DocumentStats documents={documents} />
       
-      <Card className="border border-secondary-700 bg-secondary-800">
+      <Card>
         <div className="p-6">
           <DocumentSearch onSearch={handleSearch} onFilter={handleFilter} />
           
@@ -263,11 +263,11 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
 
           {filteredDocuments.length === 0 ? (
             <div className="text-center py-12">
-              <Icons.Document className="mx-auto h-12 w-12 text-secondary-400" />
-              <h3 className="mt-4 text-lg font-medium text-secondary-100">
+              <Icons.Document className="mx-auto h-12 w-12 text-text-tertiary" />
+              <h3 className="mt-4 text-lg font-medium text-text-primary">
                 {searchQuery || statusFilter !== 'all' ? 'No documents found' : 'No documents yet'}
               </h3>
-              <p className="mt-2 text-secondary-300">
+              <p className="mt-2 text-text-secondary">
                 {searchQuery || statusFilter !== 'all' 
                   ? 'Try adjusting your search or filter criteria.' 
                   : 'Upload your first document to get started.'

@@ -60,19 +60,18 @@ export default function ProfilePage() {
     : userAuth.user?.name || 'User';
 
   return (
-    <div className="min-h-screen bg-page-bg">
-      <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           {/* Header */}
           <div className="text-center py-8">
-            <h1 className="text-4xl font-bold text-secondary-100 mb-4">Profile Settings</h1>
-            <p className="text-lg text-secondary-400 max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold text-text-primary mb-4">Profile Settings</h1>
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Manage your {isCompanyUser ? 'company' : 'personal'} information and account settings.
             </p>
           </div>
 
           {/* Current User Info */}
-          <Card className="border border-secondary-700 bg-secondary-800 shadow-lg">
+          <Card className="shadow-lg">
             <div className="p-10">
               <div className="flex flex-col items-center space-y-6">
                 <div className="flex-shrink-0">
@@ -81,8 +80,8 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="text-center space-y-3">
-                  <h3 className="text-2xl font-semibold text-secondary-100">{displayName}</h3>
-                  <p className="text-lg text-secondary-300">
+                  <h3 className="text-2xl font-semibold text-text-primary">{displayName}</h3>
+                  <p className="text-lg text-text-secondary">
                     {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
                   </p>
                   <span className={`inline-flex px-4 py-2 text-sm font-medium rounded-full ${
@@ -119,7 +118,6 @@ export default function ProfilePage() {
             />
           )}
         </div>
-      </div>
     </div>
   );
 }

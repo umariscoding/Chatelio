@@ -33,7 +33,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
 
     const defaultVariants = {
       primary: `
-        bg-primary-600 hover:bg-primary-700 text-secondary-50
+        bg-primary-600 hover:bg-primary-700 text-text-white
         focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
         shadow-sm
       `,

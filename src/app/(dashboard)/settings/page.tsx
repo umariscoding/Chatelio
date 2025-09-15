@@ -131,8 +131,7 @@ export default function SettingsPage() {
 
   if (!companyAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg">
-        <div className="max-w-7xl mx-auto space-y-8 p-8">
+        <div className="space-y-8">
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl font-bold text-secondary-900">Settings</h1>
@@ -152,13 +151,11 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-      </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-page-bg">
-      <div className="max-w-5xl mx-auto space-y-8 p-8">
+      <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center py-6">
           <h1 className="text-3xl font-bold text-secondary-100 mb-3">Settings</h1>
@@ -185,7 +182,7 @@ export default function SettingsPage() {
         )}
 
         {/* Company Slug Management */}
-        <Card className="border border-secondary-700 bg-secondary-800 shadow-lg">
+        <Card className="shadow-lg">
           <div className="p-8">
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
@@ -237,7 +234,7 @@ export default function SettingsPage() {
         </Card>
 
         {/* Chatbot Publishing */}
-        <Card className="border border-secondary-700 bg-secondary-800 shadow-lg">
+        <Card className="shadow-lg">
           <div className="p-8">
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
@@ -363,6 +360,5 @@ export default function SettingsPage() {
           </div>
         </Card>
       </div>
-    </div>
   );
 }

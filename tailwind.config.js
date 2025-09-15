@@ -7,36 +7,60 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary brand colors - Blue accents for selections and highlights
+        // Primary brand colors - Better blue that complements white backgrounds
         primary: {
-          50: '#eff6ff',   // very light blue
-          100: '#dbeafe',  // light blue
-          200: '#bfdbfe',  // lighter blue
-          300: '#93c5fd',  // medium light blue
-          400: '#60a5fa',  // medium blue
-          500: '#3b82f6',  // standard blue
-          600: '#2563eb',  // darker blue
-          700: '#1d4ed8',  // dark blue
-          800: '#1e40af',  // very dark blue
-          900: '#1e3a8a',  // darkest blue
+          50: '#e6f3ff',   // very light blue
+          100: '#cce7ff',  // light blue
+          200: '#99d0ff',  // lighter blue
+          300: '#66b2ff',  // medium light blue (light variant)
+          400: '#3399ff',  // medium blue
+          500: '#007bff',  // standard blue (main color)
+          600: '#0066cc',  // darker blue (main button color)
+          700: '#0056b3',  // dark blue (dark variant)
+          800: '#004499',  // very dark blue
+          900: '#003366',  // darkest blue
         },
         
-        // Secondary colors - Greyish/blackish palette
-        secondary: {
-          50: '#f9fafb',   // very light grey
-          100: '#f3f4f6',  // light grey
-          200: '#e5e7eb',  // lighter grey
-          300: '#d1d5db',  // medium light grey
-          400: '#9ca3af',  // medium grey
-          500: '#6b7280',  // standard grey
-          600: '#4b5563',  // darker grey
-          700: '#374151',  // dark grey
-          800: '#1f2937',  // very dark grey
-          900: '#111827',  // darkest grey
-          950: '#030712',  // deepest black
+        // Neutral colors - Improved greys that complement the blue
+        neutral: {
+          50: '#ffffff',   // pure white
+          100: '#f8f9fa',  // very light grey (recommended background)
+          200: '#e9ecef',  // light grey
+          300: '#dee2e6',  // lighter grey
+          400: '#ced4da',  // medium light grey
+          500: '#adb5bd',  // medium grey
+          600: '#6c757d',  // darker grey (recommended for borders/secondary text)
+          700: '#495057',  // dark grey
+          800: '#343a40',  // very dark grey (recommended dark variant)
+          900: '#212529',  // darkest grey
+          950: '#171717',  // near black
         },
         
-        // Success colors - Green for success states
+        // Text colors - Improved hierarchy with better greys
+        text: {
+          primary: '#000000',    // pure black for main text
+          secondary: '#6c757d',  // recommended medium grey for secondary text
+          tertiary: '#adb5bd',   // lighter grey for tertiary text
+          placeholder: '#ced4da', // light grey for placeholders
+          white: '#ffffff',      // white text for dark backgrounds
+        },
+        
+        // Background colors - Improved backgrounds
+        bg: {
+          primary: '#ffffff',    // pure white primary background
+          secondary: '#f8f9fa',  // recommended light background
+          tertiary: '#e9ecef',   // light grey tertiary background
+          dark: '#343a40',       // recommended dark background
+        },
+        
+        // Border colors - Improved greys that complement blue
+        border: {
+          light: '#dee2e6',     // light border
+          medium: '#ced4da',    // medium border
+          dark: '#6c757d',      // dark border (recommended)
+        },
+        
+        // Success colors - Green variants (kept green for success states)
         success: {
           50: '#f0fdf4',
           100: '#dcfce7',
@@ -50,18 +74,18 @@ module.exports = {
           900: '#14532d',
         },
         
-        // Warning colors - Amber for warnings
+        // Warning colors - Orange/amber for warnings
         warning: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+          50: '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+          800: '#9a3412',
+          900: '#7c2d12',
         },
         
         // Error colors - Red for errors
@@ -78,7 +102,7 @@ module.exports = {
           900: '#7f1d1d',
         },
         
-        // Auth-specific colors - Dark zinc-like palette matching public chat
+        // Auth colors - Dark zinc-like palette for authentication modals
         auth: {
           50: '#fafafa',   // very light zinc
           100: '#f4f4f5',  // light zinc
@@ -92,9 +116,6 @@ module.exports = {
           900: '#18181b',  // darkest zinc (like zinc-900)
           950: '#09090b',  // deepest zinc (like zinc-950)
         },
-        
-        // Special background for main page content - Deep dark grey/black
-        'page-bg': '#030712', // deep dark grey/black for depth
       },
     },
   },

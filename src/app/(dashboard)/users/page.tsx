@@ -82,8 +82,7 @@ export default function UsersPage() {
   // Access control check - render this if not authorized
   if (!companyAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg">
-        <div className="max-w-7xl mx-auto space-y-8 p-8">
+        <div className="space-y-8">
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl font-bold text-secondary-100">User Management</h1>
@@ -103,7 +102,6 @@ export default function UsersPage() {
             </div>
           </div>
         </div>
-      </div>
     );
   }
 
@@ -129,8 +127,7 @@ export default function UsersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-page-bg">
-        <div className="max-w-7xl mx-auto space-y-8 p-8">
+        <div className="space-y-8">
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl font-bold text-secondary-100">User Management</h1>
@@ -141,12 +138,10 @@ export default function UsersPage() {
             <p className="text-lg text-secondary-900">Loading...</p>
           </div>
         </div>
-      </div>
     );
   }
 
   return (
-      <div className="min-h-screen bg-page-bg">
         <div className="max-w-7xl mx-auto space-y-8 p-8">
           {/* Header */}
           <div className="text-center py-6">
@@ -196,7 +191,7 @@ export default function UsersPage() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-4xl mx-auto">
-            <Card className="border border-secondary-700 bg-secondary-800 shadow-lg text-center">
+            <Card className="shadow-lg text-center">
               <div className="p-6">
                 <div className="flex justify-center mb-3">
                   <div className="p-3 rounded-2xl bg-secondary-900">
@@ -210,7 +205,7 @@ export default function UsersPage() {
               </div>
             </Card>
             
-            <Card className="border border-secondary-700 bg-secondary-800 shadow-lg text-center">
+            <Card className="shadow-lg text-center">
               <div className="p-6">
                 <div className="flex justify-center mb-3">
                   <div className="p-3 rounded-2xl bg-success-800">
@@ -226,7 +221,7 @@ export default function UsersPage() {
               </div>
             </Card>
             
-            <Card className="border border-secondary-700 bg-secondary-800 shadow-lg text-center">
+            <Card className="shadow-lg text-center">
               <div className="p-6">
                 <div className="flex justify-center mb-3">
                   <div className="p-3 rounded-2xl bg-secondary-900">
@@ -246,7 +241,7 @@ export default function UsersPage() {
           </div>
 
           {/* Users List */}
-          <Card className="border border-secondary-700 bg-secondary-800 shadow-lg">
+          <Card className="shadow-lg">
             <div className="p-8">
               <h3 className="text-xl font-semibold text-secondary-100 mb-6 text-center">Company Users</h3>
               
@@ -338,6 +333,5 @@ export default function UsersPage() {
             </div>
           </Card>
         </div>
-      </div>
   );
 }

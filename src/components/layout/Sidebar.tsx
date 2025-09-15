@@ -75,24 +75,27 @@ const NavigationItemComponent: React.FC<NavigationItemComponentProps & { onNavig
   return (
     <Link
       href={item.href}
-      className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+      className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative ${
         current
-          ? 'bg-secondary-800 text-primary-400'
-          : 'text-secondary-50 hover:bg-secondary-800 hover:text-secondary-50'
+          ? 'bg-primary-500/10 text-primary-500 shadow-sm'
+          : 'text-neutral-700 hover:bg-bg-secondary hover:text-text-primary'
       }`}
       prefetch={true}
       onClick={handleClick}
     >
+      {current && (
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary-500 rounded-r-full" />
+      )}
       <Icon
-        className={`mr-3 flex-shrink-0 h-5 w-5 ${
+        className={`mr-3 flex-shrink-0 h-5 w-5 transition-colors ${
           current
-            ? 'text-primary-400'
-            : 'text-secondary-400 group-hover:text-secondary-50'
+            ? 'text-primary-500'
+            : 'text-neutral-600 group-hover:text-text-primary'
         }`}
       />
-      {item.name}
+      <span className="truncate">{item.name}</span>
       {item.badge && (
-        <span className="ml-auto inline-block py-0.5 px-2 text-xs rounded-full bg-secondary-800 text-secondary-50">
+        <span className="ml-auto inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-primary-500/20 text-primary-400">
           {item.badge}
         </span>
       )}
@@ -124,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClos
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 md:hidden bg-secondary-900 bg-opacity-75"
+          className="fixed inset-0 z-40 md:hidden bg-neutral-900/50 backdrop-blur-sm"
           onClick={onClose}
         />
       )}
@@ -132,39 +135,47 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClos
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-secondary-900 border-r border-secondary-700 transform transition-transform duration-300 ease-in-out
-          md:relative md:translate-x-0 md:z-0
+          fixed inset-y-0 left-0 z-50 w-72 bg-bg-primary backdrop-blur-xl border-r border-border-light transform transition-all duration-300 ease-in-out shadow-lg
+          md:relative md:translate-x-0 md:z-0 md:min-h-screen
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           ${className}
         `}
       >
         <div className="flex flex-col h-full">
           {/* Logo/Header area */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-secondary-700">
-            <div className="flex items-center">
+          <div className="flex-shrink-0 flex items-center justify-between h-16 px-6 border-b border-border-light">
+            <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
-                <h2 className="text-lg font-semibold text-secondary-50">Chatelio</h2>
+                <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
+                  <span className="text-text-white font-bold text-sm">C</span>
+                </div>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-text-primary">Chatelio</h2>
+                <p className="text-xs text-text-tertiary">AI Dashboard</p>
               </div>
             </div>
             {/* Close button for mobile */}
             <button
               onClick={onClose}
-              className="md:hidden p-2 rounded-md text-secondary-50 hover:text-secondary-50 hover:bg-secondary-800"
+              className="md:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors"
             >
-              <Icons.Close className="h-6 w-6" />
+              <Icons.Close className="h-5 w-5" />
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-8 overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-border-medium scrollbar-track-transparent">
             {filteredSections.map((section, sectionIndex) => (
-              <div key={sectionIndex}>
+              <div key={sectionIndex} className="space-y-2">
                 {section.title && (
-                  <h3 className="px-2 text-xs font-semibold text-secondary-50 uppercase tracking-wider">
-                    {section.title}
-                  </h3>
+                  <div className="px-3 py-2">
+                    <h3 className="text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                      {section.title}
+                    </h3>
+                  </div>
                 )}
-                <div className={`space-y-1 ${section.title ? 'mt-2' : ''}`}>
+                <div className="space-y-1">
                   {section.items.map((item) => (
                     <NavigationItemComponent
                       key={item.name}
@@ -178,12 +189,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClos
             ))}
           </nav>
 
-          {/* Footer */}
-          <div className="flex-shrink-0 p-4 border-t border-secondary-700">
-            <div className="text-xs text-secondary-50 text-center">
-              Chatelio v1.0 - Phase 2
-            </div>
-          </div>
         </div>
       </div>
     </>

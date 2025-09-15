@@ -4,10 +4,10 @@
 
 /* Set the background color for the entire page */
 html, body {
-  background-color: #000000;
-  color: #d4d4d8;
+  background-color: #ffffff;
+  color: #000000;
   scrollbar-width: thin;
-  scrollbar-color: #27272a #000000;
+  scrollbar-color: #d4d4d4 #ffffff;
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -21,24 +21,24 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #d4d4d4;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #a3a3a3;
 }
 
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #27272a transparent;
+  scrollbar-color: #d4d4d4 transparent;
 }
 
 /* Improved scrolling behavior */
 html, body {
   height: 100%;
-  background-color: #000000;
+  background-color: #ffffff;
   overscroll-behavior: none;
 }
 
@@ -57,7 +57,7 @@ html, body {
   display: inline-block;
   width: 2px;
   height: 1.2em;
-  background-color: #a1a1aa;
+  background-color: #525252;
   margin-left: 2px;
   animation: blink 1s infinite;
   align-self: center;
@@ -75,7 +75,7 @@ html, body {
   display: inline-flex;
   align-items: baseline;
   position: relative;
-  color: #a1a1aa;
+  color: #525252;
 }
 
 .animated-text span {
@@ -125,36 +125,36 @@ html, body {
   }
 }
 
-/* Fix autofill styling for dark mode inputs */
+/* Fix autofill styling for light mode inputs */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  -webkit-text-fill-color: #f4f4f5 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
-/* Dark mode specific autofill fixes */
-.dark-theme input:-webkit-autofill,
-.dark-theme input:-webkit-autofill:hover,
-.dark-theme input:-webkit-autofill:focus,
-.dark-theme input:-webkit-autofill:active {
-  -webkit-text-fill-color: #f4f4f5 !important;
-  box-shadow: 0 0 0px 1000px transparent inset !important;
-  background-color: transparent !important;
-  caret-color: #f4f4f5;
+/* Light theme specific autofill fixes */
+.light-theme input:-webkit-autofill,
+.light-theme input:-webkit-autofill:hover,
+.light-theme input:-webkit-autofill:focus,
+.light-theme input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  background-color: #ffffff !important;
+  caret-color: #000000;
 }
 
 /* Firefox autofill fix */
 input:autofill {
-  background-color: transparent !important;
-  color: inherit !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-.dark-theme input:autofill {
-  background-color: transparent !important;
-  color: #f4f4f5 !important;
+.light-theme input:autofill {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
 /* Prevent autofill yellow background */

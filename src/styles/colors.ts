@@ -1,27 +1,27 @@
-// Public chatbot interface colors - kept separate from company theme
+// Improved interface colors - better blue with complementary greys
 export const CHAT_COLORS = {
   // User message colors
-  userBg: '#3b82f6', // primary-500
+  userBg: '#007bff', // improved primary-500 (better blue)
   userText: '#ffffff',
-  userBorder: '#2563eb', // primary-600
+  userBorder: '#0066cc', // primary-600
   
   // Bot message colors
-  botBg: '#f3f4f6', // gray-100
-  botText: '#111827', // gray-900
-  botBorder: '#e5e7eb', // gray-200
+  botBg: '#f8f9fa', // improved neutral-100 (recommended light background)
+  botText: '#000000', // pure black for better contrast
+  botBorder: '#dee2e6', // improved border-light
   
   // Chat interface
   background: '#ffffff',
-  sidebarBg: '#f9fafb', // gray-50
-  sidebarBorder: '#e5e7eb', // gray-200
+  sidebarBg: '#f8f9fa', // improved neutral-100 
+  sidebarBorder: '#dee2e6', // improved border-light
   
   // Interactive elements
-  hoverBg: '#f3f4f6', // gray-100
-  activeBg: '#eff6ff', // primary-50
-  selectedBg: '#dbeafe', // primary-100
+  hoverBg: '#e9ecef', // improved neutral-200
+  activeBg: '#e6f3ff', // improved primary-50
+  selectedBg: '#cce7ff', // improved primary-100
   
   // Input area
   inputBg: '#ffffff',
-  inputBorder: '#d1d5db', // gray-300
-  inputFocus: '#3b82f6', // primary-500
+  inputBorder: '#ced4da', // improved border-medium
+  inputFocus: '#007bff', // improved primary-500 (better blue)
 } as const;
