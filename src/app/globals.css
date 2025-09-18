@@ -38,8 +38,30 @@ html, body {
 /* Improved scrolling behavior */
 html, body {
   height: 100%;
-  background-color: #ffffff;
-  overscroll-behavior: none;
+  background-color: #18181b; /* auth-900 - same as sidebar */
+  overscroll-behavior: auto;
+}
+
+/* High-performance scrolling optimizations */
+.smooth-scroll-container {
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  
+  /* Optimize scrolling performance */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  
+  /* Allow natural overscroll bounce effect */
+  overscroll-behavior: auto;
+  -webkit-overscroll-behavior: auto;
+  
+  /* Force GPU acceleration */
+  will-change: scroll-position;
+  backface-visibility: hidden;
+  
+  /* Remove containment that might prevent overscroll */
+  /* contain: layout style paint; */
 }
 
 /* Enable smooth scrolling */

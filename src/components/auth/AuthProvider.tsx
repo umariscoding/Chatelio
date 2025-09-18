@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                              companyAuth.isAuthenticated;
 
     return (
-      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
         <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );

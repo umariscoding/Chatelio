@@ -1,122 +1,100 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useAppSelector } from '@/hooks/useAuth';
-import { UserProfileForm, CompanyProfileForm } from '@/components/profile/ProfileForm';
-import Card from '@/components/ui/Card';
-import { Icons } from '@/components/ui';
-import type { ProfileFormData, CompanyProfileFormData } from '@/interfaces/Profile.interface';
+import { Icons, IOSContentLoader } from '@/components/ui';
 
 export default function ProfilePage() {
   const companyAuth = useAppSelector((state) => state.companyAuth);
   const userAuth = useAppSelector((state) => state.userAuth);
-  const [loading, setLoading] = useState(false);
-
-  const handleUserProfileSubmit = async (data: ProfileFormData) => {
-    setLoading(true);
-    try {
-      // TODO: Implement API call to update user profile
-      console.log('Updating user profile:', data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Show success message
-      alert('Profile updated successfully!');
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-      alert('Failed to update profile. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCompanyProfileSubmit = async (data: CompanyProfileFormData) => {
-    setLoading(true);
-    try {
-      // TODO: Implement API call to update company profile
-      console.log('Updating company profile:', data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Show success message
-      alert('Company profile updated successfully!');
-    } catch (error) {
-      console.error('Failed to update company profile:', error);
-      alert('Failed to update company profile. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Determine which auth is active
   const isCompanyUser = companyAuth.isAuthenticated;
-  const isRegularUser = userAuth.isAuthenticated;
+  const isLoading = companyAuth.loading || userAuth.loading;
   
   const displayName = isCompanyUser 
     ? companyAuth.company?.name || 'Company' 
     : userAuth.user?.name || 'User';
 
+  if (isLoading) {
+    return <IOSContentLoader isLoading={true} message="Loading profile..." />;
+  }
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           {/* Header */}
-          <div className="text-center py-8">
-            <h1 className="text-4xl font-bold text-text-primary mb-4">Profile Settings</h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              Manage your {isCompanyUser ? 'company' : 'personal'} information and account settings.
+          <div className="text-center">
+            <div className="relative mx-auto w-24 h-24 mb-6">
+              <div className="w-full h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center shadow-lg">
+                <Icons.User className="h-12 w-12 text-white" />
+              </div>
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-success-500 rounded-full border-3 border-white"></div>
+            </div>
+            <h1 className="text-4xl font-bold text-neutral-900 mb-2">Profile</h1>
+            <p className="text-lg text-neutral-600">
+              Your {isCompanyUser ? 'company' : 'account'} information
             </p>
           </div>
 
-          {/* Current User Info */}
-          <Card className="shadow-lg">
-            <div className="p-10">
-              <div className="flex flex-col items-center space-y-6">
-                <div className="flex-shrink-0">
-                  <div className="h-24 w-24 rounded-full bg-gradient-to-br from-secondary-900 to-secondary-800 flex items-center justify-center shadow-inner ring-4 ring-secondary-700">
-                    <Icons.User className="h-12 w-12 text-primary-400" />
+          {/* Profile Information Card */}
+          <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Name Field */}
+              <div className="group">
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center">
+                    <Icons.User className="h-4 w-4 text-primary-600" />
                   </div>
+                  <label className="text-sm font-semibold text-neutral-700">
+                    {isCompanyUser ? 'Company Name' : 'Full Name'}
+                  </label>
                 </div>
-                <div className="text-center space-y-3">
-                  <h3 className="text-2xl font-semibold text-text-primary">{displayName}</h3>
-                  <p className="text-lg text-text-secondary">
-                    {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
-                  </p>
-                  <span className={`inline-flex px-4 py-2 text-sm font-medium rounded-full ${
-                    isCompanyUser 
-                      ? 'bg-secondary-900 text-primary-400' 
-                      : 'bg-secondary-900 text-secondary-200'
-                  }`}>
-                    {isCompanyUser ? 'Company Account' : 'Team Member'}
-                  </span>
+                <div className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl p-4 border border-neutral-200 group-hover:shadow-sm transition-shadow">
+                  <p className="text-neutral-900 font-medium">{displayName}</p>
                 </div>
               </div>
-            </div>
-          </Card>
+              
+              {/* Email Field */}
+              <div className="group">
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center">
+                    <Icons.Globe className="h-4 w-4 text-primary-600" />
+                  </div>
+                  <label className="text-sm font-semibold text-neutral-700">
+                    Email Address
+                  </label>
+                </div>
+                <div className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl p-4 border border-neutral-200 group-hover:shadow-sm transition-shadow">
+                  <p className="text-neutral-900 font-medium">
+                    {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
+                  </p>
+                </div>
+              </div>
 
-          {/* Profile Forms */}
-          {isCompanyUser ? (
-            <CompanyProfileForm
-              onSubmit={handleCompanyProfileSubmit}
-              loading={loading}
-              initialData={{
-                name: companyAuth.company?.name || '',
-                email: companyAuth.company?.email || '',
-                slug: companyAuth.company?.slug || '',
-              }}
-            />
-          ) : (
-            <UserProfileForm
-              onSubmit={handleUserProfileSubmit}
-              loading={loading}
-              initialData={{
-                name: userAuth.user?.name || '',
-                email: userAuth.user?.email || '',
-              }}
-            />
-          )}
+              {/* Public URL Field (Company only) */}
+              {isCompanyUser && companyAuth.company?.slug && (
+                <div className="lg:col-span-2 group">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center">
+                      <Icons.Globe className="h-4 w-4 text-primary-600" />
+                    </div>
+                    <label className="text-sm font-semibold text-neutral-700">
+                      Public URL
+                    </label>
+                  </div>
+                  <div className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl p-4 border border-neutral-200 group-hover:shadow-sm transition-shadow">
+                    <p className="text-neutral-900 font-medium">
+                      {companyAuth.company.slug}.chatelio.com
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         </div>
     </div>
   );

@@ -3,16 +3,25 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { Company } from '@/types/auth';
 import { api } from '@/utils/api';
 
-interface PublishChatbotRequest {
-  is_published: boolean;
+interface UpdateChatbotInfoRequest {
   chatbot_title: string;
   chatbot_description: string;
+}
+
+interface UpdateChatbotInfoResponse {
+  message: string;
+  chatbot_title: string;
+  chatbot_description: string;
+}
+
+interface PublishChatbotRequest {
+  is_published: boolean;
 }
 
 interface PublishChatbotResponse {
   message: string;
   is_published: boolean;
-  public_url: string;
+  public_url?: string;
 }
 
 interface UpdateSlugRequest {
@@ -26,14 +35,12 @@ interface UpdateSlugResponse {
 }
 
 interface CompanyState {
-  company: Company | null;
   publicUrl: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: CompanyState = {
-  company: null,
   publicUrl: null,
   loading: false,
   error: null,
@@ -47,9 +54,26 @@ export const updateCompanySlug = createAsyncThunk(
       const response = await api.put<UpdateSlugResponse>('/auth/company/slug', data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to update slug'
-      );
+      const errorMessage = typeof error.response?.data?.detail === 'string' 
+        ? error.response.data.detail 
+        : error.message || 'Failed to update slug';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+// Update Chatbot Info
+export const updateChatbotInfo = createAsyncThunk(
+  'company/updateChatbotInfo',
+  async (data: UpdateChatbotInfoRequest, { rejectWithValue }) => {
+    try {
+      const response = await api.put<UpdateChatbotInfoResponse>('/auth/company/chatbot-info', data);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = typeof error.response?.data?.detail === 'string' 
+        ? error.response.data.detail 
+        : error.message || 'Failed to update chatbot info';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -62,9 +86,10 @@ export const publishChatbot = createAsyncThunk(
       const response = await api.post<PublishChatbotResponse>('/auth/company/publish-chatbot', data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to publish chatbot'
-      );
+      const errorMessage = typeof error.response?.data?.detail === 'string' 
+        ? error.response.data.detail 
+        : error.message || 'Failed to publish chatbot';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -82,20 +107,8 @@ const companySlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setCompany: (state, action: PayloadAction<Company>) => {
-      state.company = action.payload;
-      // Generate public URL if slug exists
-      if (action.payload.slug && typeof window !== 'undefined') {
-        state.publicUrl = `${window.location.origin}/${action.payload.slug}`;
-      }
-    },
-    updatePublishStatus: (state, action: PayloadAction<{ is_published: boolean; public_url?: string }>) => {
-      if (state.company) {
-        state.company.is_published = action.payload.is_published;
-      }
-      if (action.payload.public_url) {
-        state.publicUrl = action.payload.public_url;
-      }
+    setPublicUrl: (state, action: PayloadAction<string>) => {
+      state.publicUrl = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -107,12 +120,24 @@ const companySlice = createSlice({
       })
       .addCase(updateCompanySlug.fulfilled, (state, action) => {
         state.loading = false;
-        if (state.company) {
-          state.company.slug = action.payload.slug;
-        }
         state.publicUrl = action.payload.public_url;
       })
       .addCase(updateCompanySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    // Update Chatbot Info
+    builder
+      .addCase(updateChatbotInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateChatbotInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        // Company data will be updated in companyAuthSlice
+      })
+      .addCase(updateChatbotInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -125,10 +150,9 @@ const companySlice = createSlice({
       })
       .addCase(publishChatbot.fulfilled, (state, action) => {
         state.loading = false;
-        if (state.company) {
-          state.company.is_published = action.payload.is_published;
+        if (action.payload.public_url) {
+          state.publicUrl = action.payload.public_url;
         }
-        state.publicUrl = action.payload.public_url;
       })
       .addCase(publishChatbot.rejected, (state, action) => {
         state.loading = false;
@@ -141,8 +165,7 @@ export const {
   setLoading, 
   setError, 
   clearError,
-  setCompany,
-  updatePublishStatus,
+  setPublicUrl,
 } = companySlice.actions;
 
 export default companySlice.reducer;

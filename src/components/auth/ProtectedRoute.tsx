@@ -86,7 +86,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Show loading during initial auth check or while auth is loading
   if (companyAuth.loading || userAuth.loading || isInitialLoad) {
     return (
-      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
         <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );
@@ -95,7 +95,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Check authentication based on required user type
   if (requiredUserType === 'company' && !companyAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
         <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );
@@ -103,7 +103,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   
   if (requiredUserType === 'user' && !userAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
         <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );
@@ -112,7 +112,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // If no specific type required, check for any authentication
   if (!requiredUserType && !companyAuth.isAuthenticated && !userAuth.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-page-bg flex items-center justify-center">
+      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
         <p className="text-lg text-secondary-200">Loading...</p>
       </div>
     );

@@ -4,9 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
 import { listDocuments, deleteDocument } from '@/store/slices/knowledgeBaseSlice';
-import Card from '@/components/ui/Card';
 import MinimalButton from '@/components/ui/MinimalButton';
-import MinimalInput from '@/components/ui/MinimalInput';
 import { Icons } from '@/components/ui';
 import type { DocumentListProps, DocumentItemProps } from '@/interfaces/KnowledgeBase.interface';
 import type { Document } from '@/types/knowledgeBase';
@@ -69,224 +67,145 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
     }
   };
 
+  const getFileTypeIcon = (contentType: string) => {
+    if (contentType.includes('pdf')) return <Icons.FileText className="h-6 w-6 text-error-600" />;
+    if (contentType.includes('word') || contentType.includes('document')) return <Icons.FileText className="h-6 w-6 text-primary-600" />;
+    if (contentType.includes('text')) return <Icons.Document className="h-6 w-6 text-success-600" />;
+    return <Icons.Document className="h-6 w-6 text-neutral-600" />;
+  };
+
   return (
-    <div className={`bg-bg-primary border border-border-light rounded-lg p-4 hover:shadow-lg transition-shadow shadow-sm ${className}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex items-start space-x-3 flex-1">
-          <div className="flex-shrink-0 mt-1">
-            <Icons.Document className="h-6 w-6 text-text-tertiary" />
+    <div className={`group bg-white border border-neutral-200 rounded-2xl p-5 hover:shadow-xl hover:border-primary-200 transition-all duration-300 hover:-translate-y-1 ${className}`}>
+      {/* Header with Icon, Title and Actions */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-neutral-50 to-neutral-100 group-hover:from-primary-50 group-hover:to-primary-100 transition-colors duration-300">
+            {getFileTypeIcon(document.content_type)}
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-medium text-text-primary truncate">
+            <h4 className="text-lg font-semibold text-neutral-900 truncate group-hover:text-primary-700 transition-colors">
               {document.filename}
             </h4>
-            <div className="mt-1 flex items-center space-x-4 text-sm text-text-secondary">
-              <span>{formatFileSize(document.file_size)}</span>
-              <span>{document.content_type}</span>
-              <span>{formatDate(document.created_at)}</span>
-            </div>
-            <div className="mt-2 flex items-center space-x-2">
-              {getStatusIcon(document.embeddings_status)}
-              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(document.embeddings_status)}`}>
-                {document.embeddings_status}
-              </span>
-            </div>
           </div>
         </div>
-        <div className="flex-shrink-0 ml-4">
+        
+        <div className="flex items-center space-x-2">
           <MinimalButton
             variant="outline"
             size="sm"
             onClick={handleDelete}
             loading={isDeleting}
-            className="text-error-600 border-error-600 hover:bg-error-50"
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-neutral-400 border-neutral-200 hover:text-error-600 hover:border-error-300 hover:bg-error-50"
           >
             <Icons.Trash className="h-4 w-4" />
           </MinimalButton>
         </div>
       </div>
-    </div>
-  );
-};
-
-const DocumentSearch: React.FC<{ onSearch: (query: string) => void; onFilter: (status: string) => void }> = ({ 
-  onSearch, 
-  onFilter 
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    onSearch(value);
-  };
-
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setStatusFilter(value);
-    onFilter(value);
-  };
-
-  return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-6">
-      <div className="flex-1">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-            <Icons.Search className="h-4 w-4 text-text-tertiary" />
-          </div>
-          <MinimalInput
-            label="Search documents..."
-            type="text"
-            placeholder="Search documents..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="pl-10"
-            variant="default"
-            theme="light"
-          />
+      
+      {/* Compact Metadata */}
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-neutral-500">Size</span>
+          <span className="font-medium text-neutral-700">{formatFileSize(document.file_size)}</span>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-neutral-500">Type</span>
+          <span className="font-medium text-neutral-700">{document.content_type.split('/')[1]?.toUpperCase() || 'FILE'}</span>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-neutral-500">Created</span>
+          <span className="font-medium text-neutral-700">{formatDate(document.created_at)}</span>
         </div>
       </div>
-      <div className="sm:w-48">
-        <select
-          value={statusFilter}
-          onChange={handleFilterChange}
-          className="w-full h-10 rounded-md border border-border-medium bg-bg-primary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500"
-        >
-          <option value="all">All Status</option>
-          <option value="completed">Completed</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
-        </select>
+      
+      {/* Status Badge */}
+      <div className="flex justify-center">
+        <span className={`inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full ${getStatusColor(document.embeddings_status)}`}>
+          <span className={`w-1.5 h-1.5 rounded-full mr-2 ${
+            document.embeddings_status === 'completed' ? 'bg-success-500' :
+            document.embeddings_status === 'pending' ? 'bg-warning-500' :
+            'bg-error-500'
+          }`}></span>
+          {document.embeddings_status.charAt(0).toUpperCase() + document.embeddings_status.slice(1)}
+        </span>
       </div>
     </div>
   );
 };
 
-const DocumentStats: React.FC<{ documents: Document[] }> = ({ documents }) => {
-  const stats = {
-    total: documents.length,
-    completed: documents.filter(doc => doc.embeddings_status === 'completed').length,
-    pending: documents.filter(doc => doc.embeddings_status === 'pending').length,
-    failed: documents.filter(doc => doc.embeddings_status === 'failed').length,
-  };
 
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
-        <div className="text-2xl font-bold text-text-primary">{stats.total}</div>
-        <div className="text-sm text-text-secondary">Total Documents</div>
-      </div>
-      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
-        <div className="text-2xl font-bold text-success-600">{stats.completed}</div>
-        <div className="text-sm text-text-secondary">Completed</div>
-      </div>
-      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
-        <div className="text-2xl font-bold text-warning-600">{stats.pending}</div>
-        <div className="text-sm text-text-secondary">Processing</div>
-      </div>
-      <div className="bg-bg-primary rounded-lg border border-border-light p-4 shadow-md">
-        <div className="text-2xl font-bold text-error-600">{stats.failed}</div>
-        <div className="text-sm text-text-secondary">Failed</div>
-      </div>
-    </div>
-  );
-};
 
 const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
   const dispatch = useAppDispatch();
   const { documents, loading, error } = useAppSelector((state) => state.knowledgeBase);
-  const [filteredDocuments, setFilteredDocuments] = useState<Document[]>(documents);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     dispatch(listDocuments());
   }, [dispatch]);
 
-  useEffect(() => {
-    let filtered = documents;
-
-    // Apply search filter
-    if (searchQuery) {
-      filtered = filtered.filter(doc =>
-        doc.filename.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(doc => doc.embeddings_status === statusFilter);
-    }
-
-    setFilteredDocuments(filtered);
-  }, [documents, searchQuery, statusFilter]);
-
   const handleDelete = async (docId: string) => {
     await dispatch(deleteDocument(docId));
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleFilter = (status: string) => {
-    setStatusFilter(status);
-  };
-
   if (loading && documents.length === 0) {
     return (
-      <div className={`space-y-6 ${className}`}>
-        <DocumentStats documents={[]} />
-        <Card>
-          <div className="p-8 text-center">
-            <p className="text-lg text-text-secondary">Loading...</p>
+      <div className={`${className}`}>
+        <div className="text-center py-20">
+          <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 mb-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-3 border-primary-600 border-t-transparent"></div>
           </div>
-        </Card>
+          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">Loading documents...</h3>
+          <p className="text-lg text-neutral-600">
+            Please wait while we fetch your knowledge base documents.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={`space-y-6 ${className}`}>
-      <DocumentStats documents={documents} />
-      
-      <Card>
-        <div className="p-6">
-          <DocumentSearch onSearch={handleSearch} onFilter={handleFilter} />
-          
-          {error && (
-            <div className="mb-4 p-4 bg-error-50 border border-error-200 rounded-md">
-              <p className="text-sm text-error-600">{error}</p>
-            </div>
-          )}
-
-          {filteredDocuments.length === 0 ? (
-            <div className="text-center py-12">
-              <Icons.Document className="mx-auto h-12 w-12 text-text-tertiary" />
-              <h3 className="mt-4 text-lg font-medium text-text-primary">
-                {searchQuery || statusFilter !== 'all' ? 'No documents found' : 'No documents yet'}
-              </h3>
-              <p className="mt-2 text-text-secondary">
-                {searchQuery || statusFilter !== 'all' 
-                  ? 'Try adjusting your search or filter criteria.' 
-                  : 'Upload your first document to get started.'
-                }
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filteredDocuments.map((document) => (
-                <DocumentItem
-                  key={document.doc_id}
-                  document={document}
-                  onDelete={handleDelete}
-                />
-              ))}
-            </div>
-          )}
+    <div className={`${className}`}>
+      {/* Header Section */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-neutral-900 mb-2">Your Documents</h2>
+        <div className="flex items-center space-x-2 text-neutral-600">
+          <span className="text-lg font-medium">{documents.length}</span>
+          <span>{documents.length === 1 ? 'document' : 'documents'} in your knowledge base</span>
         </div>
-      </Card>
+      </div>
+      
+      {error && (
+        <div className="mb-6 p-5 bg-gradient-to-r from-error-50 to-error-100 border border-error-200 rounded-2xl">
+          <div className="flex items-center space-x-3">
+            <div className="p-1 bg-error-200 rounded-full">
+              <Icons.AlertCircle className="h-5 w-5 text-error-700" />
+            </div>
+            <p className="text-sm font-medium text-error-800">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {documents.length === 0 ? (
+        <div className="text-center py-20">
+          <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-gradient-to-br from-neutral-100 to-neutral-200 mb-8">
+            <Icons.Document className="h-12 w-12 text-neutral-400" />
+          </div>
+          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">No documents yet</h3>
+          <p className="text-lg text-neutral-600 max-w-lg mx-auto leading-relaxed">
+            Use the upload options above to start building your knowledge base. Your chatbot will use this content to provide intelligent responses.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {documents.map((document) => (
+            <DocumentItem
+              key={document.doc_id}
+              document={document}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

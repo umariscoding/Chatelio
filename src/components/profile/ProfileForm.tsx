@@ -13,17 +13,17 @@ const ProfileSection: React.FC<{ title: string; description?: string; children: 
   children,
   className = ""
 }) => (
-  <Card className={`border border-secondary-700 bg-secondary-800 shadow-lg ${className}`}>
+  <div className={`border rounded-2xl shadow-sm ${className}`}>
     <div className="p-8">
-      <div className="mb-8 text-center">
-        <h3 className="text-xl font-semibold text-secondary-100 mb-2">{title}</h3>
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold text-neutral-900 mb-2">{title}</h3>
         {description && (
-          <p className="text-secondary-300">{description}</p>
+          <p className="text-neutral-600">{description}</p>
         )}
       </div>
       {children}
     </div>
-  </Card>
+  </div>
 );
 
 export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading = false, className = "", initialData }) => {
@@ -84,90 +84,97 @@ export const UserProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, loading 
   };
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-8 ${className}`}>
       <ProfileSection
         title="Personal Information"
         description="Update your personal details and email address."
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <MinimalInput
-            label="Full Name"
-            type="text"
-            value={formData.name}
-            onChange={handleInputChange('name')}
-            error={errors.name}
-            placeholder="Enter your full name"
-            required
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="Email Address"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange('email')}
-            error={errors.email}
-            placeholder="Enter your email address"
-            required
-            variant="floating"
-            theme="light"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MinimalInput
+              label="Full Name"
+              type="text"
+              value={formData.name}
+              onChange={handleInputChange('name')}
+              error={errors.name}
+              placeholder="Enter your full name"
+              required
+              variant="floating"
+              theme="light"
+            />
+            
+            <MinimalInput
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange('email')}
+              error={errors.email}
+              placeholder="Enter your email address"
+              required
+              variant="floating"
+              theme="light"
+            />
+          </div>
 
-          <div className="pt-6 flex justify-center">
+          <div className="flex justify-end pt-4">
             <MinimalButton type="submit" loading={loading} variant="primary" size="lg">
-              Update Profile
+              Save Changes
             </MinimalButton>
           </div>
         </form>
       </ProfileSection>
 
       <ProfileSection
-        title="Change Password"
+        title="Security Settings"
         description="Update your password to keep your account secure."
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <MinimalInput
-            label="Current Password"
-            type="password"
-            value={formData.currentPassword || ''}
-            onChange={handleInputChange('currentPassword')}
-            error={errors.currentPassword}
-            placeholder="Enter your current password"
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="New Password"
-            type="password"
-            value={formData.newPassword || ''}
-            onChange={handleInputChange('newPassword')}
-            error={errors.newPassword}
-            placeholder="Enter your new password"
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="Confirm New Password"
-            type="password"
-            value={formData.confirmPassword || ''}
-            onChange={handleInputChange('confirmPassword')}
-            error={errors.confirmPassword}
-            placeholder="Confirm your new password"
-            variant="floating"
-            theme="light"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <MinimalInput
+              label="Current Password"
+              type="password"
+              value={formData.currentPassword || ''}
+              onChange={handleInputChange('currentPassword')}
+              error={errors.currentPassword}
+              placeholder="Enter your current password"
+              variant="floating"
+              theme="light"
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MinimalInput
+                label="New Password"
+                type="password"
+                value={formData.newPassword || ''}
+                onChange={handleInputChange('newPassword')}
+                error={errors.newPassword}
+                placeholder="Enter your new password"
+                variant="floating"
+                theme="light"
+              />
+              
+              <MinimalInput
+                label="Confirm New Password"
+                type="password"
+                value={formData.confirmPassword || ''}
+                onChange={handleInputChange('confirmPassword')}
+                error={errors.confirmPassword}
+                placeholder="Confirm your new password"
+                variant="floating"
+                theme="light"
+              />
+            </div>
+          </div>
 
-          <div className="pt-6 flex justify-center">
+          <div className="flex justify-end pt-4">
             <MinimalButton 
               type="submit" 
               loading={loading} 
-              variant="secondary" size="lg"
+              variant="secondary" 
+              size="lg"
               disabled={!formData.newPassword}
             >
-              Change Password
+              Update Password
             </MinimalButton>
           </div>
         </form>
@@ -240,102 +247,116 @@ export const CompanyProfileForm: React.FC<CompanyProfileFormProps> = ({ onSubmit
   };
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-8 ${className}`}>
       <ProfileSection
         title="Company Information"
         description="Update your company details and public settings."
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <MinimalInput
-            label="Company Name"
-            type="text"
-            value={formData.name}
-            onChange={handleInputChange('name')}
-            error={errors.name}
-            placeholder="Enter your company name"
-            required
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="Email Address"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange('email')}
-            error={errors.email}
-            placeholder="Enter your company email"
-            required
-            variant="floating"
-            theme="light"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MinimalInput
+              label="Company Name"
+              type="text"
+              value={formData.name}
+              onChange={handleInputChange('name')}
+              error={errors.name}
+              placeholder="Enter your company name"
+              required
+              variant="floating"
+              theme="light"
+            />
+            
+            <MinimalInput
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange('email')}
+              error={errors.email}
+              placeholder="Enter your company email"
+              required
+              variant="floating"
+              theme="light"
+            />
+          </div>
 
-          <MinimalInput
-            label="Public Slug"
-            type="text"
-            value={formData.slug || ''}
-            onChange={handleInputChange('slug')}
-            error={errors.slug}
-            placeholder="your-company"
-            variant="floating"
-            theme="light"
-          />
-          <p className="mt-1 text-sm text-secondary-300">This will be your public chatbot URL: your-company.chatelio.com</p>
+          <div>
+            <MinimalInput
+              label="Public Slug"
+              type="text"
+              value={formData.slug || ''}
+              onChange={handleInputChange('slug')}
+              error={errors.slug}
+              placeholder="your-company"
+              variant="floating"
+              theme="light"
+            />
+            <p className="mt-2 text-sm text-neutral-500 flex items-center">
+              <span>🌐 This will be your public chatbot URL: </span>
+              <code className="ml-1 px-2 py-1 bg-neutral-100 rounded text-xs">
+                {formData.slug || 'your-company'}.chatelio.com
+              </code>
+            </p>
+          </div>
 
-          <div className="pt-6 flex justify-center">
+          <div className="flex justify-end pt-4">
             <MinimalButton type="submit" loading={loading} variant="primary" size="lg">
-              Update Company
+              Save Changes
             </MinimalButton>
           </div>
         </form>
       </ProfileSection>
 
       <ProfileSection
-        title="Change Password"
+        title="Security Settings"
         description="Update your password to keep your account secure."
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <MinimalInput
-            label="Current Password"
-            type="password"
-            value={formData.currentPassword || ''}
-            onChange={handleInputChange('currentPassword')}
-            error={errors.currentPassword}
-            placeholder="Enter your current password"
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="New Password"
-            type="password"
-            value={formData.newPassword || ''}
-            onChange={handleInputChange('newPassword')}
-            error={errors.newPassword}
-            placeholder="Enter your new password"
-            variant="floating"
-            theme="light"
-          />
-          
-          <MinimalInput
-            label="Confirm New Password"
-            type="password"
-            value={formData.confirmPassword || ''}
-            onChange={handleInputChange('confirmPassword')}
-            error={errors.confirmPassword}
-            placeholder="Confirm your new password"
-            variant="floating"
-            theme="light"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <MinimalInput
+              label="Current Password"
+              type="password"
+              value={formData.currentPassword || ''}
+              onChange={handleInputChange('currentPassword')}
+              error={errors.currentPassword}
+              placeholder="Enter your current password"
+              variant="floating"
+              theme="light"
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MinimalInput
+                label="New Password"
+                type="password"
+                value={formData.newPassword || ''}
+                onChange={handleInputChange('newPassword')}
+                error={errors.newPassword}
+                placeholder="Enter your new password"
+                variant="floating"
+                theme="light"
+              />
+              
+              <MinimalInput
+                label="Confirm New Password"
+                type="password"
+                value={formData.confirmPassword || ''}
+                onChange={handleInputChange('confirmPassword')}
+                error={errors.confirmPassword}
+                placeholder="Confirm your new password"
+                variant="floating"
+                theme="light"
+              />
+            </div>
+          </div>
 
-          <div className="pt-6 flex justify-center">
+          <div className="flex justify-end pt-4">
             <MinimalButton 
               type="submit" 
               loading={loading} 
-              variant="secondary" size="lg"
+              variant="secondary" 
+              size="lg"
               disabled={!formData.newPassword}
             >
-              Change Password
+              Update Password
             </MinimalButton>
           </div>
         </form>

@@ -77,8 +77,8 @@ const NavigationItemComponent: React.FC<NavigationItemComponentProps & { onNavig
       href={item.href}
       className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative ${
         current
-          ? 'bg-primary-500/10 text-primary-500 shadow-sm'
-          : 'text-neutral-700 hover:bg-bg-secondary hover:text-text-primary'
+          ? 'bg-primary-500/20 text-primary-400 shadow-sm border border-primary-500/30'
+          : 'text-auth-300 hover:bg-auth-800 hover:text-auth-100'
       }`}
       prefetch={true}
       onClick={handleClick}
@@ -89,8 +89,8 @@ const NavigationItemComponent: React.FC<NavigationItemComponentProps & { onNavig
       <Icon
         className={`mr-3 flex-shrink-0 h-5 w-5 transition-colors ${
           current
-            ? 'text-primary-500'
-            : 'text-neutral-600 group-hover:text-text-primary'
+            ? 'text-primary-400'
+            : 'text-auth-400 group-hover:text-auth-200'
         }`}
       />
       <span className="truncate">{item.name}</span>
@@ -133,44 +133,45 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClos
       )}
 
       {/* Sidebar */}
-      <div
-        className={`
-          fixed inset-y-0 left-0 z-50 w-72 bg-bg-primary backdrop-blur-xl border-r border-border-light transform transition-all duration-300 ease-in-out shadow-lg
-          md:relative md:translate-x-0 md:z-0 md:min-h-screen
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          ${className}
-        `}
-      >
+      <div className="relative">
+        <div
+          className={`
+            fixed inset-y-0 left-0 z-50 w-72 bg-auth-900 transform transition-all duration-300 ease-in-out shadow-2xl
+            md:relative md:translate-x-0 md:z-0 md:min-h-screen
+            ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+            ${className}
+          `}
+        >
         <div className="flex flex-col h-full">
           {/* Logo/Header area */}
-          <div className="flex-shrink-0 flex items-center justify-between h-16 px-6 border-b border-border-light">
+          <div className="flex-shrink-0 flex items-center justify-between h-16 px-6 border-b border-auth-800">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                  <span className="text-text-white font-bold text-sm">C</span>
+                  <span className="text-white font-bold text-sm">C</span>
                 </div>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-text-primary">Chatelio</h2>
-                <p className="text-xs text-text-tertiary">AI Dashboard</p>
+                <h2 className="text-lg font-semibold text-auth-50">Chatelio</h2>
+                <p className="text-xs text-auth-400">AI Dashboard</p>
               </div>
             </div>
             {/* Close button for mobile */}
             <button
               onClick={onClose}
-              className="md:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors"
+              className="md:hidden p-2 rounded-lg text-auth-400 hover:text-auth-200 hover:bg-auth-800 transition-colors"
             >
               <Icons.Close className="h-5 w-5" />
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-border-medium scrollbar-track-transparent">
+          <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-auth-700 scrollbar-track-transparent">
             {filteredSections.map((section, sectionIndex) => (
               <div key={sectionIndex} className="space-y-2">
                 {section.title && (
                   <div className="px-3 py-2">
-                    <h3 className="text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <h3 className="text-xs font-semibold text-auth-500 uppercase tracking-wider">
                       {section.title}
                     </h3>
                   </div>
@@ -189,6 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClos
             ))}
           </nav>
 
+        </div>
         </div>
       </div>
     </>

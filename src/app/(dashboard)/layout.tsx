@@ -36,7 +36,7 @@ export default function DashboardLayout({
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-page-bg">
+      <div className="min-h-screen bg-auth-900">
         <div className="flex min-h-screen">
           {/* Sidebar - Fixed/Sticky */}
           <div className="sticky top-0 self-start">
@@ -47,19 +47,23 @@ export default function DashboardLayout({
           </div>
           
           {/* Main content area */}
-          <div className="flex-1 bg-bg-secondary min-h-screen">
-            {/* Header */}
-            <Header 
-              onMenuToggle={handleMenuToggle}
-              showMobileMenuButton={true}
-            />
-            
-            {/* Main content */}
-            <main>
-              <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {children}
-              </div>
-            </main>
+          <div className="flex-1 bg-bg-secondary min-h-screen relative">
+            {/* Thick border with pointy outside, rounded inside */}
+            <div className="absolute inset-0 bg-auth-900"></div>
+            <div className="absolute inset-4 bg-bg-secondary rounded-xl overflow-y-auto smooth-scroll-container">
+              {/* Header */}
+              <Header 
+                onMenuToggle={handleMenuToggle}
+                showMobileMenuButton={true}
+              />
+              
+              {/* Main content */}
+              <main>
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                  {children}
+                </div>
+              </main>
+            </div>
           </div>
         </div>
       </div>

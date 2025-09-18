@@ -25,9 +25,15 @@ import {
   LogOut,
   Menu,
   ChevronDown,
+  ChevronLeft,
   Send,
   Edit,
-  Trash
+  Trash,
+  MessageSquare,
+  UserX,
+  Zap,
+  AlertTriangle,
+  Shield
 } from 'lucide-react';
 
 // Icon component props interface
@@ -144,12 +150,45 @@ export const Icons = {
     <ChevronDown className={className} size={size} />
   ),
   
+  ChevronLeft: ({ className = "h-5 w-5", size }: IconProps) => (
+    <ChevronLeft className={className} size={size} />
+  ),
+  
   Send: ({ className = "h-5 w-5", size }: IconProps) => (
     <Send className={className} size={size} />
   ),
   
   Edit: ({ className = "h-4 w-4", size }: IconProps) => (
     <Edit className={className} size={size} />
+  ),
+
+  // Analytics Icons
+  FileText: ({ className = "h-5 w-5", size }: IconProps) => (
+    <FileText className={className} size={size} />
+  ),
+
+  MessageSquare: ({ className = "h-5 w-5", size }: IconProps) => (
+    <MessageSquare className={className} size={size} />
+  ),
+
+  UserX: ({ className = "h-5 w-5", size }: IconProps) => (
+    <UserX className={className} size={size} />
+  ),
+
+  Zap: ({ className = "h-5 w-5", size }: IconProps) => (
+    <Zap className={className} size={size} />
+  ),
+
+  AlertTriangle: ({ className = "h-5 w-5", size }: IconProps) => (
+    <AlertTriangle className={className} size={size} />
+  ),
+
+  MessageCircle: ({ className = "h-5 w-5", size }: IconProps) => (
+    <MessageCircle className={className} size={size} />
+  ),
+
+  Shield: ({ className = "h-5 w-5", size }: IconProps) => (
+    <Shield className={className} size={size} />
   )
 };
 

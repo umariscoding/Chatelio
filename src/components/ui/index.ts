@@ -27,3 +27,5 @@ export {
   useResponsive
 } from './ResponsiveContainer';
 export { Icons, default as IconsDefault } from './Icons';
+export { default as Toggle } from './Toggle';
+export { default as IOSLoader, IOSPageLoader, IOSContentLoader } from './IOSLoader';

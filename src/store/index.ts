@@ -8,6 +8,7 @@ import chatSlice from './slices/chatSlice';
 import knowledgeBaseSlice from './slices/knowledgeBaseSlice';
 import companySlice from './slices/companySlice';
 import uiSlice from './slices/uiSlice';
+import analyticsSlice from './slices/analyticsSlice';
 
 // Create a noop storage for server-side rendering
 const createNoopStorage = () => {
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   knowledgeBase: knowledgeBaseSlice,
   company: companySlice,
   ui: uiSlice,
+  analytics: analyticsSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

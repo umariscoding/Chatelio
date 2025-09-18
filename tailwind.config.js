@@ -116,6 +116,15 @@ module.exports = {
           900: '#18181b',  // darkest zinc (like zinc-900)
           950: '#09090b',  // deepest zinc (like zinc-950)
         },
+
+        // Chart-specific colors for consistent theming
+        chart: {
+          grid: '#e9ecef',        // Light grid lines
+          axis: '#6c757d',        // Axis text and lines  
+          tooltip: '#ffffff',     // Tooltip background
+          tooltipText: '#374151', // Tooltip text
+          shadow: 'rgba(0, 0, 0, 0.1)', // Box shadow
+        },
       },
     },
   },

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import IOSLoader from './IOSLoader';
 
 interface MinimalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
@@ -93,7 +94,10 @@ text-secondary-900 hover:text-secondary-50 hover:bg-secondary-800/30
         {...props}
       >
         {loading ? (
-          <span>Loading...</span>
+          <div className="flex items-center space-x-2">
+            <IOSLoader size="sm" color="white" />
+            <span>Loading...</span>
+          </div>
         ) : (
           children
         )}
