@@ -6,7 +6,7 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
-import { logout as logoutCompany } from "@/store/slices/companyAuthSlice";
+import { logoutCompanyComprehensive } from "@/store/slices/companyAuthSlice";
 import { logout as logoutUser } from "@/store/slices/userAuthSlice";
 
 export default function Home() {
@@ -14,10 +14,10 @@ export default function Home() {
   const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Since auth is now independent, logout both if authenticated
     if (companyAuth.isAuthenticated) {
-      dispatch(logoutCompany());
+      await dispatch(logoutCompanyComprehensive());
     }
     if (userAuth.isAuthenticated) {
       dispatch(logoutUser());

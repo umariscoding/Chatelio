@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { Company, Tokens } from '@/types/auth';
 import { api } from '@/utils/api';
+import { resetChat } from './chatSlice';
+import { resetKnowledgeBase } from './knowledgeBaseSlice';
+import { resetCompany } from './companySlice';
+import { resetAnalytics } from './analyticsSlice';
+import { resetUI } from './uiSlice';
 
 interface CompanyAuthState {
   company: Company | null;
@@ -69,6 +74,30 @@ export const verifyCompanyToken = createAsyncThunk(
         error.response?.data?.detail || error.message || 'Token verification failed'
       );
     }
+  }
+);
+
+// Comprehensive Company Logout
+export const logoutCompanyComprehensive = createAsyncThunk(
+  'companyAuth/logoutComprehensive',
+  async (_, { dispatch }) => {
+    // Clear localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('company_access_token');
+      localStorage.removeItem('company_refresh_token');
+      
+      // Clear Redux Persist storage
+      localStorage.removeItem('persist:root');
+    }
+    
+    // Dispatch all reset actions to clear all app states
+    dispatch(resetChat());
+    dispatch(resetKnowledgeBase());
+    dispatch(resetCompany());
+    dispatch(resetAnalytics());
+    dispatch(resetUI());
+    
+    return true;
   }
 );
 
@@ -193,6 +222,16 @@ const companyAuthSlice = createSlice({
           localStorage.removeItem('company_refresh_token');
         }
       });
+
+    // Comprehensive Logout
+    builder
+      .addCase(logoutCompanyComprehensive.fulfilled, (state) => {
+        state.company = null;
+        state.tokens = null;
+        state.isAuthenticated = false;
+        state.loading = false;
+        state.error = null;
+      });
   },
 });
 
@@ -203,5 +242,7 @@ export const {
   updateCompanyInfo,
   loadFromStorage 
 } = companyAuthSlice.actions;
+
+// Note: logoutCompanyComprehensive is exported above as a createAsyncThunk
 
 export default companyAuthSlice.reducer;

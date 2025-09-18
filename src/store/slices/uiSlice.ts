@@ -48,6 +48,12 @@ const uiSlice = createSlice({
     removeNotification: (state, action: PayloadAction<string>) => {
       state.notifications = state.notifications.filter(n => n.id !== action.payload);
     },
+    resetUI: (state) => {
+      state.sidebarOpen = true;
+      state.theme = 'light';
+      state.loading = {};
+      state.notifications = [];
+    },
   },
 });
 
@@ -58,6 +64,7 @@ export const {
   setLoading,
   addNotification,
   removeNotification,
+  resetUI,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

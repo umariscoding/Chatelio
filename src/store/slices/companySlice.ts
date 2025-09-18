@@ -110,6 +110,11 @@ const companySlice = createSlice({
     setPublicUrl: (state, action: PayloadAction<string>) => {
       state.publicUrl = action.payload;
     },
+    resetCompany: (state) => {
+      state.publicUrl = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // Update Slug
@@ -166,6 +171,7 @@ export const {
   setError, 
   clearError,
   setPublicUrl,
+  resetCompany,
 } = companySlice.actions;
 
 export default companySlice.reducer;

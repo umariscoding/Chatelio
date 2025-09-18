@@ -103,6 +103,12 @@ const knowledgeBaseSlice = createSlice({
     removeUploadProgress: (state, action: PayloadAction<string>) => {
       delete state.uploadProgress[action.payload];
     },
+    resetKnowledgeBase: (state) => {
+      state.documents = [];
+      state.uploadProgress = {};
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // List Documents
@@ -169,7 +175,8 @@ export const {
   setError, 
   clearError, 
   setUploadProgress, 
-  removeUploadProgress 
+  removeUploadProgress,
+  resetKnowledgeBase 
 } = knowledgeBaseSlice.actions;
 
 export default knowledgeBaseSlice.reducer;

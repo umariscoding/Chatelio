@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { logout as logoutCompany } from '@/store/slices/companyAuthSlice';
+import { logout as logoutCompany, logoutCompanyComprehensive } from '@/store/slices/companyAuthSlice';
 import { logout as logoutUser } from '@/store/slices/userAuthSlice';
 import { Icons } from '@/components/ui';
 import MinimalButton from '@/components/ui/MinimalButton';
@@ -16,10 +16,11 @@ const LogoutButton: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Logout the appropriate session based on which auth is active
     if (companyAuth.isAuthenticated) {
-      dispatch(logoutCompany());
+      // Use comprehensive logout for company side to clear all states
+      await dispatch(logoutCompanyComprehensive());
       router.push('/company/login');
     } else if (userAuth.isAuthenticated) {
       dispatch(logoutUser());

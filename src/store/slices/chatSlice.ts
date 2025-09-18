@@ -154,6 +154,18 @@ const chatSlice = createSlice({
         state.chats.unshift(action.payload);
       }
     },
+    resetChat: (state) => {
+      state.chats = [];
+      state.currentChat = null;
+      state.messages = [];
+      state.streaming = {
+        isStreaming: false,
+        currentChatId: undefined,
+        streamingMessage: '',
+      };
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // List Chats
@@ -230,6 +242,7 @@ export const {
   stopStreaming,
   clearMessages,
   addOrUpdateChat,
+  resetChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
