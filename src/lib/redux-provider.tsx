@@ -5,11 +5,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/store';
+import IOSLoader from '@/components/ui/IOSLoader';
 
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
   const loadingComponent = (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <p className="text-lg text-gray-600">Loading...</p>
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="text-center">
+        <IOSLoader size="xl" color="primary" className="mx-auto mb-4" />
+      </div>
     </div>
   );
 

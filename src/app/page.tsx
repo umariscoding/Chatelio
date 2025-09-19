@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from "next/link";
 
 import Button from "@/components/ui/Button";
+import IOSLoader from "@/components/ui/IOSLoader";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
 import { logoutCompanyComprehensive } from "@/store/slices/companyAuthSlice";
@@ -13,14 +14,22 @@ export default function Home() {
   const companyAuth = useAppSelector((state) => state.companyAuth);
   const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    // Since auth is now independent, logout both if authenticated
-    if (companyAuth.isAuthenticated) {
-      await dispatch(logoutCompanyComprehensive());
-    }
-    if (userAuth.isAuthenticated) {
-      dispatch(logoutUser());
+    setIsLoggingOut(true);
+    try {
+      // Since auth is now independent, logout both if authenticated
+      if (companyAuth.isAuthenticated) {
+        await dispatch(logoutCompanyComprehensive());
+      }
+      if (userAuth.isAuthenticated) {
+        dispatch(logoutUser());
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -33,8 +42,16 @@ export default function Home() {
               Dashboard
             </Button>
           </Link>
-          <Button variant="outline" onClick={handleLogout}>
-            Logout
+          <Button 
+            variant="outline" 
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? (
+                <IOSLoader size="sm" color="primary" className="mr-2" />
+            ) : (
+              'Logout'
+            )}
           </Button>
         </div>
       );

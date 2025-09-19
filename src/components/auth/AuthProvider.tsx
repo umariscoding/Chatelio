@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
 import { loadFromStorage as loadCompanyFromStorage, verifyCompanyToken } from '@/store/slices/companyAuthSlice';
 import { loadFromStorage as loadUserFromStorage, verifyUserToken, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
+import IOSLoader from '@/components/ui/IOSLoader';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -73,8 +74,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                              companyAuth.isAuthenticated;
 
     return (
-      <div className="min-h-screen bg-auth-900 flex items-center justify-center">
-        <p className="text-lg text-secondary-200">Loading...</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <IOSLoader size="xl" color="primary" className="mx-auto mb-4" />
+        </div>
       </div>
     );
   }

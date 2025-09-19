@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
@@ -8,6 +8,7 @@ import { logout as logoutCompany, logoutCompanyComprehensive } from '@/store/sli
 import { logout as logoutUser } from '@/store/slices/userAuthSlice';
 import { Icons } from '@/components/ui';
 import MinimalButton from '@/components/ui/MinimalButton';
+import IOSLoader from '@/components/ui/IOSLoader';
 import type { HeaderProps } from '@/interfaces/Header.interface';
 
 const LogoutButton: React.FC = () => {
@@ -15,18 +16,26 @@ const LogoutButton: React.FC = () => {
   const userAuth = useAppSelector((state) => state.userAuth);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    // Logout the appropriate session based on which auth is active
-    if (companyAuth.isAuthenticated) {
-      // Use comprehensive logout for company side to clear all states
-      await dispatch(logoutCompanyComprehensive());
-      router.push('/company/login');
-    } else if (userAuth.isAuthenticated) {
-      dispatch(logoutUser());
-      router.push('/');
-    } else {
-      router.push('/');
+    setIsLoggingOut(true);
+    try {
+      // Logout the appropriate session based on which auth is active
+      if (companyAuth.isAuthenticated) {
+        // Use comprehensive logout for company side to clear all states
+        await dispatch(logoutCompanyComprehensive());
+        router.push('/company/login');
+      } else if (userAuth.isAuthenticated) {
+        dispatch(logoutUser());
+        router.push('/');
+      } else {
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -35,10 +44,17 @@ const LogoutButton: React.FC = () => {
       onClick={handleLogout}
       variant="outline"
       size="sm"
-      className="text-secondary-300 border-secondary-600 hover:border-primary-500 hover:bg-primary-600/10 hover:text-primary-400 transition-all duration-200 transform hover:scale-105"
+      disabled={isLoggingOut}
+      className="text-secondary-300 border-secondary-600 hover:border-primary-500 hover:bg-primary-600/10 hover:text-primary-400 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
     >
-      <Icons.Logout className="h-4 w-4 mr-2" />
-      Logout
+      {isLoggingOut ? (
+          <IOSLoader size="sm" color="primary" className="mr-2" />
+      ) : (
+        <>
+          <Icons.Logout className="h-4 w-4 mr-2" />
+          Logout
+        </>
+      )}
     </MinimalButton>
   );
 };
