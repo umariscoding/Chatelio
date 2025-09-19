@@ -180,7 +180,7 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
             <div className="p-1 bg-error-200 rounded-full">
               <Icons.AlertCircle className="h-5 w-5 text-error-700" />
             </div>
-            <p className="text-sm font-medium text-error-800">{error}</p>
+            <p className="text-sm font-medium text-error-800">{typeof error === 'string' ? error : 'An error occurred while loading documents.'}</p>
           </div>
         </div>
       )}

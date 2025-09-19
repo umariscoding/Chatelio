@@ -185,7 +185,7 @@ export default function UsersPage() {
               <Icons.AlertTriangle className="h-5 w-5 text-error-600" />
             </div>
             <div className="ml-3 flex-1">
-              <p className="text-sm font-medium text-error-800">{error}</p>
+              <p className="text-sm font-medium text-error-800">{typeof error === 'string' ? error : 'An error occurred while loading users.'}</p>
                 </div>
                 <button
                   onClick={() => setError(null)}

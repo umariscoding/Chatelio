@@ -27,7 +27,7 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
           <h3 className="text-lg font-semibold text-text-primary mb-2">
             Failed to Load Analytics
           </h3>
-          <p className="text-text-secondary mb-4">{error}</p>
+          <p className="text-text-secondary mb-4">{typeof error === 'string' ? error : 'An error occurred while loading analytics.'}</p>
           <button 
             onClick={() => loadDashboardAnalytics()}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"

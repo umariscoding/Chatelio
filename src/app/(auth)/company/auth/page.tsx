@@ -230,7 +230,7 @@ export default function CompanyAuthPage() {
 
             {error && (
               <div className="mb-6 bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-lg text-sm">
-                {error}
+                {typeof error === 'string' ? error : 'An error occurred. Please try again.'}
               </div>
             )}
 

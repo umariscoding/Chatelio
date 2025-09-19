@@ -551,7 +551,7 @@ export default function PublicChatPage() {
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Chatbot Not Found</h1>
-          <p className="text-gray-600">{error}</p>
+          <p className="text-gray-600">{typeof error === 'string' ? error : 'An error occurred while loading the chatbot.'}</p>
         </div>
       </div>
     );
@@ -665,7 +665,7 @@ export default function PublicChatPage() {
         {/* Error Display */}
         {error && (
           <div className="bg-zinc-900 border-l-4 border-zinc-700 p-4 mx-6 mt-4">
-            <p className="text-zinc-300">{error}</p>
+            <p className="text-zinc-300">{typeof error === 'string' ? error : 'An error occurred.'}</p>
           </div>
         )}
 
@@ -721,7 +721,7 @@ export default function PublicChatPage() {
             <form onSubmit={handleAuth} className="space-y-5">
               {error && (
                 <div className="bg-error-500/10 border border-error-500/20 rounded-lg p-4">
-                  <p className="text-error-400 text-sm font-medium">{error}</p>
+                  <p className="text-error-400 text-sm font-medium">{typeof error === 'string' ? error : 'An error occurred.'}</p>
                 </div>
               )}
               
