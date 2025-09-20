@@ -46,6 +46,7 @@ export default function PublicChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -70,26 +71,9 @@ export default function PublicChatPage() {
     setCurrentChatId(null);
   }, [slug]);
 
-  // Verify user token gracefully when user appears to be logged in
-  useEffect(() => {
-    const verifyUserAuth = async () => {
-      if (userAuth.tokens?.access_token && !userAuth.user) {
-        try {
-          const result = await dispatch(verifyUserTokenGraceful()).unwrap();
-          if (!result.valid) {
-            console.warn('User token verification failed:', result.reason);
-            // Token is invalid but we don't log out - let user continue as guest
-            // They can re-authenticate if needed
-          }
-        } catch (error) {
-          console.warn('Token verification error:', error);
-          // Continue as guest if verification fails
-        }
-      }
-    };
-    
-    verifyUserAuth();
-  }, [dispatch, userAuth.tokens, userAuth.user]);
+  // Note: User token verification is now handled by AuthProvider
+  // No need for additional verification here since complete user data
+  // is stored from login and loaded immediately by AuthProvider
 
   // Handle user authentication state changes - fetch chat history when user logs in
   useEffect(() => {
@@ -177,7 +161,8 @@ export default function PublicChatPage() {
     };
     setMessages(prev => [...prev, userMessage]);
     setError(null);
-    setIsStreaming(true);
+    setIsThinking(true);
+    setIsStreaming(false);
 
     try {
       // Prepare request
@@ -267,9 +252,13 @@ export default function PublicChatPage() {
                       
                       if (data.type === 'start' && data.chat_id) {
                         setCurrentChatId(data.chat_id);
+                        setIsThinking(false);
+                        setIsStreaming(true);
                       } else if (data.type === 'chunk' && data.content) {
                         fullMessage += data.content;
                         setStreamingMessage(fullMessage);
+                        setIsThinking(false);
+                        setIsStreaming(true);
                       } else if (data.type === 'end') {
                         // Add AI message
                         const aiMessage: Message = {
@@ -281,6 +270,7 @@ export default function PublicChatPage() {
                         setMessages(prev => [...prev, aiMessage]);
                         setStreamingMessage('');
                         setIsStreaming(false);
+                        setIsThinking(false);
                         return;
                       }
                     } catch (parseError) {
@@ -319,6 +309,8 @@ export default function PublicChatPage() {
               
               if (data.type === 'start' && data.chat_id) {
                 setCurrentChatId(data.chat_id);
+                setIsThinking(false);
+                setIsStreaming(true);
                 // Add to chat history if logged in
                 if (isUserLoggedIn && !chatHistory.find(c => c.chat_id === data.chat_id)) {
                   const newChat: ChatHistory = {
@@ -333,6 +325,8 @@ export default function PublicChatPage() {
               } else if (data.type === 'chunk' && data.content) {
                 fullMessage += data.content;
                 setStreamingMessage(fullMessage);
+                setIsThinking(false);
+                setIsStreaming(true);
               } else if (data.type === 'end') {
                 // Add AI message
                 const aiMessage: Message = {
@@ -344,6 +338,7 @@ export default function PublicChatPage() {
                 setMessages(prev => [...prev, aiMessage]);
                 setStreamingMessage('');
                 setIsStreaming(false);
+                setIsThinking(false);
                 return;
               }
             } catch (parseError) {
@@ -355,6 +350,7 @@ export default function PublicChatPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
       setIsStreaming(false);
+      setIsThinking(false);
       setStreamingMessage('');
     }
   };
@@ -398,6 +394,8 @@ export default function PublicChatPage() {
       setMessages([]);
       setCurrentChatId(null);
       setStreamingMessage('');
+      setIsThinking(false);
+      setIsStreaming(false);
       setError(null);
       
       // Reset auth form
@@ -414,6 +412,8 @@ export default function PublicChatPage() {
     setMessages([]);
     setCurrentChatId(null);
     setStreamingMessage('');
+    setIsThinking(false);
+    setIsStreaming(false);
     setError(null);
   };
 
@@ -424,6 +424,8 @@ export default function PublicChatPage() {
       setCurrentChatId(chatId);
       setMessages([]);
       setStreamingMessage('');
+      setIsThinking(false);
+      setIsStreaming(false);
       setError(null);
       
       // Load chat history
@@ -513,6 +515,8 @@ export default function PublicChatPage() {
       setChatHistory([]);
       setCurrentChatId(null);
       setStreamingMessage('');
+      setIsThinking(false);
+      setIsStreaming(false);
       setError(null);
       
       // Create new guest session for continued chatting
@@ -675,6 +679,7 @@ export default function PublicChatPage() {
             <MessageList
               messages={messages}
               streamingMessage={streamingMessage}
+              loading={isThinking}
               className="h-full pb-40 pt-4" /* Extra padding to make room for floating input and top header */
             />
             {/* Extra spacer at bottom to ensure visibility of last message */}
@@ -687,7 +692,7 @@ export default function PublicChatPage() {
           <div className="pointer-events-auto">
             <MessageInput
               onSendMessage={handleSendMessage}
-              disabled={isStreaming}
+              disabled={isStreaming || isThinking}
               className="w-full shadow-lg"
             />
           </div>

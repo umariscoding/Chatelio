@@ -34,14 +34,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         // Handle company authentication (for dashboard routes)
         const companyToken = localStorage.getItem('company_access_token');
-        if (companyToken && isDashboardRoute) {
-          // Strict verification for dashboard routes
+        const companyData = localStorage.getItem('company_data');
+        if (companyToken && isDashboardRoute && !companyData) {
+          // Only verify if we don't have stored company data
           await dispatch(verifyCompanyToken());
         }
         
         // Handle user authentication
         const userToken = localStorage.getItem('user_access_token');
-        if (userToken) {
+        const userData = localStorage.getItem('user_data');
+        if (userToken && !userData) {
+          // Only verify if we don't have stored user data
           if (isPublicRoute) {
             // Graceful verification for public routes (doesn't log out on failure)
             await dispatch(verifyUserTokenGraceful());

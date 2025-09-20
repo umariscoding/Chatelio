@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, memo, useMemo } from 'react';
 
+import TypingIndicator from './TypingIndicator';
 import type { MessageListProps, MessageBubbleProps } from '@/interfaces/Chat.interface';
 import type { Message } from '@/types/chat';
 
@@ -25,16 +26,6 @@ const formatTime = (timestamp: number): string => {
   });
 };
 
-const TypingIndicator: React.FC = () => (
-  <div className="flex items-center space-x-1 text-zinc-400">
-    <div className="flex space-x-1">
-      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-      <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-    </div>
-    <span className="text-sm">AI is typing...</span>
-  </div>
-);
 
 const MessageBubble: React.FC<MessageBubbleProps> = memo(({ message, isStreaming = false, className = "" }) => {
   const isUser = message.role === 'human';
@@ -153,9 +144,7 @@ const MessageList: React.FC<MessageListProps> = memo(({
           {loading && !streamingMessage && (
             <div className="max-w-4xl mx-auto px-4 py-3">
               <div className="flex justify-start">
-                <div className="px-1 py-1">
-                  <TypingIndicator />
-                </div>
+                <TypingIndicator isVisible={true} />
               </div>
             </div>
           )}

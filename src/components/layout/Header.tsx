@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { logout as logoutCompany, logoutCompanyComprehensive } from '@/store/slices/companyAuthSlice';
-import { logout as logoutUser } from '@/store/slices/userAuthSlice';
+import { logoutCompanyComprehensive } from '@/store/slices/companyAuthSlice';
+import { logoutUserComprehensive } from '@/store/slices/userAuthSlice';
 import { Icons } from '@/components/ui';
 import MinimalButton from '@/components/ui/MinimalButton';
 import IOSLoader from '@/components/ui/IOSLoader';
@@ -23,11 +23,12 @@ const LogoutButton: React.FC = () => {
     try {
       // Logout the appropriate session based on which auth is active
       if (companyAuth.isAuthenticated) {
-        // Use comprehensive logout for company side to clear all states
+        // Company logout: Clear company data (knowledge base, analytics, etc.)
         await dispatch(logoutCompanyComprehensive());
         router.push('/company/login');
       } else if (userAuth.isAuthenticated) {
-        dispatch(logoutUser());
+        // User logout: Clear user data (chat history, etc.)
+        await dispatch(logoutUserComprehensive());
         router.push('/');
       } else {
         router.push('/');

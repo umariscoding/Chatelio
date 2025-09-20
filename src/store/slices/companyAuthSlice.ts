@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 import type { Company, Tokens } from '@/types/auth';
 import { api } from '@/utils/api';
-import { resetChat } from './chatSlice';
-import { resetKnowledgeBase } from './knowledgeBaseSlice';
+import { API_CONFIG } from '@/constants/api';
 import { resetCompany } from './companySlice';
 import { resetAnalytics } from './analyticsSlice';
+import { resetKnowledgeBase } from './knowledgeBaseSlice';
 import { resetUI } from './uiSlice';
 
 interface CompanyAuthState {
@@ -65,8 +66,12 @@ export const verifyCompanyToken = createAsyncThunk(
         throw new Error('No company token found');
       }
       
-      const response = await api.get('/auth/verify', {
-        headers: { Authorization: `Bearer ${token}` }
+      // Use axios directly to ensure we use the specific company token
+      const response = await axios.get(`${API_CONFIG.BASE_URL}/auth/verify`, {
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        }
       });
       return response.data;
     } catch (error: any) {
@@ -77,25 +82,22 @@ export const verifyCompanyToken = createAsyncThunk(
   }
 );
 
-// Comprehensive Company Logout
+// Company Logout - Clears all company-related data
 export const logoutCompanyComprehensive = createAsyncThunk(
-  'companyAuth/logoutComprehensive',
+  'companyAuth/logoutComprehensive', 
   async (_, { dispatch }) => {
-    // Clear localStorage
+    // Clear company-related localStorage data
     if (typeof window !== 'undefined') {
       localStorage.removeItem('company_access_token');
       localStorage.removeItem('company_refresh_token');
-      
-      // Clear Redux Persist storage
-      localStorage.removeItem('persist:root');
+      localStorage.removeItem('company_data');
     }
     
-    // Dispatch all reset actions to clear all app states
-    dispatch(resetChat());
-    dispatch(resetKnowledgeBase());
+    // Reset company-specific Redux states
     dispatch(resetCompany());
-    dispatch(resetAnalytics());
-    dispatch(resetUI());
+    dispatch(resetKnowledgeBase()); // Company owns knowledge base
+    dispatch(resetAnalytics()); // Company analytics
+    dispatch(resetUI()); // Clean UI state
     
     return true;
   }
@@ -118,20 +120,22 @@ const companyAuthSlice = createSlice({
       state.loading = false;
       state.error = null;
       
-      // Clear tokens from localStorage
+      // Clear tokens and company data from localStorage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('company_access_token');
         localStorage.removeItem('company_refresh_token');
+        localStorage.removeItem('company_data');
       }
     },
     updateCompanyInfo: (state, action: PayloadAction<Company>) => {
       state.company = action.payload;
     },
-    // Load tokens from storage
+    // Load tokens and company data from storage
     loadFromStorage: (state) => {
       if (typeof window !== 'undefined') {
         const accessToken = localStorage.getItem('company_access_token');
         const refreshToken = localStorage.getItem('company_refresh_token');
+        const companyData = localStorage.getItem('company_data');
         
         if (accessToken && refreshToken) {
           state.tokens = {
@@ -140,6 +144,15 @@ const companyAuthSlice = createSlice({
             token_type: 'bearer',
           };
           state.isAuthenticated = true;
+          
+          // Load complete company data if available
+          if (companyData) {
+            try {
+              state.company = JSON.parse(companyData);
+            } catch (error) {
+              console.warn('Failed to parse stored company data:', error);
+            }
+          }
         }
       }
     },
@@ -157,10 +170,11 @@ const companyAuthSlice = createSlice({
         state.tokens = action.payload.tokens;
         state.isAuthenticated = true;
         
-        // Store tokens in localStorage
+        // Store tokens and complete company data in localStorage
         if (typeof window !== 'undefined') {
           localStorage.setItem('company_access_token', action.payload.tokens.access_token);
           localStorage.setItem('company_refresh_token', action.payload.tokens.refresh_token);
+          localStorage.setItem('company_data', JSON.stringify(action.payload.company));
         }
       })
       .addCase(registerCompany.rejected, (state, action) => {
@@ -180,10 +194,11 @@ const companyAuthSlice = createSlice({
         state.tokens = action.payload.tokens;
         state.isAuthenticated = true;
         
-        // Store tokens in localStorage
+        // Store tokens and complete company data in localStorage
         if (typeof window !== 'undefined') {
           localStorage.setItem('company_access_token', action.payload.tokens.access_token);
           localStorage.setItem('company_refresh_token', action.payload.tokens.refresh_token);
+          localStorage.setItem('company_data', JSON.stringify(action.payload.company));
         }
       })
       .addCase(loginCompany.rejected, (state, action) => {
@@ -199,9 +214,7 @@ const companyAuthSlice = createSlice({
       .addCase(verifyCompanyToken.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = action.payload.valid;
-        if (action.payload.valid && action.payload.company) {
-          state.company = action.payload.company;
-        } else if (!action.payload.valid) {
+        if (!action.payload.valid) {
           // Token invalid - clear everything
           state.company = null;
           state.tokens = null;
@@ -209,8 +222,10 @@ const companyAuthSlice = createSlice({
           if (typeof window !== 'undefined') {
             localStorage.removeItem('company_access_token');
             localStorage.removeItem('company_refresh_token');
+            localStorage.removeItem('company_data');
           }
         }
+        // Note: We don't update company data from verification - use stored data from login
       })
       .addCase(verifyCompanyToken.rejected, (state) => {
         state.loading = false;
@@ -220,6 +235,7 @@ const companyAuthSlice = createSlice({
         if (typeof window !== 'undefined') {
           localStorage.removeItem('company_access_token');
           localStorage.removeItem('company_refresh_token');
+          localStorage.removeItem('company_data');
         }
       });
 
