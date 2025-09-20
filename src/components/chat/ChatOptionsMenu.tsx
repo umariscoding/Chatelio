@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import Dropdown from '@/components/ui/Dropdown';
+import React, { useState, useRef, useEffect } from 'react';
 import Modal from '@/components/ui/Modal';
 import MinimalInput from '@/components/ui/MinimalInput';
 import MinimalButton from '@/components/ui/MinimalButton';
@@ -20,11 +19,27 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
   onRename,
   onDelete
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [newTitle, setNewTitle] = useState(currentTitle);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   const handleRename = async () => {
     if (!newTitle.trim()) return;
@@ -56,35 +71,48 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
     }
   };
 
-  const menuItems = [
-    {
-      label: 'Rename',
-      onClick: () => {
-        setNewTitle(currentTitle);
-        setShowRenameModal(true);
-      },
-      icon: <Icons.Edit className="w-3.5 h-3.5" />
-    },
-    {
-      label: 'Delete',
-      onClick: () => setShowDeleteModal(true),
-      className: 'text-red-400 hover:text-red-300',
-      icon: <Icons.Trash className="w-3.5 h-3.5" />
+  const handleMenuClick = (action: 'rename' | 'delete') => {
+    setIsOpen(false);
+    if (action === 'rename') {
+      setNewTitle(currentTitle);
+      setShowRenameModal(true);
+    } else {
+      setShowDeleteModal(true);
     }
-  ];
+  };
 
   return (
     <>
-      <Dropdown
-        trigger={
-          <div className="text-zinc-500 hover:text-zinc-300 p-1.5 rounded-full hover:bg-zinc-800 transition-colors">
-            <Icons.MoreVertical className="w-3.5 h-3.5" />
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+          className="text-zinc-500 hover:text-zinc-300 p-1.5 rounded-full hover:bg-zinc-800 transition-colors focus:outline-none"
+        >
+          <Icons.MoreVertical className="w-3.5 h-3.5" />
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 top-8 z-50 min-w-[140px] bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl py-1">
+            <button
+              onClick={() => handleMenuClick('rename')}
+              className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 transition-colors flex items-center gap-2"
+            >
+              <Icons.Edit className="w-3.5 h-3.5" />
+              Rename
+            </button>
+            <button
+              onClick={() => handleMenuClick('delete')}
+              className="w-full px-3 py-2 text-left text-sm text-red-400 hover:text-red-300 hover:bg-zinc-700 transition-colors flex items-center gap-2"
+            >
+              <Icons.Trash className="w-3.5 h-3.5" />
+              Delete
+            </button>
           </div>
-        }
-        items={menuItems}
-        position="left"
-        width="160px"
-      />
+        )}
+      </div>
 
       {/* Rename Modal */}
       {showRenameModal && (

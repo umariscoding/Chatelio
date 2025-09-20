@@ -142,7 +142,11 @@ export default function PublicChatPage() {
       
       if (response.ok) {
         const data = await response.json();
-        setChatHistory(data.chats || []);
+        // Sort chats in reverse chronological order (newest first)
+        const sortedChats = (data.chats || []).sort((a: ChatHistory, b: ChatHistory) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setChatHistory(sortedChats);
       }
     } catch (err) {
       console.error('Failed to fetch chat history:', err);
@@ -598,22 +602,23 @@ export default function PublicChatPage() {
                 {chatHistory.map((chat) => (
                   <div
                     key={chat.chat_id}
-                    className={`group flex items-center justify-between px-3 py-2.5 mb-1 relative transition-colors rounded-xl ${
+                    className={`group flex items-center justify-between px-3 py-2.5 mb-1 relative transition-colors rounded-xl cursor-pointer ${
                       currentChatId === chat.chat_id 
                         ? 'text-zinc-100 bg-zinc-800/90' 
                         : 'text-zinc-400 hover:bg-zinc-800/50'
                     }`}
+                    onClick={() => selectChat(chat.chat_id)}
                   >
                     {currentChatId === chat.chat_id && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4/6 bg-blue-500 rounded-full" />
                     )}
-                    <button
-                      onClick={() => selectChat(chat.chat_id)}
-                      className="flex-1 text-left overflow-hidden pr-2"
-                    >
+                    <div className="flex-1 text-left overflow-hidden pr-2">
                       <div className="truncate text-sm font-medium">{chat.title}</div>
-                    </button>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div 
+                      className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <ChatOptionsMenu 
                         chatId={chat.chat_id}
                         currentTitle={chat.title}
