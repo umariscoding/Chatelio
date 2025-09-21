@@ -15,6 +15,7 @@ import { MessageSquarePlus, LogOut, LogIn } from 'lucide-react';
 import type { Message, ModelType } from '@/types/chat';
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
 import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
+import { generateChatTitle, FALLBACK_TITLES } from '@/utils/chatUtils';
 
 interface CompanyInfo {
   company_id: string;
@@ -175,8 +176,8 @@ export default function PublicChatPage() {
         message,
         model,
         ...(currentChatId && { chat_id: currentChatId }),
-        ...(!currentChatId && !isUserLoggedIn && { chat_title: 'Guest Chat Session' }),
-        ...(!currentChatId && isUserLoggedIn && { chat_title: 'New Conversation' }),
+        ...(!currentChatId && !isUserLoggedIn && { chat_title: generateChatTitle(message) }),
+        ...(!currentChatId && isUserLoggedIn && { chat_title: generateChatTitle(message) }),
       };
 
       // Use appropriate endpoint based on user type
@@ -222,7 +223,7 @@ export default function PublicChatPage() {
             const retryPayload = {
               message,
               model,
-              chat_title: 'Guest Chat Session'
+              chat_title: generateChatTitle(message)
             };
             
             const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${slug}/chat`, {
@@ -319,7 +320,7 @@ export default function PublicChatPage() {
                 if (isUserLoggedIn && !chatHistory.find(c => c.chat_id === data.chat_id)) {
                   const newChat: ChatHistory = {
                     chat_id: data.chat_id,
-                    title: message.slice(0, 50) + (message.length > 50 ? '...' : ''),
+                    title: generateChatTitle(message),
                     is_guest: false,
                     is_deleted: false,
                     created_at: new Date().toISOString(),
