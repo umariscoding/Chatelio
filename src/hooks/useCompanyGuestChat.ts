@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { Message, ModelType } from '@/types/chat';
 import { useAppSelector } from './useAuth';
+import { getApiUrl } from '@/constants/api';
 
 export const useCompanyGuestChat = () => {
   const { company } = useAppSelector((state) => state.companyAuth);
@@ -22,7 +23,7 @@ export const useCompanyGuestChat = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+      const response = await fetch(getApiUrl('/users/guest/create'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +71,7 @@ export const useCompanyGuestChat = () => {
       setMessages(prev => [...prev, userMessage]);
 
       // Send to public endpoint (company testing their own chatbot)
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${company.slug}/chat`, {
+      const response = await fetch(getApiUrl(`/public/chatbot/${company.slug}/chat`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

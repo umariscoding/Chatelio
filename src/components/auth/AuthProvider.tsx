@@ -66,16 +66,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
   }, [dispatch]); // Removed pathname from dependencies
 
-  // Show loading while initializing
-  if (isInitializing || companyAuth.loading || userAuth.loading) {
-    // Check if we're in company context (dashboard routes or company is authenticated)
-    const isCompanyContext = pathname.startsWith('/dashboard') || 
-                             pathname.startsWith('/knowledge-base') || 
-                             pathname.startsWith('/users') || 
-                             pathname.startsWith('/settings') || 
-                             pathname.startsWith('/profile') ||
-                             companyAuth.isAuthenticated;
-
+  // Show loading ONLY while initializing (not during login/signup)
+  if (isInitializing) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">

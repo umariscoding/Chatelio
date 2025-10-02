@@ -13,6 +13,7 @@ import MinimalButton from '@/components/ui/MinimalButton';
 import ChatOptionsMenu from '@/components/chat/ChatOptionsMenu';
 import { MessageSquarePlus, LogOut, LogIn } from 'lucide-react';
 import type { Message, ModelType } from '@/types/chat';
+import { getApiUrl } from '@/constants/api';
 import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
 import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
 import { generateChatTitle, FALLBACK_TITLES } from '@/utils/chatUtils';
@@ -92,7 +93,7 @@ export default function PublicChatPage() {
     const createGuestToken = async () => {
       if (!isUserLoggedIn && !guestToken && companyInfo) {
         try {
-          const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+          const tokenResponse = await fetch(getApiUrl('/users/guest/create'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -120,7 +121,7 @@ export default function PublicChatPage() {
       setLoading(true);
       
       // Fetch company info
-      const companyResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${slug}`);
+      const companyResponse = await fetch(getApiUrl(`/public/chatbot/${slug}`));
       if (!companyResponse.ok) throw new Error('Chatbot not found');
       
       const companyData = await companyResponse.json();
@@ -137,7 +138,7 @@ export default function PublicChatPage() {
     if (!userAuth.tokens?.access_token) return;
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/list`, {
+      const response = await fetch(getApiUrl('/chat/list'), {
         headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
       });
       
@@ -194,7 +195,7 @@ export default function PublicChatPage() {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${endpoint}`, {
+      const response = await fetch(getApiUrl(endpoint), {
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
@@ -205,7 +206,7 @@ export default function PublicChatPage() {
         console.warn('User token invalid, falling back to guest mode');
         // Create guest session and retry
         if (companyInfo) {
-          const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+          const tokenResponse = await fetch(getApiUrl('/users/guest/create'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -226,7 +227,7 @@ export default function PublicChatPage() {
               chat_title: generateChatTitle(message)
             };
             
-            const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${slug}/chat`, {
+            const retryResponse = await fetch(getApiUrl(`/public/chatbot/${slug}/chat`), {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -379,7 +380,7 @@ export default function PublicChatPage() {
             company_id: companyInfo?.company_id
           };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${endpoint}`, {
+      const response = await fetch(getApiUrl(endpoint), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -434,7 +435,7 @@ export default function PublicChatPage() {
       setError(null);
       
       // Load chat history
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/history/${chatId}`, {
+      const response = await fetch(getApiUrl(`/chat/history/${chatId}`), {
         headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
       });
       
@@ -459,7 +460,7 @@ export default function PublicChatPage() {
     if (!userAuth.tokens?.access_token) return;
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/title/${chatId}`, {
+      const response = await fetch(getApiUrl(`/chat/title/${chatId}`), {
         method: 'PUT',
         headers: { 
           'Authorization': `Bearer ${userAuth.tokens.access_token}`,
@@ -487,7 +488,7 @@ export default function PublicChatPage() {
     if (!userAuth.tokens?.access_token) return;
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat/${chatId}`, {
+      const response = await fetch(getApiUrl(`/chat/${chatId}`), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${userAuth.tokens.access_token}` }
       });
@@ -526,7 +527,7 @@ export default function PublicChatPage() {
       
       // Create new guest session for continued chatting
       if (companyInfo) {
-        const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/guest/create`, {
+        const tokenResponse = await fetch(getApiUrl('/users/guest/create'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

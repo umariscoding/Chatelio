@@ -42,6 +42,16 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
       
+      // Check if this is a login/register request - don't redirect on auth failures
+      const isAuthRequest = originalRequest.url?.includes('/login') || 
+                           originalRequest.url?.includes('/register') ||
+                           originalRequest.url?.includes('/auth/company');
+      
+      // If it's a login/register request, just return the error - don't redirect
+      if (isAuthRequest) {
+        return Promise.reject(error);
+      }
+      
       if (typeof window !== 'undefined') {
         // Try to refresh company token first
         const companyRefreshToken = localStorage.getItem('company_refresh_token');
@@ -91,7 +101,7 @@ api.interceptors.response.use(
           }
         }
         
-        // Both refresh attempts failed, redirect to company login
+        // Both refresh attempts failed, redirect to company login (only for authenticated routes)
         if (typeof window !== 'undefined') {
           window.location.href = '/company/login';
         }

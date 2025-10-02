@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useAppSelector } from '@/hooks/useAuth';
 import MinimalButton from '@/components/ui/MinimalButton';
+import { getApiUrl } from '@/constants/api';
 import Card from '@/components/ui/Card';
 import { Icons, IOSContentLoader } from '@/components/ui';
 
@@ -47,7 +48,7 @@ export default function UsersPage() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/company/analytics/users`, {
+        const response = await fetch(getApiUrl('/api/company/analytics/users'), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('company_access_token')}`,
           },

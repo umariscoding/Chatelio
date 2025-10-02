@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
+import { getApiUrl } from '@/constants/api';
 
 // Icons
 const ChatIcon: React.FC<{ className?: string }> = ({ className = "h-8 w-8" }) => (
@@ -43,7 +44,7 @@ export default function PublicChatbotPage() {
         setLoading(true);
         
         // TODO: Replace with actual API call
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/public/chatbot/${slug}`);
+        const response = await fetch(getApiUrl(`/public/chatbot/${slug}`));
         
         if (!response.ok) {
           if (response.status === 404) {
