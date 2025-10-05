@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 
-import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { uploadFile, uploadText } from '@/store/slices/knowledgeBaseSlice';
+import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
+import { uploadFile, uploadText } from '@/store/company/slices/knowledgeBaseSlice';
 import { Icons, IOSContentLoader } from '@/components/ui';
 import DocumentList from '@/components/knowledge-base/DocumentList';
 import FileUpload from '@/components/knowledge-base/FileUpload';
@@ -12,9 +12,9 @@ import TextUpload from '@/components/knowledge-base/TextUpload';
 type UploadMode = 'file' | 'text';
 
 export default function KnowledgeBasePage() {
-  const dispatch = useAppDispatch();
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const knowledgeBase = useAppSelector((state) => state.knowledgeBase);
+  const dispatch = useCompanyAppDispatch();
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
+  const knowledgeBase = useCompanyAppSelector((state) => state.knowledgeBase);
   const [uploadMode, setUploadMode] = useState<UploadMode>('file');
   const [isUploading, setIsUploading] = useState(false);
 

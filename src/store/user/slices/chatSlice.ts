@@ -9,7 +9,7 @@ import type {
   UpdateChatTitleRequest,
   StreamingState 
 } from '@/types/chat';
-import { api } from '@/utils/api';
+import { userApi as api } from '@/utils/user/api';
 
 interface ChatState {
   chats: Chat[];

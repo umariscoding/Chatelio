@@ -1,14 +1,12 @@
-// Redux store configuration
+// Company-specific Redux store configuration
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import companyAuthSlice from './slices/companyAuthSlice';
-import userAuthSlice from './slices/userAuthSlice';
-import chatSlice from './slices/chatSlice';
 import knowledgeBaseSlice from './slices/knowledgeBaseSlice';
 import companySlice from './slices/companySlice';
-import uiSlice from './slices/uiSlice';
 import analyticsSlice from './slices/analyticsSlice';
+import uiSlice from './slices/uiSlice';
 
 // Create a noop storage for server-side rendering
 const createNoopStorage = () => {
@@ -31,25 +29,23 @@ const storage = typeof window !== 'undefined'
   : createNoopStorage();
 
 const persistConfig = {
-  key: 'root',
+  key: 'company',
   storage,
-  whitelist: ['companyAuth', 'userAuth', 'company'], // Only persist auth and company data
+  whitelist: ['companyAuth', 'company'], // Only persist auth and company data
   blacklist: ['ui'], // Don't persist UI state
 };
 
 const rootReducer = combineReducers({
   companyAuth: companyAuthSlice,
-  userAuth: userAuthSlice,
-  chat: chatSlice,
   knowledgeBase: knowledgeBaseSlice,
   company: companySlice,
-  ui: uiSlice,
   analytics: analyticsSlice,
+  ui: uiSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = configureStore({
+export const companyStore = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -61,7 +57,8 @@ export const store = configureStore({
     }),
 });
 
-export const persistor = persistStore(store);
+export const companyPersistor = persistStore(companyStore);
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type CompanyRootState = ReturnType<typeof companyStore.getState>;
+export type CompanyAppDispatch = typeof companyStore.dispatch;
+

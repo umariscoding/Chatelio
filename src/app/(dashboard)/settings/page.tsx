@@ -3,18 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { publishChatbot, updateChatbotInfo, updateCompanySlug, clearError } from '@/store/slices/companySlice';
-import { updateCompanyInfo } from '@/store/slices/companyAuthSlice';
+import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
+import { publishChatbot, updateChatbotInfo, updateCompanySlug, clearError } from '@/store/company/slices/companySlice';
+import { updateCompanyInfo } from '@/store/company/slices/companyAuthSlice';
 import { Toggle, Icons, IOSContentLoader } from '@/components/ui';
 import MinimalInput from '@/components/ui/MinimalInput';
 import MinimalButton from '@/components/ui/MinimalButton';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const { publicUrl, loading, error } = useAppSelector((state) => state.company);
+  const dispatch = useCompanyAppDispatch();
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
+  const { publicUrl, loading, error } = useCompanyAppSelector((state) => state.company);
   
   const [publishData, setPublishData] = useState({
     isPublished: companyAuth.company?.is_published || false,

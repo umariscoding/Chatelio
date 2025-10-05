@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import type { Company } from '@/types/auth';
-import { api } from '@/utils/api';
+import { companyApi as api } from '@/utils/company/api';
 
 interface UpdateChatbotInfoRequest {
   chatbot_title: string;

@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { useAppSelector } from '@/hooks/useAuth';
+import { useCompanyAppSelector } from '@/hooks/company/useCompanyAuth';
 import { Icons } from '@/components/ui';
 import type { SidebarProps, NavigationItem, NavigationSection } from '@/interfaces/Sidebar.interface';
 
@@ -105,19 +105,18 @@ const NavigationItemComponent: React.FC<NavigationItemComponentProps & { onNavig
 
 const Sidebar: React.FC<SidebarProps> = ({ className = "", isOpen = true, onClose }) => {
   const pathname = usePathname();
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const userAuth = useAppSelector((state) => state.userAuth);
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
   const navigationSections = getNavigationSections();
 
-  // Determine current user type
-  const currentUserType = companyAuth.isAuthenticated ? 'company' : userAuth.isAuthenticated ? 'user' : null;
+  // Company sidebar always shows company items
+  const currentUserType = 'company';
   
   // Filter navigation items based on user type
   const filteredSections = navigationSections
     .map((section) => ({
       ...section,
       items: section.items.filter((item) =>
-        currentUserType && item.allowedUserTypes.includes(currentUserType)
+        item.allowedUserTypes.includes(currentUserType)
       ),
     }))
     .filter((section) => section.items.length > 0);

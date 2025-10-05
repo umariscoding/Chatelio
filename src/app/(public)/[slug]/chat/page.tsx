@@ -14,8 +14,8 @@ import ChatOptionsMenu from '@/components/chat/ChatOptionsMenu';
 import { MessageSquarePlus, LogOut, LogIn } from 'lucide-react';
 import type { Message, ModelType } from '@/types/chat';
 import { getApiUrl } from '@/constants/api';
-import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/slices/userAuthSlice';
+import { useUserAppSelector, useUserAppDispatch } from '@/hooks/user/useUserAuth';
+import { setUserData, logout as logoutUser, verifyUserTokenGraceful } from '@/store/user/slices/userAuthSlice';
 import { generateChatTitle, FALLBACK_TITLES } from '@/utils/chatUtils';
 
 interface CompanyInfo {
@@ -36,11 +36,11 @@ interface ChatHistory {
 
 export default function PublicChatPage() {
   const params = useParams();
-  const dispatch = useAppDispatch();
+  const dispatch = useUserAppDispatch();
   const slug = params.slug as string;
   
   // Check if user is logged in - now using simplified auth
-  const userAuth = useAppSelector((state) => state.userAuth);
+  const userAuth = useUserAppSelector((state) => state.userAuth);
   const isUserLoggedIn = userAuth.isAuthenticated;
   
   // Common state for both guest and logged-in users

@@ -2,20 +2,17 @@
 
 import React from 'react';
 
-import { useAppSelector } from '@/hooks/useAuth';
+import { useCompanyAppSelector } from '@/hooks/company/useCompanyAuth';
 import { Icons, IOSContentLoader } from '@/components/ui';
 
 export default function ProfilePage() {
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const userAuth = useAppSelector((state) => state.userAuth);
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
 
-  // Determine which auth is active
+  // Company profile page
   const isCompanyUser = companyAuth.isAuthenticated;
-  const isLoading = companyAuth.loading || userAuth.loading;
+  const isLoading = companyAuth.loading;
   
-  const displayName = isCompanyUser 
-    ? companyAuth.company?.name || 'Company' 
-    : userAuth.user?.name || 'User';
+  const displayName = companyAuth.company?.name || 'Company';
 
   if (isLoading) {
     return <IOSContentLoader isLoading={true} message="Loading profile..." />;
@@ -69,7 +66,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl p-4 border border-neutral-200 group-hover:shadow-sm transition-shadow">
                   <p className="text-neutral-900 font-medium">
-                    {isCompanyUser ? companyAuth.company?.email : userAuth.user?.email}
+                    {companyAuth.company?.email}
                   </p>
                 </div>
               </div>

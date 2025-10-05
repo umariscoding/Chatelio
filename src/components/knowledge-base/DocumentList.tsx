@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { listDocuments, deleteDocument } from '@/store/slices/knowledgeBaseSlice';
+import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
+import { listDocuments, deleteDocument } from '@/store/company/slices/knowledgeBaseSlice';
 import MinimalButton from '@/components/ui/MinimalButton';
 import { Icons } from '@/components/ui';
 import type { DocumentListProps, DocumentItemProps } from '@/interfaces/KnowledgeBase.interface';
@@ -136,8 +136,8 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
 
 
 const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
-  const dispatch = useAppDispatch();
-  const { documents, loading, error } = useAppSelector((state) => state.knowledgeBase);
+  const dispatch = useCompanyAppDispatch();
+  const { documents, loading, error } = useCompanyAppSelector((state) => state.knowledgeBase);
 
   useEffect(() => {
     dispatch(listDocuments());

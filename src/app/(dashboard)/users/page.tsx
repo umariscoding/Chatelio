@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useAppSelector } from '@/hooks/useAuth';
+import { useCompanyAppSelector } from '@/hooks/company/useCompanyAuth';
 import MinimalButton from '@/components/ui/MinimalButton';
 import { getApiUrl } from '@/constants/api';
 import Card from '@/components/ui/Card';
@@ -27,7 +27,7 @@ interface UsersApiResponse {
 }
 
 export default function UsersPage() {
-  const companyAuth = useAppSelector((state) => state.companyAuth);
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
   const [users, setUsers] = useState<CompanyUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

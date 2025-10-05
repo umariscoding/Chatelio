@@ -7,8 +7,8 @@ import Image from 'next/image';
 import MinimalInput from '@/components/ui/MinimalInput';
 import MinimalButton from '@/components/ui/MinimalButton';
 import { Icons } from '@/components/ui';
-import { useAppDispatch, useAppSelector } from '@/hooks/useAuth';
-import { loginCompany, registerCompany, clearError } from '@/store/slices/companyAuthSlice';
+import { useCompanyAppDispatch, useCompanyAppSelector } from '@/hooks/company/useCompanyAuth';
+import { loginCompany, registerCompany, clearError } from '@/store/company/slices/companyAuthSlice';
 import { APP_CONFIG, ROUTES, FORM_VALIDATION } from '@/constants/APP_CONSTANTS';
 
 interface LoginFormData {
@@ -30,8 +30,8 @@ interface FormErrors {
 
 export default function CompanyAuthPage() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { loading: companyLoading, error, isAuthenticated: isCompanyAuthenticated } = useAppSelector((state) => state.companyAuth);
+  const dispatch = useCompanyAppDispatch();
+  const { loading: companyLoading, error, isAuthenticated: isCompanyAuthenticated } = useCompanyAppSelector((state) => state.companyAuth);
 
   const [isLogin, setIsLogin] = useState(true);
   const [loginData, setLoginData] = useState<LoginFormData>({

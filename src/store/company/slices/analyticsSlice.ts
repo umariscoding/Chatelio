@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { AnalyticsDashboard } from '@/interfaces/Analytics.interface';
-import { api } from '@/utils/api';
+import { companyApi as api } from '@/utils/company/api';
 
 // Async thunk for fetching dashboard analytics
 export const fetchDashboardAnalytics = createAsyncThunk(

@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import type { RootState, AppDispatch } from '@/store';
-import { fetchDashboardAnalytics, clearError, resetAnalytics } from '@/store/slices/analyticsSlice';
+import type { CompanyRootState, CompanyAppDispatch } from '@/store/company';
+import { useCompanyAppDispatch, useCompanyAppSelector } from './useCompanyAuth';
+import { fetchDashboardAnalytics, clearError, resetAnalytics } from '@/store/company/slices/analyticsSlice';
 
-export const useAnalytics = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const analytics = useSelector((state: RootState) => state.analytics);
+export const useCompanyAnalytics = () => {
+  const dispatch = useCompanyAppDispatch();
+  const analytics = useCompanyAppSelector((state) => state.analytics);
 
   const loadDashboardAnalytics = useCallback(async () => {
     // Check if data is fresh (less than 5 minutes old)
@@ -50,3 +50,4 @@ export const useAnalytics = () => {
     hasData: !!analytics.dashboard,
   };
 };
+

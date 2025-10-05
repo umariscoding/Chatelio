@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import type { Document, DocumentListResponse, UploadTextRequest, DocumentUploadResponse } from '@/types/knowledgeBase';
-import { api } from '@/utils/api';
+import { companyApi as api } from '@/utils/company/api';
 
 interface KnowledgeBaseState {
   documents: Document[];

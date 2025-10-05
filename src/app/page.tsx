@@ -1,73 +1,10 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import Link from "next/link";
 
 import Button from "@/components/ui/Button";
-import IOSLoader from "@/components/ui/IOSLoader";
 import { APP_CONFIG, ROUTES } from "@/constants/APP_CONSTANTS";
-import { useAppSelector, useAppDispatch } from "@/hooks/useAuth";
-import { logoutCompanyComprehensive } from "@/store/slices/companyAuthSlice";
-import { logout as logoutUser } from "@/store/slices/userAuthSlice";
 
 export default function Home() {
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const userAuth = useAppSelector((state) => state.userAuth);
-  const dispatch = useAppDispatch();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      // Since auth is now independent, logout both if authenticated
-      if (companyAuth.isAuthenticated) {
-        await dispatch(logoutCompanyComprehensive());
-      }
-      if (userAuth.isAuthenticated) {
-        dispatch(logoutUser());
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      setIsLoggingOut(false);
-    }
-  };
-
-  const renderAuthButtons = () => {
-    if (companyAuth.isAuthenticated || userAuth.isAuthenticated) {
-      return (
-        <div className="flex items-center space-x-4">
-          <Link href={ROUTES.DASHBOARD}>
-            <Button variant="ghost">
-              Dashboard
-            </Button>
-          </Link>
-          <Button 
-            variant="outline" 
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-          >
-            {isLoggingOut ? (
-                <IOSLoader size="sm" color="primary" className="mr-2" />
-            ) : (
-              'Logout'
-            )}
-          </Button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center space-x-4">
-        <Link href={ROUTES.COMPANY_LOGIN}>
-          <Button variant="ghost">Login</Button>
-        </Link>
-        <Link href={ROUTES.COMPANY_REGISTER}>
-          <Button>Get Started</Button>
-        </Link>
-      </div>
-    );
-  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">
       {/* Navigation */}
@@ -79,7 +16,14 @@ export default function Home() {
                 <h1 className="text-2xl font-bold text-primary-600">{APP_CONFIG.NAME}</h1>
               </div>
             </div>
-            {renderAuthButtons()}
+            <div className="flex items-center space-x-4">
+              <Link href={ROUTES.COMPANY_LOGIN}>
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href={ROUTES.COMPANY_REGISTER}>
+                <Button>Get Started</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -95,32 +39,20 @@ export default function Home() {
             {APP_CONFIG.DESCRIPTION}. Upload your knowledge base and deploy branded chatbots for your customers.
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            {!companyAuth.isAuthenticated && !userAuth.isAuthenticated ? (
-              <>
-                <div className="rounded-md shadow">
-                  <Link href={ROUTES.COMPANY_REGISTER}>
-                    <Button size="lg" className="w-full">
-                      Start Free Trial
-                    </Button>
-                  </Link>
-                </div>
-                <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                  <Link href={ROUTES.COMPANY_LOGIN}>
-                    <Button variant="outline" size="lg" className="w-full">
-                      Sign In
-                    </Button>
-                  </Link>
-                </div>
-              </>
-            ) : (
-              <div className="rounded-md shadow">
-                <Link href={ROUTES.DASHBOARD}>
-                  <Button size="lg" className="w-full">
-                    Go to Dashboard
-                  </Button>
-                </Link>
-              </div>
-            )}
+            <div className="rounded-md shadow">
+              <Link href={ROUTES.COMPANY_REGISTER}>
+                <Button size="lg" className="w-full">
+                  Start Free Trial
+                </Button>
+              </Link>
+            </div>
+            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+              <Link href={ROUTES.COMPANY_LOGIN}>
+                <Button variant="outline" size="lg" className="w-full">
+                  Sign In
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 

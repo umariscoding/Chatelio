@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { Company, Tokens } from '@/types/auth';
-import { api } from '@/utils/api';
+import { companyApi as api } from '@/utils/company/api';
 import { API_CONFIG } from '@/constants/api';
 import { resetCompany } from './companySlice';
 import { resetAnalytics } from './analyticsSlice';

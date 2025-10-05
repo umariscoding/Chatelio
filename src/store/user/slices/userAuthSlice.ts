@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { User, Tokens } from '@/types/auth';
-import { api } from '@/utils/api';
+import { userApi as api } from '@/utils/user/api';
 import { API_CONFIG } from '@/constants/api';
 import { resetChat } from './chatSlice';
 

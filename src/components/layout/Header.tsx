@@ -3,36 +3,25 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAppSelector, useAppDispatch } from '@/hooks/useAuth';
-import { logoutCompanyComprehensive } from '@/store/slices/companyAuthSlice';
-import { logoutUserComprehensive } from '@/store/slices/userAuthSlice';
+import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
+import { logoutCompanyComprehensive } from '@/store/company/slices/companyAuthSlice';
 import { Icons } from '@/components/ui';
 import MinimalButton from '@/components/ui/MinimalButton';
 import IOSLoader from '@/components/ui/IOSLoader';
 import type { HeaderProps } from '@/interfaces/Header.interface';
 
 const LogoutButton: React.FC = () => {
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const userAuth = useAppSelector((state) => state.userAuth);
-  const dispatch = useAppDispatch();
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
+  const dispatch = useCompanyAppDispatch();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      // Logout the appropriate session based on which auth is active
-      if (companyAuth.isAuthenticated) {
-        // Company logout: Clear company data (knowledge base, analytics, etc.)
-        await dispatch(logoutCompanyComprehensive());
-        router.push('/company/login');
-      } else if (userAuth.isAuthenticated) {
-        // User logout: Clear user data (chat history, etc.)
-        await dispatch(logoutUserComprehensive());
-        router.push('/');
-      } else {
-        router.push('/');
-      }
+      // Company logout: Clear company data (knowledge base, analytics, etc.)
+      await dispatch(logoutCompanyComprehensive());
+      router.push('/company/login');
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
@@ -65,19 +54,15 @@ const Header: React.FC<HeaderProps> = ({
   onMenuToggle,
   showMobileMenuButton = true 
 }) => {
-  const companyAuth = useAppSelector((state) => state.companyAuth);
-  const userAuth = useAppSelector((state) => state.userAuth);
+  const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
 
-  // Get first name from company name or user name
+  // Get first name from company name
   const getFirstName = () => {
     if (companyAuth.isAuthenticated && companyAuth.company?.name) {
       // Extract first word from company name
       return companyAuth.company.name.split(' ')[0];
-    } else if (userAuth.isAuthenticated && userAuth.user?.name) {
-      // Extract first word from user name
-      return userAuth.user.name.split(' ')[0];
     }
-    return 'User';
+    return 'Company';
   };
 
   return (

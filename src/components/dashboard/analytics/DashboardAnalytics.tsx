@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 
-import { useAnalytics } from '@/hooks/useAnalytics';
+import { useCompanyAnalytics } from '@/hooks/company/useCompanyAnalytics';
 import StatsCard from '@/components/dashboard/StatsCard';
 import MessagesChart from './MessagesChart';
 import ChatsChart from './ChatsChart';
@@ -11,7 +11,7 @@ import Card from '@/components/ui/Card';
 import type { DashboardAnalyticsProps } from '@/interfaces/Analytics.interface';
 
 const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" }) => {
-  const { dashboard, loading, error, loadDashboardAnalytics } = useAnalytics();
+  const { dashboard, loading, error, loadDashboardAnalytics } = useCompanyAnalytics();
 
   useEffect(() => {
     loadDashboardAnalytics();
