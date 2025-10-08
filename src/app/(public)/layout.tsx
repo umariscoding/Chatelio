@@ -10,8 +10,8 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    document.documentElement.style.backgroundColor = '#ffffff';
-    document.body.style.backgroundColor = '#ffffff';
+    document.documentElement.style.backgroundColor = '#09090b'; // zinc-950
+    document.body.style.backgroundColor = '#09090b'; // zinc-950
     return () => {
       document.documentElement.style.backgroundColor = '';
       document.body.style.backgroundColor = '';
