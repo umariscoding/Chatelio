@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-auth-900`}>
+      <body className={inter.className}>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>

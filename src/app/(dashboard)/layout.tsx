@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CompanyReduxProvider } from '@/lib/company-redux-provider';
 import { CompanyAuthProvider } from '@/components/auth/company/CompanyAuthProvider';
 import { CompanyProtectedRoute } from '@/components/auth/company/CompanyProtectedRoute';
@@ -14,17 +14,14 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Optional: Handle page transition loading (disabled for faster navigation)
-  // useEffect(() => {
-  //   dispatch(setLoading({ key: 'pageTransition', loading: true }));
-  //   
-  //   const timer = setTimeout(() => {
-  //     dispatch(setLoading({ key: 'pageTransition', loading: false }));
-  //   }, 150);
-
-  //   return () => clearTimeout(timer);
-  // }, [pathname, dispatch]);
-
+  useEffect(() => {
+    document.documentElement.style.backgroundColor = '#0f172a';
+    document.body.style.backgroundColor = '#0f172a';
+    return () => {
+      document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundColor = '';
+    };
+  }, []);
 
   const handleMenuToggle = () => {
     setSidebarOpen(!sidebarOpen);
