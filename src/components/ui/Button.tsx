@@ -8,11 +8,11 @@ const Button = memo(React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
     
     const variants = {
-      primary: 'bg-primary-600 hover:bg-primary-700 text-text-white',
-      secondary: 'bg-secondary-100 hover:bg-secondary-200 text-secondary-900 border border-secondary-300',
-      outline: 'border border-primary-300 bg-transparent hover:bg-primary-50 text-primary-700 hover:text-primary-800',
-      ghost: 'hover:bg-primary-50 hover:text-primary-700 text-secondary-700',
-      destructive: 'bg-error-600 text-text-white hover:bg-error-700',
+      primary: 'bg-primary-600 hover:bg-primary-700 text-text-white shadow-lg shadow-primary-600/20 hover:shadow-xl hover:shadow-primary-600/30',
+      secondary: 'bg-neutral-200 hover:bg-neutral-300 text-text-primary border border-border-light',
+      outline: 'border border-primary-600 bg-transparent hover:bg-primary-50 text-primary-600 hover:text-primary-700',
+      ghost: 'hover:bg-bg-secondary hover:text-primary-600 text-text-secondary',
+      destructive: 'bg-error-600 text-text-white hover:bg-error-700 shadow-lg shadow-error-600/20',
     };
 
     const sizes = {

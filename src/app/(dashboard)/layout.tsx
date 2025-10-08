@@ -38,7 +38,7 @@ export default function DashboardLayout({
     <CompanyReduxProvider>
       <CompanyAuthProvider>
         <CompanyProtectedRoute>
-          <div className="min-h-screen bg-auth-900">
+          <div className="min-h-screen bg-sidebar-bg">
             <div className="flex min-h-screen">
               {/* Sidebar - Fixed/Sticky */}
               <div className="sticky top-0 self-start">
@@ -51,7 +51,7 @@ export default function DashboardLayout({
               {/* Main content area */}
               <div className="flex-1 bg-bg-secondary min-h-screen relative">
                 {/* Thick border with pointy outside, rounded inside */}
-                <div className="absolute inset-0 bg-auth-900"></div>
+                <div className="absolute inset-0 bg-sidebar-bg"></div>
                 <div className="absolute inset-4 bg-bg-secondary rounded-xl overflow-y-auto smooth-scroll-container">
                   {/* Header */}
                   <Header 

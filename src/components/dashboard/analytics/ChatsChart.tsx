@@ -51,8 +51,8 @@ const ChatsChart: React.FC<ChatsChartProps> = ({
         {/* Simple header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-success-100 rounded-lg">
-              <Icons.MessageSquare className="h-5 w-5 text-success-600" />
+            <div className="p-2 bg-primary-100 rounded-xl shadow-inner">
+              <Icons.MessageSquare className="h-5 w-5 text-primary-600" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-text-primary">
@@ -65,7 +65,7 @@ const ChatsChart: React.FC<ChatsChartProps> = ({
           </div>
           
           <div className="text-right">
-            <div className="text-2xl font-bold text-success-600">
+            <div className="text-2xl font-bold text-primary-600">
               {chartData.reduce((sum, point) => sum + point['New Chats'], 0).toLocaleString()}
             </div>
             <div className="text-xs text-text-secondary">New Chats</div>
@@ -79,20 +79,20 @@ const ChatsChart: React.FC<ChatsChartProps> = ({
               <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <defs>
                   <linearGradient id="chatGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.2}/>
-                    <stop offset="100%" stopColor="#10b981" stopOpacity={0}/>
+                    <stop offset="0%" stopColor="#9333ea" stopOpacity={0.2}/>
+                    <stop offset="100%" stopColor="#9333ea" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                 <XAxis 
                   dataKey="date" 
-                  stroke="#6b7280"
+                  stroke="#64748b"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis 
-                  stroke="#6b7280"
+                  stroke="#64748b"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
@@ -101,19 +101,19 @@ const ChatsChart: React.FC<ChatsChartProps> = ({
                 <Tooltip 
                   contentStyle={{
                     backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
+                    border: '1px solid #e2e8f0',
                     borderRadius: '8px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.1)',
                     fontSize: '14px',
                     padding: '12px',
                   }}
                   labelStyle={{ 
-                    color: '#374151', 
+                    color: '#0f172a', 
                     fontWeight: '600',
                     marginBottom: '4px'
                   }}
                   formatter={(value, name) => [
-                    <span style={{ color: '#10b981', fontWeight: '600' }}>
+                    <span style={{ color: '#9333ea', fontWeight: '600' }}>
                       {value.toLocaleString()}
                     </span>, 
                     name
@@ -122,11 +122,11 @@ const ChatsChart: React.FC<ChatsChartProps> = ({
                 <Area 
                   type="monotone" 
                   dataKey="New Chats" 
-                  stroke="#10b981"
+                  stroke="#9333ea"
                   strokeWidth={3}
                   fill="url(#chatGradient)"
-                  dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: '#059669', strokeWidth: 2, stroke: 'white' }}
+                  dot={{ r: 4, fill: '#9333ea', strokeWidth: 0 }}
+                  activeDot={{ r: 6, fill: '#7e22ce', strokeWidth: 2, stroke: 'white' }}
                 />
               </AreaChart>
             </ResponsiveContainer>

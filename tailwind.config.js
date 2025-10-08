@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-// Force rebuild for dark greyish/blackish theme with blue accents
+// Modern AI-inspired color palette for Chatelio
 module.exports = {
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
@@ -7,123 +7,138 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary brand colors - Better blue that complements white backgrounds
+        // Primary brand color - Purple/Violet (Modern AI aesthetic)
         primary: {
-          50: '#e6f3ff',   // very light blue
-          100: '#cce7ff',  // light blue
-          200: '#99d0ff',  // lighter blue
-          300: '#66b2ff',  // medium light blue (light variant)
-          400: '#3399ff',  // medium blue
-          500: '#007bff',  // standard blue (main color)
-          600: '#0066cc',  // darker blue (main button color)
-          700: '#0056b3',  // dark blue (dark variant)
-          800: '#004499',  // very dark blue
-          900: '#003366',  // darkest blue
+          50: '#faf5ff',   // very light purple
+          100: '#f3e8ff',  // light purple
+          200: '#e9d5ff',  // lighter purple
+          300: '#d8b4fe',  // soft purple
+          400: '#c084fc',  // medium purple
+          500: '#a855f7',  // standard purple (main color)
+          600: '#9333ea',  // vibrant purple (main CTA)
+          700: '#7e22ce',  // deep purple
+          800: '#6b21a8',  // darker purple
+          900: '#581c87',  // darkest purple
         },
         
-        // Neutral colors - Improved greys that complement the blue
+        // Accent color - Cyan/Teal (Modern, tech-forward)
+        accent: {
+          50: '#ecfeff',   // very light cyan
+          100: '#cffafe',  // light cyan
+          200: '#a5f3fc',  // lighter cyan
+          300: '#67e8f9',  // soft cyan
+          400: '#22d3ee',  // medium cyan
+          500: '#06b6d4',  // standard cyan
+          600: '#0891b2',  // vibrant cyan
+          700: '#0e7490',  // deep cyan
+          800: '#155e75',  // darker cyan
+          900: '#164e63',  // darkest cyan
+        },
+        
+        // Neutral colors - Deep slate (Professional, modern)
         neutral: {
-          50: '#ffffff',   // pure white
-          100: '#f8f9fa',  // very light grey (recommended background)
-          200: '#e9ecef',  // light grey
-          300: '#dee2e6',  // lighter grey
-          400: '#ced4da',  // medium light grey
-          500: '#adb5bd',  // medium grey
-          600: '#6c757d',  // darker grey (recommended for borders/secondary text)
-          700: '#495057',  // dark grey
-          800: '#343a40',  // very dark grey (recommended dark variant)
-          900: '#212529',  // darkest grey
-          950: '#171717',  // near black
+          50: '#f8fafc',   // almost white
+          100: '#f1f5f9',  // very light slate
+          200: '#e2e8f0',  // light slate
+          300: '#cbd5e1',  // medium light slate
+          400: '#94a3b8',  // medium slate
+          500: '#64748b',  // standard slate
+          600: '#475569',  // darker slate
+          700: '#334155',  // deep slate
+          800: '#1e293b',  // very dark slate
+          900: '#0f172a',  // darkest slate
+          950: '#020617',  // near black
         },
         
-        // Text colors - Improved hierarchy with better greys
+        // Text colors - Simplified hierarchy
         text: {
-          primary: '#000000',    // pure black for main text
-          secondary: '#6c757d',  // recommended medium grey for secondary text
-          tertiary: '#adb5bd',   // lighter grey for tertiary text
-          placeholder: '#ced4da', // light grey for placeholders
-          white: '#ffffff',      // white text for dark backgrounds
+          primary: '#0f172a',    // dark slate for main text
+          secondary: '#64748b',  // medium slate for secondary
+          tertiary: '#94a3b8',   // light slate for tertiary
+          placeholder: '#cbd5e1', // very light slate for placeholders
+          white: '#ffffff',      // white text
+          muted: '#475569',      // muted text
         },
         
-        // Background colors - Improved backgrounds
+        // Background colors - Clean, minimal
         bg: {
-          primary: '#ffffff',    // pure white primary background
-          secondary: '#f8f9fa',  // recommended light background
-          tertiary: '#e9ecef',   // light grey tertiary background
-          dark: '#343a40',       // recommended dark background
+          primary: '#ffffff',    // pure white
+          secondary: '#f8fafc',  // almost white
+          tertiary: '#f1f5f9',   // very light slate
+          dark: '#0f172a',       // dark slate
+          darker: '#020617',     // near black
         },
         
-        // Border colors - Improved greys that complement blue
+        // Border colors - Subtle borders
         border: {
-          light: '#dee2e6',     // light border
-          medium: '#ced4da',    // medium border
-          dark: '#6c757d',      // dark border (recommended)
+          light: '#e2e8f0',     // light slate
+          medium: '#cbd5e1',    // medium slate
+          dark: '#94a3b8',      // darker slate
         },
         
-        // Success colors - Green variants (kept green for success states)
+        // Success color - Simplified green
         success: {
           50: '#f0fdf4',
           100: '#dcfce7',
           200: '#bbf7d0',
           300: '#86efac',
           400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
+          500: '#22c55e',   // main success
+          600: '#16a34a',   // success CTA
           700: '#15803d',
           800: '#166534',
           900: '#14532d',
         },
         
-        // Warning colors - Orange/amber for warnings
+        // Warning color - Amber for attention
         warning: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316',
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',   // main warning
+          600: '#d97706',   // warning CTA
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
         },
         
-        // Error colors - Red for errors
+        // Error color - Modern red
         error: {
           50: '#fef2f2',
           100: '#fee2e2',
           200: '#fecaca',
           300: '#fca5a5',
           400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
+          500: '#ef4444',   // main error
+          600: '#dc2626',   // error CTA
           700: '#b91c1c',
           800: '#991b1b',
           900: '#7f1d1d',
         },
         
-        // Auth colors - Dark zinc-like palette for authentication modals
-        auth: {
-          50: '#fafafa',   // very light zinc
-          100: '#f4f4f5',  // light zinc
-          200: '#e4e4e7',  // lighter zinc
-          300: '#d4d4d8',  // medium light zinc
-          400: '#a1a1aa',  // medium zinc
-          500: '#71717a',  // standard zinc
-          600: '#52525b',  // darker zinc
-          700: '#3f3f46',  // dark zinc
-          800: '#27272a',  // very dark zinc
-          900: '#18181b',  // darkest zinc (like zinc-900)
-          950: '#09090b',  // deepest zinc (like zinc-950)
+        // Sidebar/Dashboard UI - Deep slate background
+        sidebar: {
+          bg: '#0f172a',       // dark slate
+          hover: '#1e293b',    // very dark slate
+          active: '#334155',   // deep slate
+          border: '#1e293b',   // very dark slate
+          text: '#cbd5e1',     // light slate text
+          'text-hover': '#f1f5f9', // very light slate hover
+          'text-active': '#ffffff', // white active
+          'text-muted': '#64748b', // muted text
         },
 
-        // Chart-specific colors for consistent theming
+        // Chart colors - Coordinated with brand
         chart: {
-          grid: '#e9ecef',        // Light grid lines
-          axis: '#6c757d',        // Axis text and lines  
-          tooltip: '#ffffff',     // Tooltip background
-          tooltipText: '#374151', // Tooltip text
-          shadow: 'rgba(0, 0, 0, 0.1)', // Box shadow
+          grid: '#e2e8f0',        // light slate
+          axis: '#64748b',        // medium slate
+          tooltip: '#ffffff',     // white
+          tooltipText: '#0f172a', // dark slate
+          shadow: 'rgba(15, 23, 42, 0.1)', // subtle shadow
+          primary: '#9333ea',     // primary purple
+          accent: '#0891b2',      // accent cyan
         },
       },
     },

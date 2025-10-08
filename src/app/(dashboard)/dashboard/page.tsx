@@ -25,11 +25,11 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-neutral-50 to-success-50 rounded-2xl border border-primary-200 shadow-lg">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-success-500/5"></div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-bg-primary to-accent-50 rounded-2xl border border-primary-200 shadow-xl shadow-primary-600/10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/5 via-transparent to-accent-600/5"></div>
         <div className="relative px-6 py-8 lg:px-8 lg:py-12 text-center">
           <h1 className="text-3xl lg:text-4xl font-bold text-text-primary mb-4">
-            Welcome back, <span className="bg-gradient-to-r from-primary-600 to-success-600 bg-clip-text text-transparent">{displayName}</span>
+            Welcome back, <span className="bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">{displayName}</span>
           </h1>
           <p className="text-text-secondary max-w-2xl mx-auto text-lg leading-relaxed">
             {isCompanyUser

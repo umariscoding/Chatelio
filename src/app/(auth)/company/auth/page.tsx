@@ -152,29 +152,33 @@ export default function CompanyAuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-bg-primary flex">
       {/* Left Side - Image */}
-      <div className="hidden lg:flex lg:w-1/2 bg-auth-900 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-sidebar-bg relative overflow-hidden">
         <div className="flex flex-col justify-center items-center text-center p-12 text-white w-full h-full">
           <div className="mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl mb-6 shadow-2xl shadow-primary-600/50">
+              <span className="text-white font-bold text-2xl">C</span>
+            </div>
             <h1 className="text-4xl font-bold mb-4 text-white">Welcome to {APP_CONFIG.NAME}</h1>
+            <p className="text-neutral-400 text-lg">Your AI-powered customer engagement platform</p>
           </div>
           
           <div className="grid grid-cols-1 gap-6 max-w-xs w-full">
-            <div className="bg-auth-800/50 backdrop-blur-sm rounded-xl p-6 border border-auth-700/50">
+            <div className="bg-neutral-800/40 backdrop-blur-sm rounded-xl p-6 border border-neutral-700/50 hover:border-primary-600/50 transition-all duration-300">
               <Icons.Zap className="h-8 w-8 text-primary-400 mb-3" />
               <h3 className="font-semibold mb-2 text-white">Quick Setup</h3>
-              <p className="text-sm text-auth-300">Get your chatbot running in minutes</p>
+              <p className="text-sm text-neutral-400">Get your chatbot running in minutes</p>
             </div>
-            <div className="bg-auth-800/50 backdrop-blur-sm rounded-xl p-6 border border-auth-700/50">
-              <Icons.Shield className="h-8 w-8 text-primary-400 mb-3" />
+            <div className="bg-neutral-800/40 backdrop-blur-sm rounded-xl p-6 border border-neutral-700/50 hover:border-primary-600/50 transition-all duration-300">
+              <Icons.Shield className="h-8 w-8 text-accent-400 mb-3" />
               <h3 className="font-semibold mb-2 text-white">Secure & Reliable</h3>
-              <p className="text-sm text-auth-300">Enterprise-grade security and uptime</p>
+              <p className="text-sm text-neutral-400">Enterprise-grade security and uptime</p>
             </div>
-            <div className="bg-auth-800/50 backdrop-blur-sm rounded-xl p-6 border border-auth-700/50">
+            <div className="bg-neutral-800/40 backdrop-blur-sm rounded-xl p-6 border border-neutral-700/50 hover:border-primary-600/50 transition-all duration-300">
               <Icons.Users className="h-8 w-8 text-primary-400 mb-3" />
               <h3 className="font-semibold mb-2 text-white">Customer Insights</h3>
-              <p className="text-sm text-auth-300">Analytics and user management</p>
+              <p className="text-sm text-neutral-400">Analytics and user management</p>
             </div>
           </div>
         </div>
@@ -185,18 +189,18 @@ export default function CompanyAuthPage() {
         <div className="mx-auto w-full max-w-sm">
           {/* Company Name */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-text-primary">{APP_CONFIG.NAME}</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">{APP_CONFIG.NAME}</h1>
           </div>
 
           {/* Toggle Switch */}
           <div className="mb-8">
-            <div className="flex bg-neutral-100 rounded-xl p-1">
+            <div className="flex bg-bg-secondary rounded-xl p-1 border border-border-light">
               <button
                 onClick={() => setIsLogin(true)}
                 className={`flex-1 py-3 px-4 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isLogin
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-neutral-500 hover:text-neutral-700'
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                    : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
                 Login
@@ -205,8 +209,8 @@ export default function CompanyAuthPage() {
                 onClick={() => setIsLogin(false)}
                 className={`flex-1 py-3 px-4 text-sm font-medium rounded-lg transition-all duration-200 ${
                   !isLogin
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-neutral-500 hover:text-neutral-700'
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                    : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
                 Sign Up

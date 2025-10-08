@@ -33,11 +33,11 @@ const StatsCard: React.FC<StatsCardProps> = ({
             <div className="animate-pulse">
               <div className="flex items-center justify-between">
                 <div className="space-y-3 flex-1">
-                  <div className="h-4 bg-secondary-200 rounded w-1/2"></div>
-                  <div className="h-8 bg-secondary-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-secondary-200 rounded w-1/3"></div>
+                  <div className="h-4 bg-neutral-200 rounded w-1/2"></div>
+                  <div className="h-8 bg-neutral-200 rounded w-3/4"></div>
+                  <div className="h-3 bg-neutral-200 rounded w-1/3"></div>
                 </div>
-                <div className="h-12 w-12 bg-secondary-200 rounded-full"></div>
+                <div className="h-12 w-12 bg-neutral-200 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
         return 'text-error-600';
       case 'neutral':
       default:
-        return 'text-secondary-600';
+        return 'text-text-secondary';
     }
   };
 
@@ -74,22 +74,22 @@ const StatsCard: React.FC<StatsCardProps> = ({
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-secondary-600 truncate">
+            <p className="text-sm font-medium text-text-secondary truncate">
               {title}
             </p>
-            <p className="mt-2 text-3xl font-bold text-secondary-900">
+            <p className="mt-2 text-3xl font-bold text-text-primary">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
             
             {change && (
-              <div className={`mt-2 flex items-center text-sm ${getChangeColorClass(change.type)}`}>
+              <div className={`mt-2 flex items-center text-sm font-medium ${getChangeColorClass(change.type)}`}>
                 {getChangeIcon(change.type)}
                 <span className="ml-1">{change.value}</span>
               </div>
             )}
             
             {description && (
-              <p className="mt-1 text-sm text-secondary-500">
+              <p className="mt-1 text-sm text-text-tertiary">
                 {description}
               </p>
             )}
@@ -97,7 +97,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
           
           {Icon && (
             <div className="flex-shrink-0">
-              <div className="p-3 bg-primary-50 rounded-full">
+              <div className="p-3 bg-primary-100 rounded-xl shadow-inner">
                 <Icon className="h-6 w-6 text-primary-600" />
               </div>
             </div>

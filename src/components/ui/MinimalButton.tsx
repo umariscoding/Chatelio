@@ -35,44 +35,44 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
     const defaultVariants = {
       primary: `
         bg-primary-600 hover:bg-primary-700 text-text-white
-        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
-        shadow-sm
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-bg-primary
+        shadow-lg shadow-primary-600/20 hover:shadow-xl hover:shadow-primary-600/30
       `,
       secondary: `
-        bg-secondary-200 hover:bg-secondary-300 text-secondary-900
-        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
-        border border-secondary-300 hover:border-secondary-400
+        bg-neutral-200 hover:bg-neutral-300 text-text-primary
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-bg-primary
+        border border-border-light hover:border-border-medium
       `,
       ghost: `
-        bg-transparent hover:bg-secondary-800/50 text-secondary-300 hover:text-secondary-100
-        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
+        bg-transparent hover:bg-bg-secondary text-text-secondary hover:text-text-primary
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-bg-primary
       `,
       outline: `
-        bg-transparent border border-secondary-300 hover:border-secondary-400
-text-secondary-900 hover:text-secondary-50 hover:bg-secondary-800/30
-        focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1 focus:ring-offset-secondary-900
+        bg-transparent border border-border-light hover:border-primary-600
+        text-text-secondary hover:text-primary-600 hover:bg-primary-50
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-bg-primary
       `
     };
 
     const authVariants = {
       primary: `
-        bg-auth-700 hover:bg-auth-600 text-auth-100
-        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
-        shadow-sm
+        bg-primary-600 hover:bg-primary-700 text-text-white
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-sidebar-bg
+        shadow-lg shadow-primary-600/30 hover:shadow-xl hover:shadow-primary-600/40
       `,
       secondary: `
-        bg-auth-800 hover:bg-auth-700 text-auth-200
-        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
-        border border-auth-700 hover:border-auth-600
+        bg-sidebar-hover hover:bg-sidebar-active text-sidebar-text
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-sidebar-bg
+        border border-sidebar-border hover:border-neutral-600
       `,
       ghost: `
-        bg-transparent hover:bg-auth-800/50 text-auth-300 hover:text-auth-100
-        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+        bg-transparent hover:bg-sidebar-hover text-sidebar-text hover:text-sidebar-text-hover
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-sidebar-bg
       `,
       outline: `
-        bg-transparent border border-auth-700 hover:border-auth-600
-        text-auth-300 hover:text-auth-100 hover:bg-auth-800/30
-        focus:ring-2 focus:ring-auth-500/40 focus:ring-offset-1 focus:ring-offset-auth-950
+        bg-transparent border border-sidebar-border hover:border-primary-600
+        text-sidebar-text hover:text-sidebar-text-hover hover:bg-sidebar-hover
+        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-sidebar-bg
       `
     };
 

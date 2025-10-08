@@ -22,34 +22,34 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
     // Theme-based styles
     const themeStyles = {
       light: {
-        input: 'border-secondary-300 text-secondary-900 focus:border-primary-500 focus:ring-primary-500/30 hover:border-secondary-400',
+        input: 'border-border-light text-text-primary focus:border-primary-600 focus:ring-primary-600/30 hover:border-border-medium',
         label: {
-          default: 'text-secondary-600',
+          default: 'text-text-secondary',
           focused: 'text-primary-600',
           error: 'text-error-600'
         },
         error: 'text-error-600',
-        passwordToggle: 'text-secondary-600 hover:text-secondary-900'
+        passwordToggle: 'text-text-secondary hover:text-text-primary'
       },
       dark: {
-        input: 'border-secondary-700 text-secondary-50 focus:border-secondary-400 focus:ring-secondary-500/30',
+        input: 'border-neutral-700 text-neutral-50 focus:border-primary-600 focus:ring-primary-600/30',
         label: {
-          default: 'text-secondary-500',
-          focused: 'text-secondary-50',
+          default: 'text-neutral-500',
+          focused: 'text-neutral-50',
           error: 'text-error-400'
         },
         error: 'text-error-400',
-        passwordToggle: 'text-secondary-400 hover:text-secondary-300'
+        passwordToggle: 'text-neutral-400 hover:text-neutral-300'
       },
       auth: {
-        input: 'border-auth-700 text-auth-100 focus:border-auth-500 focus:ring-auth-500/30',
+        input: 'border-neutral-700 text-neutral-100 focus:border-primary-600 focus:ring-primary-600/30',
         label: {
-          default: 'text-auth-400',
-          focused: 'text-auth-300',
+          default: 'text-neutral-400',
+          focused: 'text-primary-400',
           error: 'text-error-400'
         },
         error: 'text-error-400',
-        passwordToggle: 'text-auth-400 hover:text-auth-300'
+        passwordToggle: 'text-neutral-400 hover:text-neutral-300'
       }
     };
 
@@ -139,8 +139,8 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
             type={inputType}
             onChange={handleChange}
             className={`
-              w-full px-4 py-3 ${theme === 'light' ? 'bg-secondary-50' : 'bg-secondary-900/50'} border rounded-xl
-              ${currentTheme.input} ${theme === 'light' ? 'placeholder-secondary-500' : 'placeholder-secondary-500'}
+              w-full px-4 py-3 ${theme === 'light' ? 'bg-bg-primary' : 'bg-neutral-900/50'} border rounded-xl
+              ${currentTheme.input} ${theme === 'light' ? 'placeholder-text-placeholder' : 'placeholder-neutral-500'}
               focus:ring-1 focus:outline-none
               transition-all duration-200 autofill:bg-transparent
               ${error ? 'border-error-500' : ''}

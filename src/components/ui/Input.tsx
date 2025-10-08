@@ -8,20 +8,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     
     const themeClasses = {
       light: {
-        input: 'border-secondary-300 bg-secondary-50 text-secondary-900 placeholder:text-secondary-500 focus-visible:ring-primary-500 hover:border-secondary-400',
-        label: 'text-secondary-700',
-        description: 'text-secondary-600',
+        input: 'border-border-light bg-bg-primary text-text-primary placeholder:text-text-placeholder focus-visible:ring-primary-600 hover:border-border-medium',
+        label: 'text-text-primary',
+        description: 'text-text-secondary',
       },
       dark: {
-        input: 'border-secondary-700 bg-secondary-800 text-secondary-100 placeholder:text-secondary-500 focus-visible:ring-primary-600',
-        label: 'text-secondary-300',
-        description: 'text-secondary-500',
+        input: 'border-neutral-700 bg-neutral-800 text-neutral-100 placeholder:text-neutral-500 focus-visible:ring-primary-600',
+        label: 'text-neutral-300',
+        description: 'text-neutral-500',
       }
     };
     
     const currentTheme = themeClasses[theme];
     
-    const baseClasses = `flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-secondary-50 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${currentTheme.input}`;
+    const baseClasses = `flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-bg-primary file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${currentTheme.input}`;
     const errorClasses = error ? 'border-error-500 focus-visible:ring-error-500' : '';
     const classes = `${baseClasses} ${errorClasses} ${className || ''}`;
 

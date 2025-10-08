@@ -51,8 +51,8 @@ const MessagesChart: React.FC<MessagesChartProps> = ({
         {/* Simple header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <Icons.MessageCircle className="h-5 w-5 text-primary-600" />
+            <div className="p-2 bg-accent-100 rounded-xl shadow-inner">
+              <Icons.MessageCircle className="h-5 w-5 text-accent-600" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-text-primary">
@@ -65,7 +65,7 @@ const MessagesChart: React.FC<MessagesChartProps> = ({
           </div>
           
           <div className="text-right">
-            <div className="text-2xl font-bold text-primary-600">
+            <div className="text-2xl font-bold text-accent-600">
               {chartData.reduce((sum, point) => sum + point['Total Messages'], 0).toLocaleString()}
             </div>
             <div className="text-xs text-text-secondary">Total Messages</div>
@@ -77,16 +77,16 @@ const MessagesChart: React.FC<MessagesChartProps> = ({
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                 <XAxis 
                   dataKey="date" 
-                  stroke="#6b7280"
+                  stroke="#64748b"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis 
-                  stroke="#6b7280"
+                  stroke="#64748b"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
@@ -95,19 +95,19 @@ const MessagesChart: React.FC<MessagesChartProps> = ({
                 <Tooltip 
                   contentStyle={{
                     backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
+                    border: '1px solid #e2e8f0',
                     borderRadius: '8px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.1)',
                     fontSize: '14px',
                     padding: '12px',
                   }}
                   labelStyle={{ 
-                    color: '#374151', 
+                    color: '#0f172a', 
                     fontWeight: '600',
                     marginBottom: '4px'
                   }}
                   formatter={(value, name) => [
-                    <span style={{ color: '#2563eb', fontWeight: '600' }}>
+                    <span style={{ color: '#0891b2', fontWeight: '600' }}>
                       {value.toLocaleString()}
                     </span>, 
                     name
@@ -116,10 +116,10 @@ const MessagesChart: React.FC<MessagesChartProps> = ({
                 <Line 
                   type="monotone" 
                   dataKey="Total Messages" 
-                  stroke="#2563eb"
+                  stroke="#0891b2"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: '#2563eb', strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: '#1d4ed8', strokeWidth: 2, stroke: 'white' }}
+                  dot={{ r: 4, fill: '#0891b2', strokeWidth: 0 }}
+                  activeDot={{ r: 6, fill: '#0e7490', strokeWidth: 2, stroke: 'white' }}
                 />
               </LineChart>
             </ResponsiveContainer>

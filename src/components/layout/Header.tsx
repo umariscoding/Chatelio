@@ -35,7 +35,7 @@ const LogoutButton: React.FC = () => {
       variant="outline"
       size="sm"
       disabled={isLoggingOut}
-      className="text-secondary-300 border-secondary-600 hover:border-primary-500 hover:bg-primary-600/10 hover:text-primary-400 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+      className="text-text-secondary border-border-light hover:border-primary-600 hover:bg-primary-600/10 hover:text-primary-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
     >
       {isLoggingOut ? (
           <IOSLoader size="sm" color="primary" className="mr-2" />
@@ -66,21 +66,21 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className={`bg-secondary-900 shadow-sm border-b border-secondary-700 ${className}`}>
+    <header className={`bg-bg-primary shadow-sm border-b border-border-light ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             {showMobileMenuButton && (
               <button
                 onClick={onMenuToggle}
-                className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-secondary-50 hover:text-secondary-50 hover:bg-secondary-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+                className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-secondary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600"
               >
                 <Icons.Menu />
               </button>
             )}
             <div className="flex-shrink-0 ml-4 md:ml-0">
-              <h1 className="text-xl font-semibold text-secondary-50">
-                Hi, <span className="text-primary-400">{getFirstName()}</span>
+              <h1 className="text-xl font-semibold text-text-primary">
+                Hi, <span className="text-primary-600 font-bold">{getFirstName()}</span>
               </h1>
             </div>
           </div>
