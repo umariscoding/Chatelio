@@ -66,5 +66,3 @@ userApi.interceptors.response.use(
   }
 );
 
-export default userApi;
-

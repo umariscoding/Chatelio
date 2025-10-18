@@ -252,9 +252,7 @@ const companyAuthSlice = createSlice({
 });
 
 export const { 
-  setError, 
   clearError, 
-  logout,
   updateCompanyInfo,
   loadFromStorage 
 } = companyAuthSlice.actions;

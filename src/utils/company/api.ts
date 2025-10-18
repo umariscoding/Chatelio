@@ -74,5 +74,3 @@ companyApi.interceptors.response.use(
   }
 );
 
-export default companyApi;
-

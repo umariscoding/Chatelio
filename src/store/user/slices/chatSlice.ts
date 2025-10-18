@@ -1,15 +1,10 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { 
   Chat, 
   Message, 
-  ChatListResponse, 
-  ChatHistoryResponse, 
-  SendMessageRequest, 
-  UpdateChatTitleRequest,
   StreamingState 
 } from '@/types/chat';
-import { userApi as api } from '@/utils/user/api';
 
 interface ChatState {
   chats: Chat[];
@@ -32,66 +27,6 @@ const initialState: ChatState = {
   loading: false,
   error: null,
 };
-
-// List Chats
-export const listChats = createAsyncThunk(
-  'chat/listChats',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get<ChatListResponse>('/chat/list');
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to fetch chats'
-      );
-    }
-  }
-);
-
-// Get Chat History
-export const getChatHistory = createAsyncThunk(
-  'chat/getChatHistory',
-  async (chatId: string, { rejectWithValue }) => {
-    try {
-      const response = await api.get<ChatHistoryResponse>(`/chat/history/${chatId}`);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to fetch chat history'
-      );
-    }
-  }
-);
-
-// Update Chat Title
-export const updateChatTitle = createAsyncThunk(
-  'chat/updateChatTitle',
-  async ({ chatId, title }: { chatId: string; title: string }, { rejectWithValue }) => {
-    try {
-      await api.put(`/chat/title/${chatId}`, { title });
-      return { chatId, title };
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to update chat title'
-      );
-    }
-  }
-);
-
-// Delete Chat
-export const deleteChat = createAsyncThunk(
-  'chat/deleteChat',
-  async (chatId: string, { rejectWithValue }) => {
-    try {
-      await api.delete(`/chat/${chatId}`);
-      return chatId;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to delete chat'
-      );
-    }
-  }
-);
 
 const chatSlice = createSlice({
   name: 'chat',
@@ -167,81 +102,9 @@ const chatSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {
-    // List Chats
-    builder
-      .addCase(listChats.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(listChats.fulfilled, (state, action) => {
-        state.loading = false;
-        state.chats = action.payload.chats;
-      })
-      .addCase(listChats.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Get Chat History
-    builder
-      .addCase(getChatHistory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getChatHistory.fulfilled, (state, action) => {
-        state.loading = false;
-        state.messages = action.payload.messages;
-      })
-      .addCase(getChatHistory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Update Chat Title
-    builder
-      .addCase(updateChatTitle.fulfilled, (state, action) => {
-        const { chatId, title } = action.payload;
-        const chat = state.chats.find(c => c.chat_id === chatId);
-        if (chat) {
-          chat.title = title;
-        }
-        if (state.currentChat?.chat_id === chatId) {
-          state.currentChat.title = title;
-        }
-      })
-      .addCase(updateChatTitle.rejected, (state, action) => {
-        state.error = action.payload as string;
-      });
-
-    // Delete Chat
-    builder
-      .addCase(deleteChat.fulfilled, (state, action) => {
-        const chatId = action.payload;
-        state.chats = state.chats.filter(chat => chat.chat_id !== chatId);
-        if (state.currentChat?.chat_id === chatId) {
-          state.currentChat = null;
-          state.messages = [];
-        }
-      })
-      .addCase(deleteChat.rejected, (state, action) => {
-        state.error = action.payload as string;
-      });
-  },
 });
 
 export const { 
-  setLoading, 
-  setError, 
-  clearError,
-  setCurrentChat,
-  addMessage,
-  updateMessage,
-  startStreaming,
-  appendStreamingContent,
-  stopStreaming,
-  clearMessages,
-  addOrUpdateChat,
   resetChat,
 } = chatSlice.actions;
 

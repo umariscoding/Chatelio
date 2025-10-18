@@ -24,12 +24,6 @@ export interface SendMessageRequest {
   model: 'OpenAI' | 'Claude';
 }
 
-export interface ChatStreamResponse {
-  chat_id?: string;
-  type: 'start' | 'chunk' | 'end';
-  content?: string;
-}
-
 export interface ChatHistoryResponse {
   messages: Message[];
 }

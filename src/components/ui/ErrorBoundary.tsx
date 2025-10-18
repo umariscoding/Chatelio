@@ -120,21 +120,4 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-// Functional wrapper for easier usage with hooks
-export const withErrorBoundary = <P extends object>(
-  Component: React.ComponentType<P>,
-  fallbackComponent?: ReactNode,
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
-) => {
-  const WrappedComponent = (props: P) => (
-    <ErrorBoundary fallbackComponent={fallbackComponent} onError={onError}>
-      <Component {...props} />
-    </ErrorBoundary>
-  );
-
-  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
-  return WrappedComponent;
-};
-
 export default ErrorBoundary;

@@ -58,12 +58,6 @@ const uiSlice = createSlice({
 });
 
 export const {
-  toggleSidebar,
-  setSidebarOpen,
-  setTheme,
-  setLoading,
-  addNotification,
-  removeNotification,
   resetUI,
 } = uiSlice.actions;
 

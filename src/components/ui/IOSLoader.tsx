@@ -51,30 +51,6 @@ const IOSLoader: React.FC<IOSLoaderProps> = ({
   );
 };
 
-// Full page overlay loader
-interface IOSPageLoaderProps {
-  isLoading: boolean;
-  message?: string;
-  className?: string;
-}
-
-export const IOSPageLoader: React.FC<IOSPageLoaderProps> = ({ 
-  isLoading, 
-  message = 'Loading...', 
-  className = '' 
-}) => {
-  if (!isLoading) return null;
-
-  return (
-    <div className={`fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50 ${className}`}>
-      <div className="text-center">
-        <IOSLoader size="xl" color="primary" className="mx-auto mb-4" />
-        <p className="text-text-secondary font-medium">{message}</p>
-      </div>
-    </div>
-  );
-};
-
 // Inline content loader (for sections within pages)
 interface IOSContentLoaderProps {
   isLoading: boolean;

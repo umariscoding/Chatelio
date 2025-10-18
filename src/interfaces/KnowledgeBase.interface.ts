@@ -25,24 +25,3 @@ export interface TextUploadProps {
   className?: string;
 }
 
-export interface UploadModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onFileUpload: (file: File) => void;
-  onTextUpload: (content: string, filename: string) => void;
-  loading?: boolean;
-}
-
-export interface DocumentSearchProps {
-  onSearch: (query: string) => void;
-  onFilter: (status: string) => void;
-  className?: string;
-}
-
-export interface DocumentStatsProps {
-  totalDocuments: number;
-  pendingDocuments: number;
-  completedDocuments: number;
-  failedDocuments: number;
-  className?: string;
-}

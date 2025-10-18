@@ -6,18 +6,3 @@ import type { UserRootState, UserAppDispatch } from '@/store/user';
 export const useUserAppDispatch: () => UserAppDispatch = useDispatch;
 export const useUserAppSelector: TypedUseSelectorHook<UserRootState> = useSelector;
 
-// Convenience hook for user auth
-export const useUserAuth = () => {
-  const userAuth = useUserAppSelector((state) => state.userAuth);
-  const dispatch = useUserAppDispatch();
-  
-  return {
-    user: userAuth.user,
-    tokens: userAuth.tokens,
-    isAuthenticated: userAuth.isAuthenticated,
-    loading: userAuth.loading,
-    error: userAuth.error,
-    dispatch,
-  };
-};
-

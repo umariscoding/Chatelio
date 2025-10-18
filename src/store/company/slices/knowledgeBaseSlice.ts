@@ -171,11 +171,6 @@ const knowledgeBaseSlice = createSlice({
 });
 
 export const { 
-  setLoading, 
-  setError, 
-  clearError, 
-  setUploadProgress, 
-  removeUploadProgress,
   resetKnowledgeBase 
 } = knowledgeBaseSlice.actions;
 

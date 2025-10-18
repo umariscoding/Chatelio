@@ -11,6 +11,3 @@ export interface StatsCardProps {
   loading?: boolean;
 }
 
-export interface DashboardStatsProps {
-  className?: string;
-}

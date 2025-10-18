@@ -21,64 +21,6 @@ const initialState: UserAuthState = {
   error: null,
 };
 
-// User Registration
-export const registerUser = createAsyncThunk(
-  'userAuth/register',
-  async (data: { email: string; password: string; name: string; company_id: string }, { rejectWithValue }) => {
-    try {
-      const response = await api.post('/users/register', data);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Registration failed'
-      );
-    }
-  }
-);
-
-// User Login
-export const loginUser = createAsyncThunk(
-  'userAuth/login',
-  async (data: { email: string; password: string; company_id: string }, { rejectWithValue }) => {
-    try {
-      const response = await api.post('/users/login', data);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Login failed'
-      );
-    }
-  }
-);
-
-// Verify User Token
-export const verifyUserToken = createAsyncThunk(
-  'userAuth/verify',
-  async (_, { rejectWithValue, getState }) => {
-    try {
-      const state = getState() as { userAuth: UserAuthState };
-      const token = state.userAuth.tokens?.access_token || localStorage.getItem('user_access_token');
-      
-      if (!token) {
-        throw new Error('No user token found');
-      }
-      
-      // Use axios directly to avoid API interceptor token prioritization
-      const response = await axios.get(`${API_CONFIG.BASE_URL}/auth/verify`, {
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        }
-      });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Token verification failed'
-      );
-    }
-  }
-);
-
 // Graceful User Token Verification (doesn't clear tokens on failure)
 export const verifyUserTokenGraceful = createAsyncThunk(
   'userAuth/verifyGraceful',
@@ -106,24 +48,6 @@ export const verifyUserTokenGraceful = createAsyncThunk(
         reason: error.response?.data?.detail || error.message || 'Token verification failed' 
       };
     }
-  }
-);
-
-// User Logout - Clears all user-related data 
-export const logoutUserComprehensive = createAsyncThunk(
-  'userAuth/logoutComprehensive',
-  async (_, { dispatch }) => {
-    // Clear user-related localStorage data
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('user_access_token');
-      localStorage.removeItem('user_refresh_token');
-      localStorage.removeItem('user_data');
-    }
-    
-    // Reset user-specific Redux states
-    dispatch(resetChat()); // User chat history
-    
-    return true;
   }
 );
 
@@ -192,86 +116,6 @@ const userAuthSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // User Registration
-    builder
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.tokens = action.payload.tokens;
-        state.isAuthenticated = true;
-        
-        // Store tokens and complete user data in localStorage
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('user_access_token', action.payload.tokens.access_token);
-          localStorage.setItem('user_refresh_token', action.payload.tokens.refresh_token);
-          localStorage.setItem('user_data', JSON.stringify(action.payload.user));
-        }
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // User Login
-    builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.tokens = action.payload.tokens;
-        state.isAuthenticated = true;
-        
-        // Store tokens and complete user data in localStorage
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('user_access_token', action.payload.tokens.access_token);
-          localStorage.setItem('user_refresh_token', action.payload.tokens.refresh_token);
-          localStorage.setItem('user_data', JSON.stringify(action.payload.user));
-        }
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Token Verification (strict - clears tokens on failure)
-    builder
-      .addCase(verifyUserToken.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(verifyUserToken.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = action.payload.valid;
-        if (!action.payload.valid) {
-          // Token invalid - clear everything
-          state.user = null;
-          state.tokens = null;
-          state.isAuthenticated = false;
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('user_access_token');
-            localStorage.removeItem('user_refresh_token');
-            localStorage.removeItem('user_data');
-          }
-        }
-      })
-      .addCase(verifyUserToken.rejected, (state) => {
-        state.loading = false;
-        state.user = null;
-        state.tokens = null;
-        state.isAuthenticated = false;
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('user_access_token');
-          localStorage.removeItem('user_refresh_token');
-          localStorage.removeItem('user_data');
-        }
-      });
-
     // Graceful Token Verification (doesn't clear tokens on failure)
     builder
       .addCase(verifyUserTokenGraceful.pending, (state) => {
@@ -291,27 +135,13 @@ const userAuthSlice = createSlice({
         // Don't clear tokens on graceful verification failure
         state.isAuthenticated = false;
       });
-
-    // Comprehensive User Logout
-    builder
-      .addCase(logoutUserComprehensive.fulfilled, (state) => {
-        state.user = null;
-        state.tokens = null;
-        state.isAuthenticated = false;
-        state.loading = false;
-        state.error = null;
-      });
   },
 });
 
 export const { 
-  setError, 
-  clearError, 
   logout,
   setUserData,
   loadFromStorage 
 } = userAuthSlice.actions;
-
-// Note: logoutUserComprehensive is already exported above as createAsyncThunk
 
 export default userAuthSlice.reducer;

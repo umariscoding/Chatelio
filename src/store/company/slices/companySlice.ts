@@ -167,10 +167,7 @@ const companySlice = createSlice({
 });
 
 export const { 
-  setLoading, 
-  setError, 
   clearError,
-  setPublicUrl,
   resetCompany,
 } = companySlice.actions;
 

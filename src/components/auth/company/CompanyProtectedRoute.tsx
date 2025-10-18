@@ -61,5 +61,3 @@ export const CompanyProtectedRoute: React.FC<CompanyProtectedRouteProps> = ({
   return <>{children}</>;
 };
 
-export default CompanyProtectedRoute;
-

@@ -56,32 +56,3 @@ export const FORM_VALIDATION = {
   },
 } as const;
 
-export const UI_CONSTANTS = {
-  ANIMATION_DURATION: {
-    FAST: 150,
-    NORMAL: 300,
-    SLOW: 500,
-  },
-  DEBOUNCE_DELAY: 300,
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
-  SUPPORTED_FILE_TYPES: ['.txt', '.pdf', '.doc', '.docx', '.md'],
-  CHAT_MESSAGE_LIMIT: 1000,
-  PAGINATION_LIMIT: 20,
-} as const;
-
-export const USER_ROLES = {
-  COMPANY_ADMIN: 'company',
-  USER: 'user', 
-  GUEST: 'guest',
-} as const;
-
-export const CHAT_MODELS = {
-  OPENAI: 'OpenAI',
-  CLAUDE: 'Claude',
-} as const;
-
-export const SUBSCRIPTION_PLANS = {
-  FREE: 'free',
-  PREMIUM: 'premium',
-  ENTERPRISE: 'enterprise',
-} as const;
