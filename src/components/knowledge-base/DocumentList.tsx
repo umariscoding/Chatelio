@@ -1,63 +1,76 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
-import { listDocuments, deleteDocument } from '@/store/company/slices/knowledgeBaseSlice';
-import MinimalButton from '@/components/ui/MinimalButton';
-import { Icons } from '@/components/ui';
-import type { DocumentListProps, DocumentItemProps } from '@/interfaces/KnowledgeBase.interface';
-import type { Document } from '@/types/knowledgeBase';
+import {
+  useCompanyAppSelector,
+  useCompanyAppDispatch,
+} from "@/hooks/company/useCompanyAuth";
+import {
+  listDocuments,
+  deleteDocument,
+} from "@/store/company/slices/knowledgeBaseSlice";
+import MinimalButton from "@/components/ui/MinimalButton";
+import { Icons } from "@/components/ui";
+import type {
+  DocumentListProps,
+  DocumentItemProps,
+} from "@/interfaces/KnowledgeBase.interface";
+import type { Document } from "@/types/knowledgeBase";
 
 const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
   const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const sizes = ["Bytes", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
 
 const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
-const getStatusIcon = (status: Document['embeddings_status']) => {
+const getStatusIcon = (status: Document["embeddings_status"]) => {
   switch (status) {
-    case 'completed':
+    case "completed":
       return <Icons.CheckCircle className="h-5 w-5 text-success-500" />;
-    case 'pending':
+    case "pending":
       return <Icons.Clock className="h-5 w-5 text-warning-400" />;
-    case 'failed':
+    case "failed":
       return <Icons.AlertCircle className="h-5 w-5 text-error-600" />;
     default:
       return <Icons.Clock className="h-5 w-5 text-text-tertiary" />;
   }
 };
 
-const getStatusColor = (status: Document['embeddings_status']) => {
+const getStatusColor = (status: Document["embeddings_status"]) => {
   switch (status) {
-    case 'completed':
-      return 'bg-success-100 text-success-800';
-    case 'pending':
-      return 'bg-warning-50 text-warning-700';
-    case 'failed':
-      return 'bg-error-100 text-error-800';
+    case "completed":
+      return "bg-success-100 text-success-800";
+    case "pending":
+      return "bg-warning-50 text-warning-700";
+    case "failed":
+      return "bg-error-100 text-error-800";
     default:
-      return 'bg-secondary-100 text-secondary-600';
+      return "bg-secondary-100 text-secondary-600";
   }
 };
 
-const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, className = "" }) => {
+const DocumentItem: React.FC<DocumentItemProps> = ({
+  document,
+  onDelete,
+  className = "",
+}) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this document?')) {
+    if (window.confirm("Are you sure you want to delete this document?")) {
       setIsDeleting(true);
       try {
         await onDelete(document.doc_id);
@@ -68,14 +81,19 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
   };
 
   const getFileTypeIcon = (contentType: string) => {
-    if (contentType.includes('pdf')) return <Icons.FileText className="h-6 w-6 text-error-600" />;
-    if (contentType.includes('word') || contentType.includes('document')) return <Icons.FileText className="h-6 w-6 text-primary-600" />;
-    if (contentType.includes('text')) return <Icons.Document className="h-6 w-6 text-success-600" />;
+    if (contentType.includes("pdf"))
+      return <Icons.FileText className="h-6 w-6 text-error-600" />;
+    if (contentType.includes("word") || contentType.includes("document"))
+      return <Icons.FileText className="h-6 w-6 text-primary-600" />;
+    if (contentType.includes("text"))
+      return <Icons.Document className="h-6 w-6 text-success-600" />;
     return <Icons.Document className="h-6 w-6 text-neutral-600" />;
   };
 
   return (
-    <div className={`group bg-white border border-neutral-200 rounded-2xl p-5 hover:shadow-xl hover:border-primary-200 transition-all duration-300 hover:-translate-y-1 ${className}`}>
+    <div
+      className={`group bg-white border border-neutral-200 rounded-2xl p-5 hover:shadow-xl hover:border-primary-200 transition-all duration-300 hover:-translate-y-1 ${className}`}
+    >
       {/* Header with Icon, Title and Actions */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
@@ -88,7 +106,7 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
             </h4>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <MinimalButton
             variant="outline"
@@ -101,43 +119,56 @@ const DocumentItem: React.FC<DocumentItemProps> = ({ document, onDelete, classNa
           </MinimalButton>
         </div>
       </div>
-      
+
       {/* Compact Metadata */}
       <div className="space-y-2 mb-4">
         <div className="flex items-center justify-between text-sm">
           <span className="text-neutral-500">Size</span>
-          <span className="font-medium text-neutral-700">{formatFileSize(document.file_size)}</span>
+          <span className="font-medium text-neutral-700">
+            {formatFileSize(document.file_size)}
+          </span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-neutral-500">Type</span>
-          <span className="font-medium text-neutral-700">{document.content_type.split('/')[1]?.toUpperCase() || 'FILE'}</span>
+          <span className="font-medium text-neutral-700">
+            {document.content_type.split("/")[1]?.toUpperCase() || "FILE"}
+          </span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-neutral-500">Created</span>
-          <span className="font-medium text-neutral-700">{formatDate(document.created_at)}</span>
+          <span className="font-medium text-neutral-700">
+            {formatDate(document.created_at)}
+          </span>
         </div>
       </div>
-      
+
       {/* Status Badge */}
       <div className="flex justify-center">
-        <span className={`inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full ${getStatusColor(document.embeddings_status)}`}>
-          <span className={`w-1.5 h-1.5 rounded-full mr-2 ${
-            document.embeddings_status === 'completed' ? 'bg-success-500' :
-            document.embeddings_status === 'pending' ? 'bg-warning-500' :
-            'bg-error-500'
-          }`}></span>
-          {document.embeddings_status.charAt(0).toUpperCase() + document.embeddings_status.slice(1)}
+        <span
+          className={`inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full ${getStatusColor(document.embeddings_status)}`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full mr-2 ${
+              document.embeddings_status === "completed"
+                ? "bg-success-500"
+                : document.embeddings_status === "pending"
+                  ? "bg-warning-500"
+                  : "bg-error-500"
+            }`}
+          ></span>
+          {document.embeddings_status.charAt(0).toUpperCase() +
+            document.embeddings_status.slice(1)}
         </span>
       </div>
     </div>
   );
 };
 
-
-
 const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
   const dispatch = useCompanyAppDispatch();
-  const { documents, loading, error } = useCompanyAppSelector((state) => state.knowledgeBase);
+  const { documents, loading, error } = useCompanyAppSelector(
+    (state) => state.knowledgeBase,
+  );
 
   useEffect(() => {
     dispatch(listDocuments());
@@ -154,7 +185,9 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
           <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 mb-8">
             <div className="animate-spin rounded-full h-8 w-8 border-3 border-primary-600 border-t-transparent"></div>
           </div>
-          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">Loading documents...</h3>
+          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">
+            Loading documents...
+          </h3>
           <p className="text-lg text-neutral-600">
             Please wait while we fetch your knowledge base documents.
           </p>
@@ -167,20 +200,29 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
     <div className={`${className}`}>
       {/* Header Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-neutral-900 mb-2">Your Documents</h2>
+        <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+          Your Documents
+        </h2>
         <div className="flex items-center space-x-2 text-neutral-600">
           <span className="text-lg font-medium">{documents.length}</span>
-          <span>{documents.length === 1 ? 'document' : 'documents'} in your knowledge base</span>
+          <span>
+            {documents.length === 1 ? "document" : "documents"} in your
+            knowledge base
+          </span>
         </div>
       </div>
-      
+
       {error && (
         <div className="mb-6 p-5 bg-gradient-to-r from-error-50 to-error-100 border border-error-200 rounded-2xl">
           <div className="flex items-center space-x-3">
             <div className="p-1 bg-error-200 rounded-full">
               <Icons.AlertCircle className="h-5 w-5 text-error-700" />
             </div>
-            <p className="text-sm font-medium text-error-800">{typeof error === 'string' ? error : 'An error occurred while loading documents.'}</p>
+            <p className="text-sm font-medium text-error-800">
+              {typeof error === "string"
+                ? error
+                : "An error occurred while loading documents."}
+            </p>
           </div>
         </div>
       )}
@@ -190,9 +232,12 @@ const DocumentList: React.FC<DocumentListProps> = ({ className = "" }) => {
           <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-gradient-to-br from-neutral-100 to-neutral-200 mb-8">
             <Icons.Document className="h-12 w-12 text-neutral-400" />
           </div>
-          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">No documents yet</h3>
+          <h3 className="text-2xl font-semibold text-neutral-900 mb-3">
+            No documents yet
+          </h3>
           <p className="text-lg text-neutral-600 max-w-lg mx-auto leading-relaxed">
-            Use the upload options above to start building your knowledge base. Your chatbot will use this content to provide intelligent responses.
+            Use the upload options above to start building your knowledge base.
+            Your chatbot will use this content to provide intelligent responses.
           </p>
         </div>
       ) : (

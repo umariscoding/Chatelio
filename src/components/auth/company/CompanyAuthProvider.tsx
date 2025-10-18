@@ -1,16 +1,26 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
-import { loadFromStorage, verifyCompanyToken } from '@/store/company/slices/companyAuthSlice';
+import React, { useEffect, useState } from "react";
+import {
+  useCompanyAppSelector,
+  useCompanyAppDispatch,
+} from "@/hooks/company/useCompanyAuth";
+import {
+  loadFromStorage,
+  verifyCompanyToken,
+} from "@/store/company/slices/companyAuthSlice";
 
 interface CompanyAuthProviderProps {
   children: React.ReactNode;
 }
 
-export const CompanyAuthProvider: React.FC<CompanyAuthProviderProps> = ({ children }) => {
+export const CompanyAuthProvider: React.FC<CompanyAuthProviderProps> = ({
+  children,
+}) => {
   const dispatch = useCompanyAppDispatch();
-  const { tokens, isAuthenticated } = useCompanyAppSelector((state) => state.companyAuth);
+  const { tokens, isAuthenticated } = useCompanyAppSelector(
+    (state) => state.companyAuth,
+  );
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -19,12 +29,12 @@ export const CompanyAuthProvider: React.FC<CompanyAuthProviderProps> = ({ childr
       dispatch(loadFromStorage());
 
       // If we have tokens, verify them
-      const storedToken = localStorage.getItem('company_access_token');
+      const storedToken = localStorage.getItem("company_access_token");
       if (storedToken) {
         try {
           await dispatch(verifyCompanyToken()).unwrap();
         } catch (error) {
-          console.error('Company token verification failed:', error);
+          console.error("Company token verification failed:", error);
         }
       }
 
@@ -45,4 +55,3 @@ export const CompanyAuthProvider: React.FC<CompanyAuthProviderProps> = ({ childr
 
   return <>{children}</>;
 };
-

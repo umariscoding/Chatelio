@@ -2,57 +2,56 @@
 // NEVER hardcode these values in components - always import from here
 
 export const APP_CONFIG = {
-  NAME: 'Chatelio',
-  DESCRIPTION: 'Multi-tenant chatbot platform for businesses',
-  VERSION: '1.0.0',
-  AUTHOR: 'Chatelio Team',
+  NAME: "Chatelio",
+  DESCRIPTION: "Multi-tenant chatbot platform for businesses",
+  VERSION: "1.0.0",
+  AUTHOR: "Chatelio Team",
 } as const;
 
 export const ROUTES = {
-  HOME: '/',
-  
+  HOME: "/",
+
   // Company auth routes (only companies can access these directly)
-  COMPANY_LOGIN: '/company/auth',
-  COMPANY_REGISTER: '/company/auth',
-  
+  COMPANY_LOGIN: "/company/auth",
+  COMPANY_REGISTER: "/company/auth",
+
   // Dashboard routes
-  DASHBOARD: '/dashboard',
-  PROFILE: '/profile',
-  SETTINGS: '/settings',
-  
+  DASHBOARD: "/dashboard",
+  PROFILE: "/profile",
+  SETTINGS: "/settings",
+
   // Chat routes
-  CHAT: '/chat',
-  CHAT_DETAIL: '/chat/[chatId]',
-  
+  CHAT: "/chat",
+  CHAT_DETAIL: "/chat/[chatId]",
+
   // Knowledge Base routes
-  KNOWLEDGE_BASE: '/knowledge-base',
-  KNOWLEDGE_BASE_UPLOAD: '/knowledge-base/upload',
-  
+  KNOWLEDGE_BASE: "/knowledge-base",
+  KNOWLEDGE_BASE_UPLOAD: "/knowledge-base/upload",
+
   // Public routes
-  PUBLIC_CHATBOT: '/[slug]',
-  PUBLIC_CHAT: '/[slug]/chat',
+  PUBLIC_CHATBOT: "/[slug]",
+  PUBLIC_CHAT: "/[slug]/chat",
 } as const;
 
 export const FORM_VALIDATION = {
   EMAIL: {
-    REQUIRED: 'Email is required',
-    INVALID: 'Please enter a valid email address',
+    REQUIRED: "Email is required",
+    INVALID: "Please enter a valid email address",
     MAX_LENGTH: 255,
   },
   PASSWORD: {
-    REQUIRED: 'Password is required',
+    REQUIRED: "Password is required",
     MIN_LENGTH: 8,
-    WEAK: 'Password must contain at least 8 characters, including uppercase, lowercase, and numbers',
+    WEAK: "Password must contain at least 8 characters, including uppercase, lowercase, and numbers",
   },
   NAME: {
-    REQUIRED: 'Name is required',
+    REQUIRED: "Name is required",
     MIN_LENGTH: 2,
     MAX_LENGTH: 100,
   },
   COMPANY_NAME: {
-    REQUIRED: 'Company name is required',
+    REQUIRED: "Company name is required",
     MIN_LENGTH: 2,
     MAX_LENGTH: 100,
   },
 } as const;
-

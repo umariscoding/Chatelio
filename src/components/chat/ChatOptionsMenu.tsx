@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import Modal from '@/components/ui/Modal';
-import MinimalInput from '@/components/ui/MinimalInput';
-import MinimalButton from '@/components/ui/MinimalButton';
-import { Icons } from '@/components/ui';
+import React, { useState, useRef, useEffect } from "react";
+import Modal from "@/components/ui/Modal";
+import MinimalInput from "@/components/ui/MinimalInput";
+import MinimalButton from "@/components/ui/MinimalButton";
+import { Icons } from "@/components/ui";
 
 interface ChatOptionsMenuProps {
   chatId: string;
@@ -17,7 +17,7 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
   chatId,
   currentTitle,
   onRename,
-  onDelete
+  onDelete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
@@ -30,28 +30,32 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
   // Handle click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen]);
 
   const handleRename = async () => {
     if (!newTitle.trim()) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await onRename(chatId, newTitle.trim());
       setShowRenameModal(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to rename chat');
+      setError(err instanceof Error ? err.message : "Failed to rename chat");
     } finally {
       setIsLoading(false);
     }
@@ -60,20 +64,20 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
   const handleDelete = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await onDelete(chatId);
       setShowDeleteModal(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete chat');
+      setError(err instanceof Error ? err.message : "Failed to delete chat");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleMenuClick = (action: 'rename' | 'delete') => {
+  const handleMenuClick = (action: "rename" | "delete") => {
     setIsOpen(false);
-    if (action === 'rename') {
+    if (action === "rename") {
       setNewTitle(currentTitle);
       setShowRenameModal(true);
     } else {
@@ -97,14 +101,14 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
         {isOpen && (
           <div className="absolute right-0 top-8 z-50 min-w-[140px] bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl py-1">
             <button
-              onClick={() => handleMenuClick('rename')}
+              onClick={() => handleMenuClick("rename")}
               className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 transition-colors flex items-center gap-2"
             >
               <Icons.Edit className="w-3.5 h-3.5" />
               Rename
             </button>
             <button
-              onClick={() => handleMenuClick('delete')}
+              onClick={() => handleMenuClick("delete")}
               className="w-full px-3 py-2 text-left text-sm text-red-400 hover:text-red-300 hover:bg-zinc-700 transition-colors flex items-center gap-2"
             >
               <Icons.Trash className="w-3.5 h-3.5" />
@@ -126,18 +130,16 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
         >
           <div className="px-2 py-4">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-bold text-zinc-100">
-                Rename Chat
-              </h2>
+              <h2 className="text-xl font-bold text-zinc-100">Rename Chat</h2>
             </div>
-            
+
             <div className="space-y-4">
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
                   <p className="text-red-400 text-sm font-medium">{error}</p>
                 </div>
               )}
-              
+
               <MinimalInput
                 label="Chat Title"
                 value={newTitle}
@@ -145,7 +147,7 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
                 variant="floating"
                 required
               />
-              
+
               <div className="flex justify-end space-x-2 pt-4">
                 <MinimalButton
                   onClick={() => setShowRenameModal(false)}
@@ -179,21 +181,20 @@ const ChatOptionsMenu: React.FC<ChatOptionsMenuProps> = ({
         >
           <div className="px-2 py-4">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-bold text-zinc-100">
-                Delete Chat
-              </h2>
+              <h2 className="text-xl font-bold text-zinc-100">Delete Chat</h2>
               <p className="text-zinc-400 text-sm mt-2">
-                Are you sure you want to delete this chat? This action cannot be undone.
+                Are you sure you want to delete this chat? This action cannot be
+                undone.
               </p>
             </div>
-            
+
             <div className="space-y-4">
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
                   <p className="text-red-400 text-sm font-medium">{error}</p>
                 </div>
               )}
-              
+
               <div className="flex justify-end space-x-2 pt-2">
                 <MinimalButton
                   onClick={() => setShowDeleteModal(false)}

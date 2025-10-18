@@ -1,14 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { useCompanyAppSelector, useCompanyAppDispatch } from '@/hooks/company/useCompanyAuth';
-import { logoutCompanyComprehensive } from '@/store/company/slices/companyAuthSlice';
-import { Icons } from '@/components/ui';
-import MinimalButton from '@/components/ui/MinimalButton';
-import IOSLoader from '@/components/ui/IOSLoader';
-import type { HeaderProps } from '@/interfaces/Header.interface';
+import {
+  useCompanyAppSelector,
+  useCompanyAppDispatch,
+} from "@/hooks/company/useCompanyAuth";
+import { logoutCompanyComprehensive } from "@/store/company/slices/companyAuthSlice";
+import { Icons } from "@/components/ui";
+import MinimalButton from "@/components/ui/MinimalButton";
+import IOSLoader from "@/components/ui/IOSLoader";
+import type { HeaderProps } from "@/interfaces/Header.interface";
 
 const LogoutButton: React.FC = () => {
   const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
@@ -21,9 +24,9 @@ const LogoutButton: React.FC = () => {
     try {
       // Company logout: Clear company data (knowledge base, analytics, etc.)
       await dispatch(logoutCompanyComprehensive());
-      router.push('/company/login');
+      router.push("/company/login");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     } finally {
       setIsLoggingOut(false);
     }
@@ -38,7 +41,7 @@ const LogoutButton: React.FC = () => {
       className="text-text-secondary border-border-light hover:border-primary-600 hover:bg-primary-600/10 hover:text-primary-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
     >
       {isLoggingOut ? (
-          <IOSLoader size="sm" color="primary" className="mr-2" />
+        <IOSLoader size="sm" color="primary" className="mr-2" />
       ) : (
         <>
           <Icons.Logout className="h-4 w-4 mr-2" />
@@ -49,10 +52,10 @@ const LogoutButton: React.FC = () => {
   );
 };
 
-const Header: React.FC<HeaderProps> = ({ 
-  className = "", 
+const Header: React.FC<HeaderProps> = ({
+  className = "",
   onMenuToggle,
-  showMobileMenuButton = true 
+  showMobileMenuButton = true,
 }) => {
   const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
 
@@ -60,13 +63,15 @@ const Header: React.FC<HeaderProps> = ({
   const getFirstName = () => {
     if (companyAuth.isAuthenticated && companyAuth.company?.name) {
       // Extract first word from company name
-      return companyAuth.company.name.split(' ')[0];
+      return companyAuth.company.name.split(" ")[0];
     }
-    return 'Company';
+    return "Company";
   };
 
   return (
-    <header className={`bg-bg-primary shadow-sm border-b border-border-light ${className}`}>
+    <header
+      className={`bg-bg-primary shadow-sm border-b border-border-light ${className}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -80,11 +85,14 @@ const Header: React.FC<HeaderProps> = ({
             )}
             <div className="flex-shrink-0 ml-4 md:ml-0">
               <h1 className="text-xl font-semibold text-text-primary">
-                Hi, <span className="text-primary-600 font-bold">{getFirstName()}</span>
+                Hi,{" "}
+                <span className="text-primary-600 font-bold">
+                  {getFirstName()}
+                </span>
               </h1>
             </div>
           </div>
-          
+
           <div className="flex items-center">
             <LogoutButton />
           </div>

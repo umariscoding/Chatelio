@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
-import { useCompanyAppSelector } from '@/hooks/company/useCompanyAuth';
-import { Icons, IOSContentLoader } from '@/components/ui';
+import { useCompanyAppSelector } from "@/hooks/company/useCompanyAuth";
+import { Icons, IOSContentLoader } from "@/components/ui";
 
 export default function ProfilePage() {
   const companyAuth = useCompanyAppSelector((state) => state.companyAuth);
@@ -11,8 +11,8 @@ export default function ProfilePage() {
   // Company profile page
   const isCompanyUser = companyAuth.isAuthenticated;
   const isLoading = companyAuth.loading;
-  
-  const displayName = companyAuth.company?.name || 'Company';
+
+  const displayName = companyAuth.company?.name || "Company";
 
   if (isLoading) {
     return <IOSContentLoader isLoading={true} message="Loading profile..." />;
@@ -30,9 +30,11 @@ export default function ProfilePage() {
               </div>
               <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-success-500 rounded-full border-3 border-white"></div>
             </div>
-            <h1 className="text-4xl font-bold text-neutral-900 mb-2">Profile</h1>
+            <h1 className="text-4xl font-bold text-neutral-900 mb-2">
+              Profile
+            </h1>
             <p className="text-lg text-neutral-600">
-              Your {isCompanyUser ? 'company' : 'account'} information
+              Your {isCompanyUser ? "company" : "account"} information
             </p>
           </div>
 
@@ -46,14 +48,14 @@ export default function ProfilePage() {
                     <Icons.User className="h-4 w-4 text-primary-600" />
                   </div>
                   <label className="text-sm font-semibold text-neutral-700">
-                    {isCompanyUser ? 'Company Name' : 'Full Name'}
+                    {isCompanyUser ? "Company Name" : "Full Name"}
                   </label>
                 </div>
                 <div className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl p-4 border border-neutral-200 group-hover:shadow-sm transition-shadow">
                   <p className="text-neutral-900 font-medium">{displayName}</p>
                 </div>
               </div>
-              
+
               {/* Email Field */}
               <div className="group">
                 <div className="flex items-center space-x-2 mb-3">
@@ -92,7 +94,7 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ export interface Document {
   filename: string;
   content_type: string;
   file_size: number;
-  embeddings_status: 'pending' | 'failed' | 'completed';
+  embeddings_status: "pending" | "failed" | "completed";
   created_at: string;
 }
 

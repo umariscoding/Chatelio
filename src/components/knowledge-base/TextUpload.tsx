@@ -1,35 +1,37 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import Button from '@/components/ui/Button';
-import MinimalInput from '@/components/ui/MinimalInput';
-import { Icons } from '@/components/ui';
-import type { TextUploadProps } from '@/interfaces/KnowledgeBase.interface';
+import Button from "@/components/ui/Button";
+import MinimalInput from "@/components/ui/MinimalInput";
+import { Icons } from "@/components/ui";
+import type { TextUploadProps } from "@/interfaces/KnowledgeBase.interface";
 
 const TextUpload: React.FC<TextUploadProps> = ({
   onUpload,
   loading = false,
   className = "",
 }) => {
-  const [filename, setFilename] = useState('');
-  const [content, setContent] = useState('');
-  const [errors, setErrors] = useState<{ filename?: string; content?: string }>({});
+  const [filename, setFilename] = useState("");
+  const [content, setContent] = useState("");
+  const [errors, setErrors] = useState<{ filename?: string; content?: string }>(
+    {},
+  );
 
   const validateForm = (): boolean => {
     const newErrors: { filename?: string; content?: string } = {};
 
     if (!filename.trim()) {
-      newErrors.filename = 'Filename is required';
-    } else if (!filename.endsWith('.txt') && !filename.includes('.')) {
+      newErrors.filename = "Filename is required";
+    } else if (!filename.endsWith(".txt") && !filename.includes(".")) {
       // Auto-add .txt extension if no extension provided
-      setFilename(prev => prev + '.txt');
+      setFilename((prev) => prev + ".txt");
     }
 
     if (!content.trim()) {
-      newErrors.content = 'Content is required';
+      newErrors.content = "Content is required";
     } else if (content.trim().length < 10) {
-      newErrors.content = 'Content must be at least 10 characters long';
+      newErrors.content = "Content must be at least 10 characters long";
     }
 
     setErrors(newErrors);
@@ -38,12 +40,12 @@ const TextUpload: React.FC<TextUploadProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onUpload(content.trim(), filename.trim());
       // Reset form after successful upload
-      setFilename('');
-      setContent('');
+      setFilename("");
+      setContent("");
       setErrors({});
     }
   };
@@ -51,18 +53,21 @@ const TextUpload: React.FC<TextUploadProps> = ({
   const handleFilenameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilename(e.target.value);
     if (errors.filename) {
-      setErrors(prev => ({ ...prev, filename: undefined }));
+      setErrors((prev) => ({ ...prev, filename: undefined }));
     }
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
     if (errors.content) {
-      setErrors(prev => ({ ...prev, content: undefined }));
+      setErrors((prev) => ({ ...prev, content: undefined }));
     }
   };
 
-  const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+  const wordCount = content
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
   const charCount = content.length;
 
   return (
@@ -94,7 +99,9 @@ const TextUpload: React.FC<TextUploadProps> = ({
             variant="floating"
             theme="light"
           />
-          <p className="mt-1 text-sm text-secondary-300">Enter a descriptive filename for your content</p>
+          <p className="mt-1 text-sm text-secondary-300">
+            Enter a descriptive filename for your content
+          </p>
         </div>
 
         {/* Content Textarea */}
@@ -108,7 +115,7 @@ const TextUpload: React.FC<TextUploadProps> = ({
             placeholder="Paste or type your content here..."
             rows={12}
             className={`w-full rounded-md border border-secondary-700 bg-secondary-900 text-secondary-100 placeholder-secondary-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed ${
-              errors.content ? 'border-error-500 focus:ring-error-500' : ''
+              errors.content ? "border-error-500 focus:ring-error-500" : ""
             }`}
             disabled={loading}
             required
@@ -116,7 +123,7 @@ const TextUpload: React.FC<TextUploadProps> = ({
           {errors.content && (
             <p className="mt-1 text-sm text-error-600">{errors.content}</p>
           )}
-          
+
           {/* Character and Word Count */}
           <div className="mt-2 flex justify-between text-xs text-secondary-300">
             <span>{wordCount} words</span>
@@ -138,7 +145,9 @@ const TextUpload: React.FC<TextUploadProps> = ({
 
       {/* Tips */}
       <div className="bg-primary-900 border border-primary-700 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-primary-200 mb-2">Tips for better results:</h4>
+        <h4 className="text-sm font-medium text-primary-200 mb-2">
+          Tips for better results:
+        </h4>
         <ul className="text-sm text-primary-300 space-y-1">
           <li>• Use clear, descriptive filenames</li>
           <li>• Include relevant context and details</li>

@@ -1,4 +1,4 @@
-import type { UserType } from '@/types/auth';
+import type { UserType } from "@/types/auth";
 
 export interface SidebarProps {
   className?: string;

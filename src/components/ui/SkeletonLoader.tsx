@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface SkeletonProps {
   className?: string;
@@ -11,23 +11,23 @@ interface SkeletonProps {
 }
 
 const Skeleton: React.FC<SkeletonProps> = ({
-  className = '',
-  width = '100%',
-  height = '1rem',
+  className = "",
+  width = "100%",
+  height = "1rem",
   rounded = false,
   animate = true,
 }) => {
-  const baseClasses = 'bg-secondary-200';
-  const animationClasses = animate ? 'animate-pulse' : '';
-  const roundedClasses = rounded ? 'rounded-full' : 'rounded';
-  
+  const baseClasses = "bg-secondary-200";
+  const animationClasses = animate ? "animate-pulse" : "";
+  const roundedClasses = rounded ? "rounded-full" : "rounded";
+
   const style = {
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
   };
 
   return (
-    <div 
+    <div
       className={`${baseClasses} ${animationClasses} ${roundedClasses} ${className}`}
       style={style}
     />

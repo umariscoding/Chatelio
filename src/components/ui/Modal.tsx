@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Icons } from '@/components/ui';
+import React from "react";
+import { Icons } from "@/components/ui";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'custom';
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "custom";
   customWidth?: string;
-  theme?: 'light' | 'dark' | 'auth';
+  theme?: "light" | "dark" | "auth";
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -18,38 +18,38 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  maxWidth = 'md',
+  maxWidth = "md",
   customWidth,
-  theme = 'light',
+  theme = "light",
 }) => {
   if (!isOpen) return null;
 
   const maxWidthClasses = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    custom: customWidth || 'max-w-md',
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    custom: customWidth || "max-w-md",
   };
 
   const themeClasses = {
     light: {
-      background: 'bg-secondary-50',
-      text: 'text-secondary-900',
-      closeButton: 'text-secondary-600 hover:text-secondary-900',
-      closeButtonBg: 'bg-secondary-50',
+      background: "bg-secondary-50",
+      text: "text-secondary-900",
+      closeButton: "text-secondary-600 hover:text-secondary-900",
+      closeButtonBg: "bg-secondary-50",
     },
     dark: {
-      background: 'bg-secondary-900',
-      text: 'text-secondary-50',
-      closeButton: 'text-secondary-600 hover:text-secondary-500',
-      closeButtonBg: 'bg-transparent',
+      background: "bg-secondary-900",
+      text: "text-secondary-50",
+      closeButton: "text-secondary-600 hover:text-secondary-500",
+      closeButtonBg: "bg-transparent",
     },
     auth: {
-      background: 'bg-auth-950',
-      text: 'text-auth-100',
-      closeButton: 'text-auth-400 hover:text-auth-300',
-      closeButtonBg: 'bg-transparent',
+      background: "bg-auth-950",
+      text: "text-auth-100",
+      closeButton: "text-auth-400 hover:text-auth-300",
+      closeButtonBg: "bg-transparent",
     },
   };
 
@@ -62,25 +62,27 @@ const Modal: React.FC<ModalProps> = ({
           className="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
           onClick={onClose}
         ></div>
-        
-        <div 
+
+        <div
           className={`
             relative transform overflow-hidden rounded-3xl ${currentTheme.background} 
             px-6 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full 
-            ${maxWidthClasses[maxWidth]} sm:px-8 sm:py-6 border ${theme === 'light' ? 'border-secondary-200' : theme === 'auth' ? 'border-auth-800' : 'border-secondary-800'}
+            ${maxWidthClasses[maxWidth]} sm:px-8 sm:py-6 border ${theme === "light" ? "border-secondary-200" : theme === "auth" ? "border-auth-800" : "border-secondary-800"}
           `}
-          style={{ 
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          style={{
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
           }}
         >
           {title && (
             <div className="mb-4">
-              <h3 className={`text-lg font-medium leading-6 ${currentTheme.text}`}>
+              <h3
+                className={`text-lg font-medium leading-6 ${currentTheme.text}`}
+              >
                 {title}
               </h3>
             </div>
           )}
-          
+
           <div className="absolute right-0 top-0 pr-4 pt-4">
             <button
               type="button"
@@ -91,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({
               <Icons.Close className="h-5 w-5 opacity-50" />
             </button>
           </div>
-          
+
           {children}
         </div>
       </div>

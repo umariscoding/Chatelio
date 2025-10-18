@@ -1,10 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { 
-  Chat, 
-  Message, 
-  StreamingState 
-} from '@/types/chat';
+import type { Chat, Message, StreamingState } from "@/types/chat";
 
 interface ChatState {
   chats: Chat[];
@@ -22,14 +18,14 @@ const initialState: ChatState = {
   streaming: {
     isStreaming: false,
     currentChatId: undefined,
-    streamingMessage: '',
+    streamingMessage: "",
   },
   loading: false,
   error: null,
 };
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -50,8 +46,11 @@ const chatSlice = createSlice({
     addMessage: (state, action: PayloadAction<Message>) => {
       state.messages.push(action.payload);
     },
-    updateMessage: (state, action: PayloadAction<{ id: string; content: string }>) => {
-      const message = state.messages.find(m => m.id === action.payload.id);
+    updateMessage: (
+      state,
+      action: PayloadAction<{ id: string; content: string }>,
+    ) => {
+      const message = state.messages.find((m) => m.id === action.payload.id);
       if (message) {
         message.content = action.payload.content;
       }
@@ -59,7 +58,7 @@ const chatSlice = createSlice({
     startStreaming: (state, action: PayloadAction<{ chatId?: string }>) => {
       state.streaming.isStreaming = true;
       state.streaming.currentChatId = action.payload.chatId;
-      state.streaming.streamingMessage = '';
+      state.streaming.streamingMessage = "";
     },
     appendStreamingContent: (state, action: PayloadAction<string>) => {
       state.streaming.streamingMessage += action.payload;
@@ -69,20 +68,22 @@ const chatSlice = createSlice({
       if (state.streaming.streamingMessage) {
         state.messages.push({
           id: `msg-${Date.now()}`,
-          role: 'ai',
+          role: "ai",
           content: state.streaming.streamingMessage,
           timestamp: Date.now(),
         });
       }
       state.streaming.isStreaming = false;
       state.streaming.currentChatId = undefined;
-      state.streaming.streamingMessage = '';
+      state.streaming.streamingMessage = "";
     },
     clearMessages: (state) => {
       state.messages = [];
     },
     addOrUpdateChat: (state, action: PayloadAction<Chat>) => {
-      const existingIndex = state.chats.findIndex(chat => chat.chat_id === action.payload.chat_id);
+      const existingIndex = state.chats.findIndex(
+        (chat) => chat.chat_id === action.payload.chat_id,
+      );
       if (existingIndex >= 0) {
         state.chats[existingIndex] = action.payload;
       } else {
@@ -96,7 +97,7 @@ const chatSlice = createSlice({
       state.streaming = {
         isStreaming: false,
         currentChatId: undefined,
-        streamingMessage: '',
+        streamingMessage: "",
       };
       state.loading = false;
       state.error = null;
@@ -104,8 +105,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const { 
-  resetChat,
-} = chatSlice.actions;
+export const { resetChat } = chatSlice.actions;
 
 export default chatSlice.reducer;

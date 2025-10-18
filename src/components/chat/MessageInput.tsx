@@ -34,7 +34,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         }
       }
     },
-    [message, selectedModel, onSendMessage, loading, disabled]
+    [message, selectedModel, onSendMessage, loading, disabled],
   );
 
   const handleKeyDown = useCallback(
@@ -44,7 +44,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         handleSubmit(e);
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   const handleInputChange = useCallback(
@@ -62,18 +62,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
       const minSingleLineHeight = 40; // Initial height from style
       setIsMultiline(newHeight > minSingleLineHeight);
     },
-    []
+    [],
   );
 
   return (
     <div className={`w-full ${className}`}>
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Message Input Container - Floating with black theme */}
-         <div
-           className={`relative flex items-center bg-zinc-900/40 backdrop-blur-xl p-3 border border-zinc-600/50 focus-within:border-zinc-500/80 focus-within:bg-zinc-800/50 focus-within:shadow-lg focus-within:shadow-zinc-500/20 transition-all shadow-2xl shadow-zinc-700/30 ring-1 ring-zinc-600/20 ${
-             isMultiline ? "rounded-3xl" : "rounded-full"
-           }`}
-         >
+        <div
+          className={`relative flex items-center bg-zinc-900/40 backdrop-blur-xl p-3 border border-zinc-600/50 focus-within:border-zinc-500/80 focus-within:bg-zinc-800/50 focus-within:shadow-lg focus-within:shadow-zinc-500/20 transition-all shadow-2xl shadow-zinc-700/30 ring-1 ring-zinc-600/20 ${
+            isMultiline ? "rounded-3xl" : "rounded-full"
+          }`}
+        >
           <div className="flex-1 flex items-center">
             <textarea
               ref={textareaRef}
@@ -94,11 +94,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
             />
           </div>
 
-           <button
-             type="submit"
-             disabled={!message.trim() || loading || disabled}
-             className="flex-shrink-0 w-8 h-8 bg-zinc-700/60 backdrop-blur-sm hover:bg-zinc-600/70 hover:shadow-md hover:shadow-zinc-400/20 disabled:bg-zinc-900/30 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-500/30 hover:border-zinc-400/50"
-           >
+          <button
+            type="submit"
+            disabled={!message.trim() || loading || disabled}
+            className="flex-shrink-0 w-8 h-8 bg-zinc-700/60 backdrop-blur-sm hover:bg-zinc-600/70 hover:shadow-md hover:shadow-zinc-400/20 disabled:bg-zinc-900/30 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-500/30 hover:border-zinc-400/50"
+          >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (

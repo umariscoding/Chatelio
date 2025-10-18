@@ -1,9 +1,9 @@
 // User-specific Redux store configuration
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-import userAuthSlice from './slices/userAuthSlice';
-import chatSlice from './slices/chatSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import userAuthSlice from "./slices/userAuthSlice";
+import chatSlice from "./slices/chatSlice";
 
 // Create a noop storage for server-side rendering
 const createNoopStorage = () => {
@@ -21,15 +21,16 @@ const createNoopStorage = () => {
 };
 
 // Use proper storage based on environment
-const storage = typeof window !== 'undefined' 
-  ? createWebStorage('local') 
-  : createNoopStorage();
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 const persistConfig = {
-  key: 'user',
+  key: "user",
   storage,
-  whitelist: ['userAuth'], // Only persist auth data
-  blacklist: ['chat'], // Don't persist chat (loaded from API)
+  whitelist: ["userAuth"], // Only persist auth data
+  blacklist: ["chat"], // Don't persist chat (loaded from API)
 };
 
 const rootReducer = combineReducers({
@@ -44,9 +45,9 @@ export const userStore = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-        ignoredActionsPaths: ['meta.arg', 'payload.timestamp'],
-        ignoredPaths: ['_persist'],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        ignoredActionsPaths: ["meta.arg", "payload.timestamp"],
+        ignoredPaths: ["_persist"],
       },
     }),
 });
@@ -55,4 +56,3 @@ export const userPersistor = persistStore(userStore);
 
 export type UserRootState = ReturnType<typeof userStore.getState>;
 export type UserAppDispatch = typeof userStore.dispatch;
-

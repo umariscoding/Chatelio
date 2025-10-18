@@ -1,13 +1,13 @@
 // UI slice for managing UI state
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   sidebarOpen: boolean;
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   loading: Record<string, boolean>;
   notifications: Array<{
     id: string;
-    type: 'success' | 'error' | 'warning' | 'info';
+    type: "success" | "error" | "warning" | "info";
     message: string;
     timestamp: number;
   }>;
@@ -15,13 +15,13 @@ interface UIState {
 
 const initialState: UIState = {
   sidebarOpen: true,
-  theme: 'light',
+  theme: "light",
   loading: {},
   notifications: [],
 };
 
 const uiSlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
     toggleSidebar: (state) => {
@@ -30,14 +30,22 @@ const uiSlice = createSlice({
     setSidebarOpen: (state, action: PayloadAction<boolean>) => {
       state.sidebarOpen = action.payload;
     },
-    setTheme: (state, action: PayloadAction<'light' | 'dark'>) => {
+    setTheme: (state, action: PayloadAction<"light" | "dark">) => {
       state.theme = action.payload;
     },
-    setLoading: (state, action: PayloadAction<{ key: string; loading: boolean }>) => {
+    setLoading: (
+      state,
+      action: PayloadAction<{ key: string; loading: boolean }>,
+    ) => {
       const { key, loading } = action.payload;
       state.loading[key] = loading;
     },
-    addNotification: (state, action: PayloadAction<Omit<UIState['notifications'][0], 'id' | 'timestamp'>>) => {
+    addNotification: (
+      state,
+      action: PayloadAction<
+        Omit<UIState["notifications"][0], "id" | "timestamp">
+      >,
+    ) => {
       const notification = {
         ...action.payload,
         id: Date.now().toString(),
@@ -46,19 +54,19 @@ const uiSlice = createSlice({
       state.notifications.push(notification);
     },
     removeNotification: (state, action: PayloadAction<string>) => {
-      state.notifications = state.notifications.filter(n => n.id !== action.payload);
+      state.notifications = state.notifications.filter(
+        (n) => n.id !== action.payload,
+      );
     },
     resetUI: (state) => {
       state.sidebarOpen = true;
-      state.theme = 'light';
+      state.theme = "light";
       state.loading = {};
       state.notifications = [];
     },
   },
 });
 
-export const {
-  resetUI,
-} = uiSlice.actions;
+export const { resetUI } = uiSlice.actions;
 
 export default uiSlice.reducer;

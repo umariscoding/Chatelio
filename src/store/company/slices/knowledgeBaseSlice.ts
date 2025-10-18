@@ -1,7 +1,12 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import type { Document, DocumentListResponse, UploadTextRequest, DocumentUploadResponse } from '@/types/knowledgeBase';
-import { companyApi as api } from '@/utils/company/api';
+import type {
+  Document,
+  DocumentListResponse,
+  UploadTextRequest,
+  DocumentUploadResponse,
+} from "@/types/knowledgeBase";
+import { companyApi as api } from "@/utils/company/api";
 
 interface KnowledgeBaseState {
   documents: Document[];
@@ -19,73 +24,88 @@ const initialState: KnowledgeBaseState = {
 
 // List Documents
 export const listDocuments = createAsyncThunk(
-  'knowledgeBase/listDocuments',
+  "knowledgeBase/listDocuments",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<DocumentListResponse>('/chat/documents');
+      const response = await api.get<DocumentListResponse>("/chat/documents");
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to fetch documents'
+        error.response?.data?.detail ||
+          error.message ||
+          "Failed to fetch documents",
       );
     }
-  }
+  },
 );
 
 // Upload Text Content
 export const uploadText = createAsyncThunk(
-  'knowledgeBase/uploadText',
+  "knowledgeBase/uploadText",
   async (data: UploadTextRequest, { rejectWithValue }) => {
     try {
-      const response = await api.post<DocumentUploadResponse>('/chat/upload-text', data);
+      const response = await api.post<DocumentUploadResponse>(
+        "/chat/upload-text",
+        data,
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to upload text'
+        error.response?.data?.detail ||
+          error.message ||
+          "Failed to upload text",
       );
     }
-  }
+  },
 );
 
 // Upload File
 export const uploadFile = createAsyncThunk(
-  'knowledgeBase/uploadFile',
+  "knowledgeBase/uploadFile",
   async (file: File, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
-      const response = await api.post<DocumentUploadResponse>('/chat/upload-document', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await api.post<DocumentUploadResponse>(
+        "/chat/upload-document",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to upload file'
+        error.response?.data?.detail ||
+          error.message ||
+          "Failed to upload file",
       );
     }
-  }
+  },
 );
 
 // Delete Document
 export const deleteDocument = createAsyncThunk(
-  'knowledgeBase/deleteDocument',
+  "knowledgeBase/deleteDocument",
   async (docId: string, { rejectWithValue }) => {
     try {
       await api.delete(`/chat/documents/${docId}`);
       return docId;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Failed to delete document'
+        error.response?.data?.detail ||
+          error.message ||
+          "Failed to delete document",
       );
     }
-  }
+  },
 );
 
 const knowledgeBaseSlice = createSlice({
-  name: 'knowledgeBase',
+  name: "knowledgeBase",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -97,7 +117,10 @@ const knowledgeBaseSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setUploadProgress: (state, action: PayloadAction<{ id: string; progress: number }>) => {
+    setUploadProgress: (
+      state,
+      action: PayloadAction<{ id: string; progress: number }>,
+    ) => {
       state.uploadProgress[action.payload.id] = action.payload.progress;
     },
     removeUploadProgress: (state, action: PayloadAction<string>) => {
@@ -162,7 +185,9 @@ const knowledgeBaseSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteDocument.fulfilled, (state, action) => {
-        state.documents = state.documents.filter(doc => doc.doc_id !== action.payload);
+        state.documents = state.documents.filter(
+          (doc) => doc.doc_id !== action.payload,
+        );
       })
       .addCase(deleteDocument.rejected, (state, action) => {
         state.error = action.payload as string;
@@ -170,8 +195,6 @@ const knowledgeBaseSlice = createSlice({
   },
 });
 
-export const { 
-  resetKnowledgeBase 
-} = knowledgeBaseSlice.actions;
+export const { resetKnowledgeBase } = knowledgeBaseSlice.actions;
 
 export default knowledgeBaseSlice.reducer;

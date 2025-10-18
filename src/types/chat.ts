@@ -1,7 +1,7 @@
 // Chat related types
 export interface Message {
   id?: string;
-  role: 'human' | 'ai';
+  role: "human" | "ai";
   content: string;
   timestamp: number;
   loading?: boolean;
@@ -21,7 +21,7 @@ export interface SendMessageRequest {
   message: string;
   chat_id?: string;
   chat_title?: string;
-  model: 'OpenAI' | 'Claude';
+  model: "OpenAI" | "Claude";
 }
 
 export interface ChatHistoryResponse {
@@ -42,4 +42,4 @@ export interface StreamingState {
   streamingMessage: string;
 }
 
-export type ModelType = 'OpenAI' | 'Claude';
+export type ModelType = "OpenAI" | "Claude";

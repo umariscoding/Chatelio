@@ -1,17 +1,20 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import { useCompanyAnalytics } from '@/hooks/company/useCompanyAnalytics';
-import StatsCard from '@/components/dashboard/StatsCard';
-import MessagesChart from './MessagesChart';
-import ChatsChart from './ChatsChart';
-import { Icons } from '@/components/ui';
-import Card from '@/components/ui/Card';
-import type { DashboardAnalyticsProps } from '@/interfaces/Analytics.interface';
+import { useCompanyAnalytics } from "@/hooks/company/useCompanyAnalytics";
+import StatsCard from "@/components/dashboard/StatsCard";
+import MessagesChart from "./MessagesChart";
+import ChatsChart from "./ChatsChart";
+import { Icons } from "@/components/ui";
+import Card from "@/components/ui/Card";
+import type { DashboardAnalyticsProps } from "@/interfaces/Analytics.interface";
 
-const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" }) => {
-  const { dashboard, loading, error, loadDashboardAnalytics } = useCompanyAnalytics();
+const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({
+  className = "",
+}) => {
+  const { dashboard, loading, error, loadDashboardAnalytics } =
+    useCompanyAnalytics();
 
   useEffect(() => {
     loadDashboardAnalytics();
@@ -27,8 +30,12 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
           <h3 className="text-lg font-semibold text-text-primary mb-2">
             Failed to Load Analytics
           </h3>
-          <p className="text-text-secondary mb-4">{typeof error === 'string' ? error : 'An error occurred while loading analytics.'}</p>
-          <button 
+          <p className="text-text-secondary mb-4">
+            {typeof error === "string"
+              ? error
+              : "An error occurred while loading analytics."}
+          </p>
+          <button
             onClick={() => loadDashboardAnalytics()}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
@@ -51,22 +58,31 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
                 <Icons.MessageCircle className="h-5 w-5 text-white" />
               </div>
               {!loading && dashboard?.overview.totalMessages.change && (
-                <div className={`flex items-center text-sm font-medium ${
-                  dashboard.overview.totalMessages.change.type === 'increase' 
-                    ? 'text-success-600' 
-                    : dashboard.overview.totalMessages.change.type === 'decrease'
-                    ? 'text-error-600'
-                    : 'text-neutral-600'
-                }`}>
+                <div
+                  className={`flex items-center text-sm font-medium ${
+                    dashboard.overview.totalMessages.change.type === "increase"
+                      ? "text-success-600"
+                      : dashboard.overview.totalMessages.change.type ===
+                          "decrease"
+                        ? "text-error-600"
+                        : "text-neutral-600"
+                  }`}
+                >
                   {dashboard.overview.totalMessages.change.value}
                 </div>
               )}
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-bold text-neutral-900">
-                {loading ? '...' : (dashboard?.overview.totalMessages.count || 0).toLocaleString()}
+                {loading
+                  ? "..."
+                  : (
+                      dashboard?.overview.totalMessages.count || 0
+                    ).toLocaleString()}
               </p>
-              <p className="text-sm font-medium text-neutral-700">Total Messages</p>
+              <p className="text-sm font-medium text-neutral-700">
+                Total Messages
+              </p>
               <p className="text-xs text-neutral-600">Last 7 days</p>
             </div>
           </div>
@@ -80,20 +96,24 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
                 <Icons.Users className="h-5 w-5 text-white" />
               </div>
               {!loading && dashboard?.overview.users.change && (
-                <div className={`flex items-center text-sm font-medium ${
-                  dashboard.overview.users.change.type === 'increase' 
-                    ? 'text-success-600' 
-                    : dashboard.overview.users.change.type === 'decrease'
-                    ? 'text-error-600'
-                    : 'text-neutral-600'
-                }`}>
+                <div
+                  className={`flex items-center text-sm font-medium ${
+                    dashboard.overview.users.change.type === "increase"
+                      ? "text-success-600"
+                      : dashboard.overview.users.change.type === "decrease"
+                        ? "text-error-600"
+                        : "text-neutral-600"
+                  }`}
+                >
                   {dashboard.overview.users.change.value}
                 </div>
               )}
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-bold text-neutral-900">
-                {loading ? '...' : (dashboard?.overview.users.count || 0).toLocaleString()}
+                {loading
+                  ? "..."
+                  : (dashboard?.overview.users.count || 0).toLocaleString()}
               </p>
               <p className="text-sm font-medium text-neutral-700">New Users</p>
               <p className="text-xs text-neutral-600">Registered users</p>
@@ -109,22 +129,30 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
                 <Icons.MessageSquare className="h-5 w-5 text-white" />
               </div>
               {!loading && dashboard?.overview.totalChats.change && (
-                <div className={`flex items-center text-sm font-medium ${
-                  dashboard.overview.totalChats.change.type === 'increase' 
-                    ? 'text-success-600' 
-                    : dashboard.overview.totalChats.change.type === 'decrease'
-                    ? 'text-error-600'
-                    : 'text-neutral-600'
-                }`}>
+                <div
+                  className={`flex items-center text-sm font-medium ${
+                    dashboard.overview.totalChats.change.type === "increase"
+                      ? "text-success-600"
+                      : dashboard.overview.totalChats.change.type === "decrease"
+                        ? "text-error-600"
+                        : "text-neutral-600"
+                  }`}
+                >
                   {dashboard.overview.totalChats.change.value}
                 </div>
               )}
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-bold text-neutral-900">
-                {loading ? '...' : (dashboard?.overview.totalChats.count || 0).toLocaleString()}
+                {loading
+                  ? "..."
+                  : (
+                      dashboard?.overview.totalChats.count || 0
+                    ).toLocaleString()}
               </p>
-              <p className="text-sm font-medium text-neutral-700">Total Chats</p>
+              <p className="text-sm font-medium text-neutral-700">
+                Total Chats
+              </p>
               <p className="text-xs text-neutral-600">Last 7 days</p>
             </div>
           </div>
@@ -138,22 +166,31 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
                 <Icons.FileText className="h-5 w-5 text-white" />
               </div>
               {!loading && dashboard?.overview.knowledgeBases.change && (
-                <div className={`flex items-center text-sm font-medium ${
-                  dashboard.overview.knowledgeBases.change.type === 'increase' 
-                    ? 'text-success-600' 
-                    : dashboard.overview.knowledgeBases.change.type === 'decrease'
-                    ? 'text-error-600'
-                    : 'text-neutral-600'
-                }`}>
+                <div
+                  className={`flex items-center text-sm font-medium ${
+                    dashboard.overview.knowledgeBases.change.type === "increase"
+                      ? "text-success-600"
+                      : dashboard.overview.knowledgeBases.change.type ===
+                          "decrease"
+                        ? "text-error-600"
+                        : "text-neutral-600"
+                  }`}
+                >
                   {dashboard.overview.knowledgeBases.change.value}
                 </div>
               )}
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-bold text-neutral-900">
-                {loading ? '...' : (dashboard?.overview.knowledgeBases.count || 0).toLocaleString()}
+                {loading
+                  ? "..."
+                  : (
+                      dashboard?.overview.knowledgeBases.count || 0
+                    ).toLocaleString()}
               </p>
-              <p className="text-sm font-medium text-neutral-700">Knowledge Bases</p>
+              <p className="text-sm font-medium text-neutral-700">
+                Knowledge Bases
+              </p>
               <p className="text-xs text-neutral-600">Last 7 days</p>
             </div>
           </div>
@@ -167,22 +204,31 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
                 <Icons.UserX className="h-5 w-5 text-white" />
               </div>
               {!loading && dashboard?.overview.guestSessions.change && (
-                <div className={`flex items-center text-sm font-medium ${
-                  dashboard.overview.guestSessions.change.type === 'increase' 
-                    ? 'text-success-600' 
-                    : dashboard.overview.guestSessions.change.type === 'decrease'
-                    ? 'text-error-600'
-                    : 'text-neutral-600'
-                }`}>
+                <div
+                  className={`flex items-center text-sm font-medium ${
+                    dashboard.overview.guestSessions.change.type === "increase"
+                      ? "text-success-600"
+                      : dashboard.overview.guestSessions.change.type ===
+                          "decrease"
+                        ? "text-error-600"
+                        : "text-neutral-600"
+                  }`}
+                >
                   {dashboard.overview.guestSessions.change.value}
                 </div>
               )}
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-bold text-neutral-900">
-                {loading ? '...' : (dashboard?.overview.guestSessions.count || 0).toLocaleString()}
+                {loading
+                  ? "..."
+                  : (
+                      dashboard?.overview.guestSessions.count || 0
+                    ).toLocaleString()}
               </p>
-              <p className="text-sm font-medium text-neutral-700">Guest Sessions</p>
+              <p className="text-sm font-medium text-neutral-700">
+                Guest Sessions
+              </p>
               <p className="text-xs text-neutral-600">Last 7 days</p>
             </div>
           </div>
@@ -192,21 +238,20 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({ className = "" 
       {/* Charts Section */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
         <div>
-          <MessagesChart 
+          <MessagesChart
             data={dashboard?.timeSeries.messagesOverTime || []}
             loading={loading}
             className="shadow-lg shadow-primary-500/5 border-primary-200/50"
           />
         </div>
         <div>
-          <ChatsChart 
+          <ChatsChart
             data={dashboard?.timeSeries.chatsOverTime || []}
             loading={loading}
             className="shadow-lg shadow-success-500/5 border-success-200/50"
           />
         </div>
       </div>
-
     </div>
   );
 };

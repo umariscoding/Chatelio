@@ -1,5 +1,5 @@
 // Authentication related types
-export type UserType = 'company' | 'user' | 'guest';
+export type UserType = "company" | "user" | "guest";
 
 export interface User {
   user_id: string;
@@ -14,8 +14,8 @@ export interface Company {
   company_id: string;
   name: string;
   email: string;
-  plan: 'free' | 'premium' | 'enterprise';
-  status: 'active' | 'inactive' | 'suspended';
+  plan: "free" | "premium" | "enterprise";
+  status: "active" | "inactive" | "suspended";
   slug: string | null;
   is_published: boolean;
   chatbot_title?: string;
@@ -28,4 +28,3 @@ export interface Tokens {
   refresh_token: string;
   token_type: string;
 }
-

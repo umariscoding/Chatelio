@@ -1,10 +1,11 @@
-import type { Chat, Message, ModelType } from '@/types/chat';
+import type { Chat, Message, ModelType } from "@/types/chat";
 
 export interface MessageListProps {
   messages: Message[];
   streamingMessage?: string;
   loading?: boolean;
   className?: string;
+  chatbotTitle?: string;
 }
 
 export interface MessageBubbleProps {

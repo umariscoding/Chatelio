@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { CompanyReduxProvider } from '@/lib/company-redux-provider';
-import { CompanyAuthProvider } from '@/components/auth/company/CompanyAuthProvider';
+import React from "react";
+import { CompanyReduxProvider } from "@/lib/company-redux-provider";
+import { CompanyAuthProvider } from "@/components/auth/company/CompanyAuthProvider";
 
 export default function CompanyAuthLayout({
   children,
@@ -11,10 +11,7 @@ export default function CompanyAuthLayout({
 }) {
   return (
     <CompanyReduxProvider>
-      <CompanyAuthProvider>
-        {children}
-      </CompanyAuthProvider>
+      <CompanyAuthProvider>{children}</CompanyAuthProvider>
     </CompanyReduxProvider>
   );
 }
-

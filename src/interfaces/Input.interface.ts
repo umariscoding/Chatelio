@@ -1,12 +1,12 @@
 // Input component interface
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
   description?: string;
-  variant?: 'default' | 'filled' | 'outlined';
+  variant?: "default" | "filled" | "outlined";
   fullWidth?: boolean;
-  theme?: 'light' | 'dark';
+  theme?: "light" | "dark";
 }

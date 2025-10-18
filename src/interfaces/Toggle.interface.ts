@@ -4,12 +4,12 @@ export interface ToggleProps {
   onChange: (checked: boolean) => void;
   label?: string;
   description?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'primary' | 'success' | 'warning' | 'error';
+  size?: "sm" | "md" | "lg";
+  variant?: "primary" | "success" | "warning" | "error";
   disabled?: boolean;
   loading?: boolean;
   className?: string;
   id?: string;
-  'aria-label'?: string;
-  'aria-describedby'?: string;
+  "aria-label"?: string;
+  "aria-describedby"?: string;
 }

@@ -3,4 +3,3 @@ export interface HeaderProps {
   onMenuToggle?: () => void;
   showMobileMenuButton?: boolean;
 }
-

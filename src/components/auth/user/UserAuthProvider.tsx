@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useUserAppSelector, useUserAppDispatch } from '@/hooks/user/useUserAuth';
-import { loadFromStorage } from '@/store/user/slices/userAuthSlice';
+import React, { useEffect, useState } from "react";
+import {
+  useUserAppSelector,
+  useUserAppDispatch,
+} from "@/hooks/user/useUserAuth";
+import { loadFromStorage } from "@/store/user/slices/userAuthSlice";
 
 interface UserAuthProviderProps {
   children: React.ReactNode;
 }
 
-export const UserAuthProvider: React.FC<UserAuthProviderProps> = ({ children }) => {
+export const UserAuthProvider: React.FC<UserAuthProviderProps> = ({
+  children,
+}) => {
   const dispatch = useUserAppDispatch();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -33,4 +38,3 @@ export const UserAuthProvider: React.FC<UserAuthProviderProps> = ({ children }) 
 
   return <>{children}</>;
 };
-

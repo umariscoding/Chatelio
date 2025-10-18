@@ -1,20 +1,22 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import type { AnalyticsDashboard } from '@/interfaces/Analytics.interface';
-import { companyApi as api } from '@/utils/company/api';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import type { AnalyticsDashboard } from "@/interfaces/Analytics.interface";
+import { companyApi as api } from "@/utils/company/api";
 
 // Async thunk for fetching dashboard analytics
 export const fetchDashboardAnalytics = createAsyncThunk(
-  'analytics/fetchDashboard',
+  "analytics/fetchDashboard",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<AnalyticsDashboard>('/api/company/analytics/dashboard');
+      const response = await api.get<AnalyticsDashboard>(
+        "/api/company/analytics/dashboard",
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.detail || 'Failed to fetch analytics data'
+        error.response?.data?.detail || "Failed to fetch analytics data",
       );
     }
-  }
+  },
 );
 
 interface AnalyticsState {
@@ -32,7 +34,7 @@ const initialState: AnalyticsState = {
 };
 
 const analyticsSlice = createSlice({
-  name: 'analytics',
+  name: "analytics",
   initialState,
   reducers: {
     clearError: (state) => {
@@ -51,12 +53,15 @@ const analyticsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchDashboardAnalytics.fulfilled, (state, action: PayloadAction<AnalyticsDashboard>) => {
-        state.loading = false;
-        state.dashboard = action.payload;
-        state.lastFetched = Date.now();
-        state.error = null;
-      })
+      .addCase(
+        fetchDashboardAnalytics.fulfilled,
+        (state, action: PayloadAction<AnalyticsDashboard>) => {
+          state.loading = false;
+          state.dashboard = action.payload;
+          state.lastFetched = Date.now();
+          state.error = null;
+        },
+      )
       .addCase(fetchDashboardAnalytics.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

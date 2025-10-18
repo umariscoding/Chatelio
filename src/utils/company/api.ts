@@ -1,20 +1,20 @@
-import axios, { AxiosError } from 'axios';
-import { API_CONFIG } from '@/constants/api';
+import axios, { AxiosError } from "axios";
+import { API_CONFIG } from "@/constants/api";
 
 // Company-specific API client
 export const companyApi = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Request interceptor for company auth
 companyApi.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
-      const companyToken = localStorage.getItem('company_access_token');
-      
+    if (typeof window !== "undefined") {
+      const companyToken = localStorage.getItem("company_access_token");
+
       if (companyToken) {
         config.headers.Authorization = `Bearer ${companyToken}`;
       }
@@ -23,7 +23,7 @@ companyApi.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor for token refresh
@@ -36,41 +36,43 @@ companyApi.interceptors.response.use(
       originalRequest._retry = true;
 
       // Try to refresh company token
-      const companyRefreshToken = localStorage.getItem('company_refresh_token');
+      const companyRefreshToken = localStorage.getItem("company_refresh_token");
       if (companyRefreshToken) {
         try {
-          const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
-            refresh_token: companyRefreshToken,
-          });
-          
+          const response = await axios.post(
+            `${API_CONFIG.BASE_URL}/auth/refresh`,
+            {
+              refresh_token: companyRefreshToken,
+            },
+          );
+
           const { access_token } = response.data;
-          localStorage.setItem('company_access_token', access_token);
-          
+          localStorage.setItem("company_access_token", access_token);
+
           // Retry the original request with new token
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${access_token}`;
           }
-          
+
           return companyApi(originalRequest);
         } catch (refreshError) {
           // Company refresh failed, clear company tokens and redirect
-          localStorage.removeItem('company_access_token');
-          localStorage.removeItem('company_refresh_token');
-          localStorage.removeItem('company_data');
-          
-          if (typeof window !== 'undefined') {
-            window.location.href = '/company/login';
+          localStorage.removeItem("company_access_token");
+          localStorage.removeItem("company_refresh_token");
+          localStorage.removeItem("company_data");
+
+          if (typeof window !== "undefined") {
+            window.location.href = "/company/login";
           }
         }
       } else {
         // No refresh token, redirect to company login
-        if (typeof window !== 'undefined') {
-          window.location.href = '/company/login';
+        if (typeof window !== "undefined") {
+          window.location.href = "/company/login";
         }
       }
     }
-    
-    return Promise.reject(error);
-  }
-);
 
+    return Promise.reject(error);
+  },
+);

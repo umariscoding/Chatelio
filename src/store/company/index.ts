@@ -1,12 +1,12 @@
 // Company-specific Redux store configuration
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-import companyAuthSlice from './slices/companyAuthSlice';
-import knowledgeBaseSlice from './slices/knowledgeBaseSlice';
-import companySlice from './slices/companySlice';
-import analyticsSlice from './slices/analyticsSlice';
-import uiSlice from './slices/uiSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import companyAuthSlice from "./slices/companyAuthSlice";
+import knowledgeBaseSlice from "./slices/knowledgeBaseSlice";
+import companySlice from "./slices/companySlice";
+import analyticsSlice from "./slices/analyticsSlice";
+import uiSlice from "./slices/uiSlice";
 
 // Create a noop storage for server-side rendering
 const createNoopStorage = () => {
@@ -24,15 +24,16 @@ const createNoopStorage = () => {
 };
 
 // Use proper storage based on environment
-const storage = typeof window !== 'undefined' 
-  ? createWebStorage('local') 
-  : createNoopStorage();
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 const persistConfig = {
-  key: 'company',
+  key: "company",
   storage,
-  whitelist: ['companyAuth', 'company'], // Only persist auth and company data
-  blacklist: ['ui'], // Don't persist UI state
+  whitelist: ["companyAuth", "company"], // Only persist auth and company data
+  blacklist: ["ui"], // Don't persist UI state
 };
 
 const rootReducer = combineReducers({
@@ -50,9 +51,9 @@ export const companyStore = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-        ignoredActionsPaths: ['meta.arg', 'payload.timestamp'],
-        ignoredPaths: ['_persist'],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        ignoredActionsPaths: ["meta.arg", "payload.timestamp"],
+        ignoredPaths: ["_persist"],
       },
     }),
 });
@@ -61,4 +62,3 @@ export const companyPersistor = persistStore(companyStore);
 
 export type CompanyRootState = ReturnType<typeof companyStore.getState>;
 export type CompanyAppDispatch = typeof companyStore.dispatch;
-

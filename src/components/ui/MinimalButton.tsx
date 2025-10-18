@@ -1,35 +1,38 @@
-'use client';
+"use client";
 
-import React from 'react';
-import IOSLoader from './IOSLoader';
+import React from "react";
+import IOSLoader from "./IOSLoader";
 
-interface MinimalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+interface MinimalButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "ghost" | "outline";
+  size?: "sm" | "md" | "lg";
   loading?: boolean;
   fullWidth?: boolean;
   children: React.ReactNode;
-  theme?: 'default' | 'auth';
+  theme?: "default" | "auth";
 }
 
 const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
-  ({ 
-    variant = 'primary', 
-    size = 'md', 
-    loading = false, 
-    fullWidth = false,
-    className = '', 
-    children, 
-    disabled,
-    theme = 'default',
-    ...props 
-  }, ref) => {
-    
+  (
+    {
+      variant = "primary",
+      size = "md",
+      loading = false,
+      fullWidth = false,
+      className = "",
+      children,
+      disabled,
+      theme = "default",
+      ...props
+    },
+    ref,
+  ) => {
     const baseClasses = `
       inline-flex items-center justify-center rounded-lg font-medium
       transition-all duration-200 focus:outline-none
       disabled:opacity-50 disabled:cursor-not-allowed
-      ${fullWidth ? 'w-full' : ''}
+      ${fullWidth ? "w-full" : ""}
     `;
 
     const defaultVariants = {
@@ -51,7 +54,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
         bg-transparent border border-border-light hover:border-primary-600
         text-text-secondary hover:text-primary-600 hover:bg-primary-50
         focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-bg-primary
-      `
+      `,
     };
 
     const authVariants = {
@@ -73,15 +76,15 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
         bg-transparent border border-sidebar-border hover:border-primary-600
         text-sidebar-text hover:text-sidebar-text-hover hover:bg-sidebar-hover
         focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1 focus:ring-offset-sidebar-bg
-      `
+      `,
     };
 
-    const variants = theme === 'auth' ? authVariants : defaultVariants;
+    const variants = theme === "auth" ? authVariants : defaultVariants;
 
     const sizes = {
-      sm: 'px-3 py-2 text-sm',
-      md: 'px-6 py-3 text-base',
-      lg: 'px-8 py-4 text-base'
+      sm: "px-3 py-2 text-sm",
+      md: "px-6 py-3 text-base",
+      lg: "px-8 py-4 text-base",
     };
 
     const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;
@@ -103,9 +106,9 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
-MinimalButton.displayName = 'MinimalButton';
+MinimalButton.displayName = "MinimalButton";
 
 export default MinimalButton;

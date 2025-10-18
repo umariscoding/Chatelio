@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import type { Company } from '@/types/auth';
-import { companyApi as api } from '@/utils/company/api';
+import type { Company } from "@/types/auth";
+import { companyApi as api } from "@/utils/company/api";
 
 interface UpdateChatbotInfoRequest {
   chatbot_title: string;
@@ -48,54 +48,66 @@ const initialState: CompanyState = {
 
 // Update Company Slug
 export const updateCompanySlug = createAsyncThunk(
-  'company/updateSlug',
+  "company/updateSlug",
   async (data: UpdateSlugRequest, { rejectWithValue }) => {
     try {
-      const response = await api.put<UpdateSlugResponse>('/auth/company/slug', data);
+      const response = await api.put<UpdateSlugResponse>(
+        "/auth/company/slug",
+        data,
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = typeof error.response?.data?.detail === 'string' 
-        ? error.response.data.detail 
-        : error.message || 'Failed to update slug';
+      const errorMessage =
+        typeof error.response?.data?.detail === "string"
+          ? error.response.data.detail
+          : error.message || "Failed to update slug";
       return rejectWithValue(errorMessage);
     }
-  }
+  },
 );
 
 // Update Chatbot Info
 export const updateChatbotInfo = createAsyncThunk(
-  'company/updateChatbotInfo',
+  "company/updateChatbotInfo",
   async (data: UpdateChatbotInfoRequest, { rejectWithValue }) => {
     try {
-      const response = await api.put<UpdateChatbotInfoResponse>('/auth/company/chatbot-info', data);
+      const response = await api.put<UpdateChatbotInfoResponse>(
+        "/auth/company/chatbot-info",
+        data,
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = typeof error.response?.data?.detail === 'string' 
-        ? error.response.data.detail 
-        : error.message || 'Failed to update chatbot info';
+      const errorMessage =
+        typeof error.response?.data?.detail === "string"
+          ? error.response.data.detail
+          : error.message || "Failed to update chatbot info";
       return rejectWithValue(errorMessage);
     }
-  }
+  },
 );
 
 // Publish/Unpublish Chatbot
 export const publishChatbot = createAsyncThunk(
-  'company/publishChatbot',
+  "company/publishChatbot",
   async (data: PublishChatbotRequest, { rejectWithValue }) => {
     try {
-      const response = await api.post<PublishChatbotResponse>('/auth/company/publish-chatbot', data);
+      const response = await api.post<PublishChatbotResponse>(
+        "/auth/company/publish-chatbot",
+        data,
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = typeof error.response?.data?.detail === 'string' 
-        ? error.response.data.detail 
-        : error.message || 'Failed to publish chatbot';
+      const errorMessage =
+        typeof error.response?.data?.detail === "string"
+          ? error.response.data.detail
+          : error.message || "Failed to publish chatbot";
       return rejectWithValue(errorMessage);
     }
-  }
+  },
 );
 
 const companySlice = createSlice({
-  name: 'company',
+  name: "company",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -166,9 +178,6 @@ const companySlice = createSlice({
   },
 });
 
-export const { 
-  clearError,
-  resetCompany,
-} = companySlice.actions;
+export const { clearError, resetCompany } = companySlice.actions;
 
 export default companySlice.reducer;

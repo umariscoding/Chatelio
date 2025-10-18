@@ -1,38 +1,34 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface IOSLoaderProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  color?: 'primary' | 'white' | 'dark';
+  size?: "sm" | "md" | "lg" | "xl";
+  color?: "primary" | "white" | "dark";
   className?: string;
 }
 
-const IOSLoader: React.FC<IOSLoaderProps> = ({ 
-  size = 'md', 
-  color = 'primary', 
-  className = '' 
+const IOSLoader: React.FC<IOSLoaderProps> = ({
+  size = "md",
+  color = "primary",
+  className = "",
 }) => {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6', 
-    lg: 'w-8 h-8',
-    xl: 'w-12 h-12'
+    sm: "w-4 h-4",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
+    xl: "w-12 h-12",
   };
 
   const colorClasses = {
-    primary: 'text-primary-600',
-    white: 'text-white',
-    dark: 'text-neutral-700'
+    primary: "text-primary-600",
+    white: "text-white",
+    dark: "text-neutral-700",
   };
 
   return (
     <div className={`${sizeClasses[size]} ${colorClasses[color]} ${className}`}>
-      <svg 
-        className="animate-spin" 
-        fill="none" 
-        viewBox="0 0 24 24"
-      >
+      <svg className="animate-spin" fill="none" viewBox="0 0 24 24">
         <circle
           className="opacity-25"
           cx="12"
@@ -59,11 +55,11 @@ interface IOSContentLoaderProps {
   children?: React.ReactNode;
 }
 
-export const IOSContentLoader: React.FC<IOSContentLoaderProps> = ({ 
-  isLoading, 
-  message = 'Loading...', 
-  className = '',
-  children
+export const IOSContentLoader: React.FC<IOSContentLoaderProps> = ({
+  isLoading,
+  message = "Loading...",
+  className = "",
+  children,
 }) => {
   if (!isLoading && children) {
     return <>{children}</>;
@@ -72,7 +68,9 @@ export const IOSContentLoader: React.FC<IOSContentLoaderProps> = ({
   if (!isLoading) return null;
 
   return (
-    <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
+    <div
+      className={`flex flex-col items-center justify-center py-12 ${className}`}
+    >
       <IOSLoader size="lg" color="primary" className="mb-4" />
       <p className="text-text-secondary font-medium">{message}</p>
     </div>

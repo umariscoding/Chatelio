@@ -1,4 +1,4 @@
-import type { Document } from '@/types/knowledgeBase';
+import type { Document } from "@/types/knowledgeBase";
 
 export interface DocumentListProps {
   className?: string;
@@ -24,4 +24,3 @@ export interface TextUploadProps {
   loading?: boolean;
   className?: string;
 }
-
