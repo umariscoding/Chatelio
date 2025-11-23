@@ -140,11 +140,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       {/* Sidebar */}
-      <div className="relative">
+      <div className="relative h-full">
         <div
           className={`
             fixed inset-y-0 left-0 z-50 w-72 bg-sidebar-bg transform transition-all duration-300 ease-in-out shadow-2xl
-            md:relative md:translate-x-0 md:z-0 md:min-h-screen
+            md:relative md:translate-x-0 md:z-0 md:h-full
             ${isOpen ? "translate-x-0" : "-translate-x-full"}
             ${className}
           `}

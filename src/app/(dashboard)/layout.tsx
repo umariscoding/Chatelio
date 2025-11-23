@@ -35,28 +35,26 @@ export default function DashboardLayout({
     <CompanyReduxProvider>
       <CompanyAuthProvider>
         <CompanyProtectedRoute>
-          <div className="min-h-screen bg-sidebar-bg">
-            <div className="flex min-h-screen">
-              {/* Sidebar - Fixed/Sticky */}
-              <div className="sticky top-0 self-start">
-                <Sidebar isOpen={sidebarOpen} onClose={handleSidebarClose} />
-              </div>
+          <div className="h-screen overflow-hidden bg-sidebar-bg flex">
+            {/* Sidebar - Fixed and locked */}
+            <div className="w-72 flex-shrink-0 h-screen fixed left-0 top-0 z-10">
+              <Sidebar isOpen={sidebarOpen} onClose={handleSidebarClose} />
+            </div>
 
-              {/* Main content area */}
-              <div className="flex-1 bg-bg-secondary min-h-screen overflow-y-auto smooth-scroll-container">
-                {/* Header */}
-                <Header
-                  onMenuToggle={handleMenuToggle}
-                  showMobileMenuButton={true}
-                />
+            {/* Main content area - with left margin for sidebar */}
+            <div className="flex-1 ml-72 bg-bg-secondary h-screen overflow-y-auto smooth-scroll-container">
+              {/* Header */}
+              <Header
+                onMenuToggle={handleMenuToggle}
+                showMobileMenuButton={true}
+              />
 
-                {/* Main content */}
-                <main>
-                  <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {children}
-                  </div>
-                </main>
-              </div>
+              {/* Main content */}
+              <main>
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                  {children}
+                </div>
+              </main>
             </div>
           </div>
         </CompanyProtectedRoute>
