@@ -393,7 +393,7 @@ const ChatPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black">
+      <div className="h-screen flex items-center justify-center bg-zinc-950">
         <p className="text-lg text-zinc-500">Loading...</p>
       </div>
     );
@@ -401,7 +401,7 @@ const ChatPage: React.FC = () => {
 
   if (error && !companyInfo) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black">
+      <div className="h-screen flex items-center justify-center bg-zinc-950">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-2">
             Chatbot Not Found

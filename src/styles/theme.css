@@ -1,0 +1,344 @@
+/**
+ * Chatelio Design System - Color Tokens
+ *
+ * This file defines all color tokens used throughout the application.
+ * Following industry best practices with semantic naming and CSS variables.
+ *
+ * Structure:
+ * 1. Base palette (primitive colors)
+ * 2. Semantic tokens (purpose-based colors)
+ * 3. Component-specific tokens
+ */
+
+:root {
+  /* ============================================
+     BASE PALETTE - Primitive Colors
+     These are the raw color values that form the foundation
+     ============================================ */
+
+  /* Primary Brand Colors (Grey/Black) */
+  --color-primary-50: #f9fafb;
+  --color-primary-100: #f3f4f6;
+  --color-primary-200: #e5e7eb;
+  --color-primary-300: #d1d5db;
+  --color-primary-400: #9ca3af;
+  --color-primary-500: #6b7280;
+  --color-primary-600: #4b5563;
+  --color-primary-700: #374151;
+  --color-primary-800: #1f2937;
+  --color-primary-900: #111827;
+
+  /* Accent Colors (Dark Grey) */
+  --color-accent-50: #f9fafb;
+  --color-accent-100: #f3f4f6;
+  --color-accent-200: #e5e7eb;
+  --color-accent-300: #d1d5db;
+  --color-accent-400: #9ca3af;
+  --color-accent-500: #6b7280;
+  --color-accent-600: #4b5563;
+  --color-accent-700: #374151;
+  --color-accent-800: #1f2937;
+  --color-accent-900: #111827;
+
+  /* Neutral/Gray Scale */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #18181b;
+  --color-neutral-950: #09090b;
+
+  /* Zinc Scale (Dark UI) */
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+
+  /* Slate Scale (Auth UI) */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* Semantic Colors - Error/Danger */
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+
+  /* Additional semantic colors */
+  --color-blue-500: #3b82f6;
+
+  /* Pure Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  /* ============================================
+     SEMANTIC TOKENS - Purpose-Based Colors
+     Use these in your components for consistency
+     ============================================ */
+
+  /* Background Colors */
+  --bg-primary: var(--color-zinc-950);
+  --bg-secondary: var(--color-zinc-900);
+  --bg-tertiary: var(--color-zinc-800);
+  --bg-elevated: var(--color-zinc-900);
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+  --bg-pure: var(--color-black);
+
+  /* Surface Colors (for cards, containers) */
+  --surface-primary: var(--color-zinc-950);
+  --surface-secondary: var(--color-zinc-900);
+  --surface-tertiary: var(--color-zinc-800);
+  --surface-hover: rgba(39, 39, 42, 0.9);
+  --surface-active: rgba(39, 39, 42, 0.5);
+
+  /* Text Colors */
+  --text-primary: var(--color-zinc-100);
+  --text-secondary: var(--color-zinc-200);
+  --text-tertiary: var(--color-zinc-300);
+  --text-quaternary: var(--color-zinc-400);
+  --text-disabled: var(--color-zinc-600);
+  --text-placeholder: var(--color-zinc-500);
+  --text-inverse: var(--color-white);
+  --text-muted: var(--color-zinc-500);
+
+  /* Border Colors */
+  --border-primary: var(--color-zinc-800);
+  --border-secondary: rgba(82, 82, 91, 0.5);
+  --border-tertiary: rgba(82, 82, 91, 0.3);
+  --border-focus: var(--color-zinc-500);
+  --border-error: var(--color-error-500);
+  --border-active: var(--color-blue-500);
+
+  /* Interactive Colors (Buttons, Links, etc.) */
+  --interactive-primary: var(--color-primary-600);
+  --interactive-primary-hover: var(--color-primary-700);
+  --interactive-primary-active: var(--color-primary-800);
+  --interactive-secondary: var(--color-zinc-700);
+  --interactive-secondary-hover: var(--color-zinc-600);
+  --interactive-ghost-hover: rgba(39, 39, 42, 0.9);
+  --interactive-ghost-active: rgba(39, 39, 42, 0.5);
+
+  /* Focus & Selection */
+  --focus-ring: rgba(147, 51, 234, 0.4);
+  --focus-ring-offset: rgba(147, 51, 234, 0.1);
+  --selection-bg: var(--color-blue-500);
+  --selection-indicator: var(--color-blue-500);
+
+  /* Shadow Colors */
+  --shadow-primary: rgba(147, 51, 234, 0.2);
+  --shadow-primary-lg: rgba(147, 51, 234, 0.3);
+  --shadow-elevated: rgba(0, 0, 0, 0.25);
+  --shadow-zinc: rgba(113, 113, 122, 0.3);
+  --shadow-zinc-subtle: rgba(82, 82, 91, 0.2);
+  --shadow-input: rgba(113, 113, 122, 0.2);
+
+  /* Scrollbar Colors */
+  --scrollbar-track: var(--color-transparent);
+  --scrollbar-thumb: var(--color-zinc-300);
+  --scrollbar-thumb-hover: var(--color-zinc-400);
+  --scrollbar-thumb-firefox: var(--color-gray-500);
+
+  /* ============================================
+     COMPONENT-SPECIFIC TOKENS
+     Colors for specific UI components
+     ============================================ */
+
+  /* Input Component */
+  --input-bg: rgba(24, 24, 27, 0.4);
+  --input-bg-focus: rgba(39, 39, 42, 0.5);
+  --input-border: rgba(82, 82, 91, 0.5);
+  --input-border-focus: rgba(113, 113, 122, 0.8);
+  --input-text: var(--color-zinc-200);
+  --input-placeholder: var(--color-zinc-500);
+  --input-autofill-bg: var(--color-zinc-950);
+  --input-autofill-text: var(--color-zinc-200);
+  --input-ring: rgba(113, 113, 122, 0.2);
+
+  /* Button Component - Default Theme */
+  --button-primary-bg: var(--color-primary-600);
+  --button-primary-bg-hover: var(--color-primary-700);
+  --button-primary-text: var(--color-white);
+  --button-primary-shadow: rgba(147, 51, 234, 0.2);
+  --button-primary-shadow-hover: rgba(147, 51, 234, 0.3);
+
+  --button-secondary-bg: var(--color-neutral-200);
+  --button-secondary-bg-hover: var(--color-neutral-300);
+  --button-secondary-text: var(--color-neutral-900);
+  --button-secondary-border: var(--color-neutral-300);
+  --button-secondary-border-hover: var(--color-neutral-400);
+
+  --button-ghost-bg: var(--color-transparent);
+  --button-ghost-bg-hover: var(--color-neutral-100);
+  --button-ghost-text: var(--color-neutral-700);
+  --button-ghost-text-hover: var(--color-neutral-900);
+
+  --button-disabled-bg: var(--color-zinc-800);
+  --button-disabled-text: var(--color-zinc-600);
+
+  /* Button Component - Auth Theme */
+  --button-auth-primary-bg: var(--color-slate-700);
+  --button-auth-primary-bg-hover: var(--color-slate-600);
+  --button-auth-primary-text: var(--color-slate-50);
+  --button-auth-primary-shadow: rgba(51, 65, 85, 0.3);
+  --button-auth-primary-shadow-hover: rgba(51, 65, 85, 0.4);
+
+  --button-auth-ghost-bg-hover: var(--color-slate-800);
+  --button-auth-ghost-text: var(--color-slate-300);
+  --button-auth-ghost-text-hover: var(--color-slate-100);
+
+  /* Modal Component */
+  --modal-bg-light: var(--color-white);
+  --modal-bg-dark: var(--color-neutral-900);
+  --modal-bg-auth: var(--color-zinc-950);
+  --modal-text-light: var(--color-neutral-900);
+  --modal-text-dark: var(--color-neutral-50);
+  --modal-text-auth: var(--color-zinc-50);
+  --modal-border-light: var(--color-neutral-200);
+  --modal-border-dark: var(--color-neutral-800);
+  --modal-border-auth: var(--color-zinc-800);
+  --modal-close-light: var(--color-neutral-600);
+  --modal-close-light-hover: var(--color-neutral-900);
+  --modal-close-dark: var(--color-neutral-600);
+  --modal-close-dark-hover: var(--color-neutral-500);
+  --modal-close-auth: var(--color-zinc-400);
+  --modal-close-auth-hover: var(--color-zinc-300);
+
+  /* Input Component Themes */
+  --input-light-border: var(--color-neutral-300);
+  --input-light-border-hover: var(--color-neutral-400);
+  --input-light-border-focus: var(--color-primary-600);
+  --input-light-text: var(--color-neutral-900);
+  --input-light-label: var(--color-neutral-600);
+  --input-light-label-focus: var(--color-primary-600);
+  --input-light-label-error: var(--color-error-600);
+  --input-light-error: var(--color-error-600);
+  --input-light-toggle: var(--color-neutral-500);
+  --input-light-toggle-hover: var(--color-neutral-700);
+
+  --input-dark-border: var(--color-neutral-700);
+  --input-dark-border-focus: var(--color-primary-600);
+  --input-dark-text: var(--color-neutral-50);
+  --input-dark-label: var(--color-neutral-500);
+  --input-dark-label-focus: var(--color-neutral-50);
+  --input-dark-label-error: var(--color-error-400);
+  --input-dark-error: var(--color-error-400);
+  --input-dark-toggle: var(--color-neutral-400);
+  --input-dark-toggle-hover: var(--color-neutral-300);
+
+  --input-auth-border: var(--color-slate-700);
+  --input-auth-border-focus: var(--color-primary-500);
+  --input-auth-text: var(--color-slate-50);
+  --input-auth-label: var(--color-slate-300);
+  --input-auth-label-focus: var(--color-primary-400);
+  --input-auth-label-error: var(--color-error-400);
+  --input-auth-error: var(--color-error-400);
+  --input-auth-toggle: var(--color-slate-400);
+  --input-auth-toggle-hover: var(--color-slate-200);
+
+  /* Message Bubbles */
+  --message-user-bg: var(--color-zinc-800);
+  --message-user-text: var(--color-zinc-200);
+  --message-ai-text: var(--color-zinc-300);
+  --message-streaming-cursor: var(--color-zinc-600);
+
+  /* Chat UI */
+  --chat-sidebar-bg: var(--color-zinc-950);
+  --chat-sidebar-border: var(--color-zinc-800);
+  --chat-sidebar-text: var(--color-white);
+  --chat-sidebar-text-secondary: var(--color-zinc-100);
+  --chat-sidebar-text-muted: var(--color-zinc-500);
+  --chat-sidebar-item-text: var(--color-zinc-400);
+  --chat-sidebar-item-text-active: var(--color-zinc-100);
+  --chat-sidebar-item-text-hover: var(--color-zinc-300);
+  --chat-sidebar-item-bg-active: rgba(39, 39, 42, 0.9);
+  --chat-sidebar-item-bg-hover: rgba(39, 39, 42, 0.5);
+  --chat-sidebar-button-text: var(--color-zinc-300);
+  --chat-sidebar-button-text-hover: var(--color-zinc-100);
+  --chat-sidebar-button-bg-hover: rgba(39, 39, 42, 0.9);
+
+  /* Dropdown/Menu */
+  --menu-bg: var(--color-zinc-800);
+  --menu-border: var(--color-zinc-700);
+  --menu-item-text: var(--color-zinc-300);
+  --menu-item-text-hover: var(--color-zinc-100);
+  --menu-item-bg-hover: var(--color-zinc-700);
+  --menu-icon-text: var(--color-zinc-500);
+  --menu-icon-text-hover: var(--color-zinc-300);
+  --menu-icon-bg-hover: var(--color-zinc-800);
+
+  /* Error/Alert States */
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --error-border: rgba(239, 68, 68, 0.2);
+  --error-text: var(--color-error-400);
+  --error-delete-bg: var(--color-error-600);
+  --error-delete-bg-hover: var(--color-error-700);
+  --error-delete-text: var(--color-white);
+
+  /* Loading/Animation */
+  --loader-primary: var(--color-primary-600);
+  --typing-indicator-dot-1: var(--color-primary-500);
+  --typing-indicator-dot-2: var(--color-primary-600);
+  --typing-indicator-dot-3: var(--color-primary-700);
+  --typing-text: var(--color-zinc-300);
+  --animation-text: var(--color-gray-500);
+  --animation-cursor: var(--color-gray-500);
+
+  /* Opacity Values (for rgba combinations) */
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+}
+
+/**
+ * USAGE EXAMPLES:
+ *
+ * Background:
+ * background-color: var(--bg-primary);
+ *
+ * Text:
+ * color: var(--text-primary);
+ *
+ * Borders:
+ * border-color: var(--border-primary);
+ *
+ * Buttons:
+ * background-color: var(--interactive-primary);
+ *
+ * Custom with opacity:
+ * background-color: rgba(from var(--color-zinc-900) r g b / 0.4);
+ * OR use the semantic tokens already defined above
+ */

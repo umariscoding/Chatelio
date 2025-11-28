@@ -60,7 +60,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     <div className={`w-full ${className}`}>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div
-          className={`relative flex items-center bg-zinc-900/40 backdrop-blur-xl p-3 border border-zinc-600/50 focus-within:border-zinc-500/80 focus-within:bg-zinc-800/50 focus-within:shadow-lg focus-within:shadow-zinc-500/20 transition-all shadow-2xl shadow-zinc-700/30 ring-1 ring-zinc-600/20 ${
+          className={`relative flex items-center bg-zinc-900 backdrop-blur-xl p-3 border border-zinc-700 focus-within:border-zinc-600 focus-within:bg-zinc-800 focus-within:shadow-lg focus-within:shadow-zinc-900/50 transition-all shadow-lg shadow-zinc-950/50 ${
             isMultiline ? "rounded-3xl" : "rounded-full"
           }`}
         >
@@ -87,7 +87,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           <button
             type="submit"
             disabled={!message.trim() || loading || disabled}
-            className="flex-shrink-0 w-8 h-8 bg-zinc-700/60 backdrop-blur-sm hover:bg-zinc-600/70 hover:shadow-md hover:shadow-zinc-400/20 disabled:bg-zinc-900/30 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-500/30 hover:border-zinc-400/50"
+            className="flex-shrink-0 w-8 h-8 bg-zinc-700 backdrop-blur-sm hover:bg-zinc-600 hover:shadow-md hover:shadow-zinc-900/50 disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-600 hover:border-zinc-500"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

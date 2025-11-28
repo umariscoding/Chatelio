@@ -86,7 +86,7 @@ const ChatPageView: React.FC<ChatPageViewProps> = ({
   onAuth,
 }) => {
   return (
-    <div className="h-screen flex bg-black overflow-hidden">
+    <div className="h-screen flex bg-zinc-950 overflow-hidden">
       {/* Chat History Sidebar - Only for logged-in users */}
       {isUserLoggedIn && (
         <div className="w-64 bg-zinc-950 text-white flex flex-col border-r border-zinc-800">

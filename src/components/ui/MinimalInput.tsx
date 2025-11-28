@@ -93,6 +93,7 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
               setFocused(false);
               props.onBlur?.(e);
             }}
+            autoComplete="off"
             className={`
               peer w-full px-4 pt-6 pb-3 bg-transparent border rounded-lg
               ${currentTheme.input} placeholder-transparent
@@ -151,6 +152,7 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
             {...props}
             type={inputType}
             onChange={handleChange}
+            autoComplete="off"
             className={`
               w-full px-4 py-3 ${theme === "light" ? "bg-white" : "bg-transparent"} border rounded-lg
               ${currentTheme.input} ${theme === "light" ? "placeholder-neutral-400" : "placeholder-neutral-500"}

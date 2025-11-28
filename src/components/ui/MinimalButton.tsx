@@ -34,23 +34,23 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
 
     const defaultVariants = {
       primary: `
-        bg-primary-600 hover:bg-primary-700 text-white
-        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
-        shadow-lg shadow-primary-600/20 hover:shadow-xl hover:shadow-primary-600/30
+        bg-zinc-700 hover:bg-zinc-600 text-white
+        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1
+        shadow-lg shadow-zinc-900/50 hover:shadow-xl hover:shadow-zinc-900/60
       `,
       secondary: `
-        bg-neutral-200 hover:bg-neutral-300 text-neutral-900
-        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
-        border border-neutral-300 hover:border-neutral-400
+        bg-zinc-800 hover:bg-zinc-700 text-zinc-100
+        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1
+        border border-zinc-700 hover:border-zinc-600
       `,
       ghost: `
-        bg-transparent hover:bg-neutral-100 text-neutral-700 hover:text-neutral-900
-        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
+        bg-transparent hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100
+        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1
       `,
       outline: `
-        bg-transparent border border-neutral-300 hover:border-primary-600
-        text-neutral-700 hover:text-primary-600 hover:bg-primary-50
-        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
+        bg-transparent border border-zinc-700 hover:border-zinc-500
+        text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800
+        focus:ring-2 focus:ring-zinc-500/40 focus:ring-offset-1
       `,
     };
 
