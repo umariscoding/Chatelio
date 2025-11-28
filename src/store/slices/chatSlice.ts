@@ -95,7 +95,9 @@ const chatSlice = createSlice({
       }
     },
     removeChat: (state, action: PayloadAction<string>) => {
-      state.chats = state.chats.filter((chat) => chat.chat_id !== action.payload);
+      state.chats = state.chats.filter(
+        (chat) => chat.chat_id !== action.payload,
+      );
       if (state.currentChat?.chat_id === action.payload) {
         state.currentChat = null;
         state.messages = [];
@@ -115,23 +117,5 @@ const chatSlice = createSlice({
     },
   },
 });
-
-export const {
-  setLoading,
-  setError,
-  clearError,
-  setCurrentChat,
-  setMessages,
-  setChats,
-  addMessage,
-  updateMessage,
-  startStreaming,
-  appendStreamingContent,
-  stopStreaming,
-  clearMessages,
-  addOrUpdateChat,
-  removeChat,
-  resetChat,
-} = chatSlice.actions;
 
 export default chatSlice.reducer;

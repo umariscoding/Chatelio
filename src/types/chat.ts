@@ -16,25 +16,6 @@ export interface Chat {
   message_count?: number;
 }
 
-export interface SendMessageRequest {
-  message: string;
-  chat_id?: string;
-  chat_title?: string;
-  model: "OpenAI" | "Claude";
-}
-
-export interface ChatHistoryResponse {
-  messages: Message[];
-}
-
-export interface ChatListResponse {
-  chats: Chat[];
-}
-
-export interface UpdateChatTitleRequest {
-  title: string;
-}
-
 export interface StreamingState {
   isStreaming: boolean;
   currentChatId?: string;

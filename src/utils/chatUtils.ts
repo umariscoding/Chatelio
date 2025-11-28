@@ -23,8 +23,3 @@ export const generateChatTitle = (message: string): string => {
 
   return capitalizedTitle;
 };
-
-export const FALLBACK_TITLES = {
-  GUEST: "Guest Chat",
-  USER: "New Conversation",
-} as const;

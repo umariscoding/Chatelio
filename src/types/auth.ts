@@ -12,5 +12,3 @@ export interface Tokens {
   refresh_token: string;
   token_type: string;
 }
-
-export type UserType = "user" | "guest";
