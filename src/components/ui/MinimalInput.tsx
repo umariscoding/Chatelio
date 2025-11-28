@@ -55,14 +55,14 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
       },
       auth: {
         input:
-          "border-neutral-700 text-neutral-100 focus:border-primary-600 focus:ring-primary-600/30",
+          "border-slate-700 text-slate-50 focus:border-primary-500 focus:ring-primary-600/30",
         label: {
-          default: "text-neutral-400",
+          default: "text-slate-300",
           focused: "text-primary-400",
           error: "text-red-400",
         },
         error: "text-red-400",
-        passwordToggle: "text-neutral-400 hover:text-neutral-300",
+        passwordToggle: "text-slate-400 hover:text-slate-200",
       },
     };
 
@@ -94,20 +94,19 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
               props.onBlur?.(e);
             }}
             className={`
-              peer w-full px-4 pt-6 pb-3 bg-transparent border rounded-xl
+              peer w-full px-4 pt-6 pb-3 bg-transparent border rounded-lg
               ${currentTheme.input} placeholder-transparent
               focus:ring-1 focus:outline-none
-              transition-all duration-200 autofill:bg-transparent
+              transition-all duration-150
               ${error ? "border-red-500" : ""}
               ${isPassword ? "pr-10" : ""}
               ${className}
             `}
             placeholder={label}
-            autoComplete="new-password"
           />
           <label
             className={`
-              absolute left-4 transition-all duration-200 pointer-events-none
+              absolute left-4 transition-all duration-150 pointer-events-none
               ${
                 focused || hasValue
                   ? `top-2 text-xs font-medium ${focused ? currentTheme.label.focused : currentTheme.label.default}`
@@ -153,15 +152,14 @@ const MinimalInput = React.forwardRef<HTMLInputElement, MinimalInputProps>(
             type={inputType}
             onChange={handleChange}
             className={`
-              w-full px-4 py-3 ${theme === "light" ? "bg-white" : "bg-neutral-900/50"} border rounded-xl
+              w-full px-4 py-3 ${theme === "light" ? "bg-white" : "bg-transparent"} border rounded-lg
               ${currentTheme.input} ${theme === "light" ? "placeholder-neutral-400" : "placeholder-neutral-500"}
               focus:ring-1 focus:outline-none
-              transition-all duration-200 autofill:bg-transparent
+              transition-all duration-150
               ${error ? "border-red-500" : ""}
               ${isPassword ? "pr-10" : ""}
               ${className}
             `}
-            autoComplete="new-password"
           />
 
           {isPassword && (

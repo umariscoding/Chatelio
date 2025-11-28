@@ -256,10 +256,10 @@ const ChatPageView: React.FC<ChatPageViewProps> = ({
           <div className="px-2 py-4">
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-auth-100 mb-2">
+              <h2 className="text-2xl font-bold text-slate-50 mb-2">
                 {authMode === "login" ? "Welcome back" : "Get started"}
               </h2>
-              <p className="text-auth-400 text-sm">
+              <p className="text-slate-300 text-sm">
                 {authMode === "login"
                   ? "Sign in to continue to your account"
                   : "Create your account to get started"}
@@ -340,7 +340,7 @@ const ChatPageView: React.FC<ChatPageViewProps> = ({
                 onClick={() =>
                   onSetAuthMode(authMode === "login" ? "signup" : "login")
                 }
-                className="text-auth-400 hover:text-auth-600 text-sm transition-colors duration-200"
+                className="text-slate-50 hover:text-auth-600 text-sm transition-colors duration-200"
               >
                 {authMode === "login"
                   ? "Don't have an account? Sign up"

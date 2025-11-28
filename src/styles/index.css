@@ -11,9 +11,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
-  background-color: #0f172a;
+  background-color: #09090b;
   scrollbar-width: thin;
-  scrollbar-color: #d4d4d4 transparent;
+  scrollbar-color: #525252 transparent;
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background-color: #09090b;
 }
 
 code {
@@ -44,6 +50,34 @@ code {
 * {
   scrollbar-width: thin;
   scrollbar-color: #d4d4d4 transparent;
+}
+
+/* Autofill input styling - comprehensive fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px #09090b inset !important;
+  box-shadow: 0 0 0 30px #09090b inset !important;
+  -webkit-text-fill-color: #e4e4e7 !important;
+  caret-color: #e4e4e7 !important;
+}
+
+input:-webkit-autofill {
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #e4e4e7 !important;
+}
+
+/* Override autofill label colors */
+input:-webkit-autofill::placeholder {
+  -webkit-text-fill-color: inherit !important;
+  color: inherit !important;
+  opacity: 0 !important;
+}
+
+/* Shadow removal for autofill */
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px #09090b inset !important;
 }
 
 /* Simple blinking cursor */

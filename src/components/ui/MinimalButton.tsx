@@ -28,7 +28,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
     const baseClasses = `
       inline-flex items-center justify-center rounded-lg font-medium
       transition-all duration-200 focus:outline-none
-      disabled:opacity-50 disabled:cursor-not-allowed
+      disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-100
       ${fullWidth ? "w-full" : ""}
     `;
 
@@ -56,22 +56,22 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
 
     const authVariants = {
       primary: `
-        bg-primary-600 hover:bg-primary-700 text-white
-        focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
-        shadow-lg shadow-primary-600/30 hover:shadow-xl hover:shadow-primary-600/40
+        bg-slate-700 hover:bg-slate-600 text-slate-50
+        focus:ring-2 focus:ring-slate-600/40 focus:ring-offset-1
+        shadow-lg shadow-slate-700/30 hover:shadow-xl hover:shadow-slate-700/40
       `,
       secondary: `
-        bg-neutral-800 hover:bg-neutral-700 text-neutral-200
+        bg-slate-700 hover:bg-slate-600 text-slate-50
         focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
-        border border-neutral-700 hover:border-neutral-600
+        border border-slate-600 hover:border-slate-500
       `,
       ghost: `
-        bg-transparent hover:bg-neutral-800 text-neutral-300 hover:text-neutral-100
+        bg-transparent hover:bg-slate-800 text-slate-300 hover:text-slate-100
         focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
       `,
       outline: `
-        bg-transparent border border-neutral-700 hover:border-primary-600
-        text-neutral-300 hover:text-neutral-100 hover:bg-neutral-800
+        bg-transparent border border-slate-700 hover:border-primary-600
+        text-slate-300 hover:text-slate-100 hover:bg-slate-800
         focus:ring-2 focus:ring-primary-600/40 focus:ring-offset-1
       `,
     };

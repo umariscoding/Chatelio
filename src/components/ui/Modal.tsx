@@ -46,11 +46,11 @@ const Modal: React.FC<ModalProps> = ({
       border: "border-neutral-800",
     },
     auth: {
-      background: "bg-neutral-950",
-      text: "text-neutral-100",
-      closeButton: "text-neutral-400 hover:text-neutral-300",
+      background: "bg-zinc-950",
+      text: "text-zinc-50",
+      closeButton: "text-zinc-400 hover:text-zinc-300",
       closeButtonBg: "bg-transparent",
-      border: "border-neutral-800",
+      border: "border-zinc-800",
     },
   };
 

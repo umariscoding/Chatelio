@@ -393,20 +393,20 @@ const ChatPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-lg text-gray-600">Loading...</p>
+      <div className="h-screen flex items-center justify-center bg-black">
+        <p className="text-lg text-zinc-500">Loading...</p>
       </div>
     );
   }
 
   if (error && !companyInfo) {
     return (
-      <div className="h-screen flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-white mb-2">
             Chatbot Not Found
           </h1>
-          <p className="text-gray-600">
+          <p className="text-zinc-400">
             {typeof error === "string"
               ? error
               : "An error occurred while loading the chatbot."}

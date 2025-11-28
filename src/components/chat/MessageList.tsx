@@ -55,7 +55,7 @@ const MessageList: React.FC<MessageListProps> = memo(
         <div
           className={`flex-1 flex items-center justify-center p-8 ${className}`}
         >
-          <p className="text-lg text-gray-600">Loading...</p>
+          <p className="text-lg text-zinc-500">Loading...</p>
         </div>
       );
     }
