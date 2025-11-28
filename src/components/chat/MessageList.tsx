@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, memo } from "react";
 import TypingIndicator from "./TypingIndicator";
-import type {
-  MessageListProps,
-  MessageBubbleProps,
-} from "@/types/interfaces";
+import type { MessageListProps, MessageBubbleProps } from "@/types/interfaces";
 
 const MessageBubble: React.FC<MessageBubbleProps> = memo(
   ({ message, isStreaming = false, className = "" }) => {

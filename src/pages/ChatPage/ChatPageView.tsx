@@ -53,7 +53,9 @@ interface ChatPageViewProps {
   onLogout: () => void;
   onShowAuthModal: (show: boolean) => void;
   onSetAuthMode: (mode: "login" | "signup") => void;
-  onSetAuthData: React.Dispatch<React.SetStateAction<{ email: string; password: string; name: string }>>;
+  onSetAuthData: React.Dispatch<
+    React.SetStateAction<{ email: string; password: string; name: string }>
+  >;
   onAuth: (e: React.FormEvent) => void;
 }
 
@@ -220,7 +222,9 @@ const ChatPageView: React.FC<ChatPageViewProps> = ({
               messages={messages}
               streamingMessage={streamingMessage}
               loading={isThinking}
-              chatbotTitle={companyInfo?.chatbot_title || companyInfo?.name || ""}
+              chatbotTitle={
+                companyInfo?.chatbot_title || companyInfo?.name || ""
+              }
               className="h-full pb-40 pt-4"
             />
             <div className="h-20"></div>
@@ -305,7 +309,10 @@ const ChatPageView: React.FC<ChatPageViewProps> = ({
                 type="password"
                 value={authData.password}
                 onChange={(e) =>
-                  onSetAuthData((prev) => ({ ...prev, password: e.target.value }))
+                  onSetAuthData((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
                 }
                 required
                 variant="floating"

@@ -65,6 +65,7 @@ The app extracts the company slug from the subdomain:
 - `chatbot1.chatelio.com` → slug: "chatbot1"
 
 For local development, add to your hosts file:
+
 ```
 127.0.0.1 chatbot1.localhost
 127.0.0.1 chatbot2.localhost
@@ -82,6 +83,7 @@ For local development, add to your hosts file:
 ## Architecture Pattern
 
 **Controller + Component + Thunk**:
+
 - **Controllers**: Business logic, state management
 - **Components (Views)**: Pure presentation
 - **Thunks**: Async operations (API calls)
@@ -91,6 +93,7 @@ Example: `ChatPage.tsx` (controller) + `ChatPageView.tsx` (component)
 ## API Integration
 
 Uses identical endpoints as the admin app:
+
 - `POST /users/guest/create`
 - `POST /users/login`
 - `POST /users/register`

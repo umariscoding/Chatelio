@@ -1,4 +1,14 @@
-import { X, Send, Edit, Trash, MoreVertical, LogOut, User as UserIcon, LogIn, MessageSquarePlus } from "lucide-react";
+import {
+  X,
+  Send,
+  Edit,
+  Trash,
+  MoreVertical,
+  LogOut,
+  User as UserIcon,
+  LogIn,
+  MessageSquarePlus,
+} from "lucide-react";
 
 interface IconProps {
   className?: string;

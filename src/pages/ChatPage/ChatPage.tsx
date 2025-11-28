@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import ChatPageView from "./ChatPageView";
 import type { Message, ModelType } from "@/types/chat";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
-import { setUserData, logout as logoutUser } from "@/store/slices/userAuthSlice";
+import {
+  setUserData,
+  logout as logoutUser,
+} from "@/store/slices/userAuthSlice";
 import { generateChatTitle } from "@/utils/chatUtils";
 import { parseSubdomain } from "@/utils/subdomainParser";
 import { getApiUrl } from "@/constants/api";
@@ -29,7 +32,8 @@ const ChatPage: React.FC = () => {
   const params = useParams();
 
   // Try to get slug from URL params first, then from subdomain
-  const slug = params.slug || parseSubdomain(window.location.hostname) || "default";
+  const slug =
+    params.slug || parseSubdomain(window.location.hostname) || "default";
 
   const userAuth = useAppSelector((state) => state.userAuth);
   const isUserLoggedIn = userAuth.isAuthenticated;
@@ -46,7 +50,11 @@ const ChatPage: React.FC = () => {
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
-  const [authData, setAuthData] = useState({ email: "", password: "", name: "" });
+  const [authData, setAuthData] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
   const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
@@ -97,7 +105,9 @@ const ChatPage: React.FC = () => {
       const companyData = await companyResponse.json();
       setCompanyInfo(companyData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to initialize chat");
+      setError(
+        err instanceof Error ? err.message : "Failed to initialize chat",
+      );
     } finally {
       setLoading(false);
     }
@@ -143,7 +153,9 @@ const ChatPage: React.FC = () => {
         ...(currentChatId && { chat_id: currentChatId }),
         ...(!currentChatId && { chat_title: generateChatTitle(message) }),
       };
-      const endpoint = isUserLoggedIn ? "/chat/send" : `/public/chatbot/${slug}/chat`;
+      const endpoint = isUserLoggedIn
+        ? "/chat/send"
+        : `/public/chatbot/${slug}/chat`;
       const headers: any = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
@@ -176,7 +188,10 @@ const ChatPage: React.FC = () => {
                 setCurrentChatId(data.chat_id);
                 setIsThinking(false);
                 setIsStreaming(true);
-                if (isUserLoggedIn && !chatHistory.find((c) => c.chat_id === data.chat_id)) {
+                if (
+                  isUserLoggedIn &&
+                  !chatHistory.find((c) => c.chat_id === data.chat_id)
+                ) {
                   const newChat: ChatHistory = {
                     chat_id: data.chat_id,
                     title: generateChatTitle(message),
@@ -222,10 +237,21 @@ const ChatPage: React.FC = () => {
     e.preventDefault();
     setAuthLoading(true);
     try {
-      const endpoint = authMode === "login" ? "/users/login" : "/users/register";
-      const payload = authMode === "login"
-        ? { email: authData.email.toLowerCase(), password: authData.password, company_id: companyInfo?.company_id }
-        : { email: authData.email.toLowerCase(), password: authData.password, name: authData.name, company_id: companyInfo?.company_id };
+      const endpoint =
+        authMode === "login" ? "/users/login" : "/users/register";
+      const payload =
+        authMode === "login"
+          ? {
+              email: authData.email.toLowerCase(),
+              password: authData.password,
+              company_id: companyInfo?.company_id,
+            }
+          : {
+              email: authData.email.toLowerCase(),
+              password: authData.password,
+              name: authData.name,
+              company_id: companyInfo?.company_id,
+            };
       const response = await fetch(getApiUrl(endpoint), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -273,12 +299,14 @@ const ChatPage: React.FC = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        const convertedMessages: Message[] = data.messages.map((msg: any, index: number) => ({
-          id: `${msg.role}-${index}`,
-          role: msg.role === "human" ? "human" : "ai",
-          content: msg.content,
-          timestamp: msg.timestamp * 1000,
-        }));
+        const convertedMessages: Message[] = data.messages.map(
+          (msg: any, index: number) => ({
+            id: `${msg.role}-${index}`,
+            role: msg.role === "human" ? "human" : "ai",
+            content: msg.content,
+            timestamp: msg.timestamp * 1000,
+          }),
+        );
         setMessages(convertedMessages);
       }
     } catch (err) {
@@ -303,7 +331,9 @@ const ChatPage: React.FC = () => {
         throw new Error(errorData.detail || "Failed to rename chat");
       }
       setChatHistory((prev) =>
-        prev.map((chat) => (chat.chat_id === chatId ? { ...chat, title: newTitle } : chat)),
+        prev.map((chat) =>
+          chat.chat_id === chatId ? { ...chat, title: newTitle } : chat,
+        ),
       );
     } catch (err) {
       console.error("Failed to rename chat:", err);
@@ -373,8 +403,14 @@ const ChatPage: React.FC = () => {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Chatbot Not Found</h1>
-          <p className="text-gray-600">{typeof error === "string" ? error : "An error occurred while loading the chatbot."}</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Chatbot Not Found
+          </h1>
+          <p className="text-gray-600">
+            {typeof error === "string"
+              ? error
+              : "An error occurred while loading the chatbot."}
+          </p>
         </div>
       </div>
     );

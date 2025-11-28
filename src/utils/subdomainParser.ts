@@ -12,7 +12,8 @@ export const parseSubdomain = (hostname: string): string | null => {
   const domainPart = parts[parts.length - 1].split(":")[0];
   const secondLastPart = parts[parts.length - 2]?.split(":")[0];
 
-  const isLocalhost = domainPart === "localhost" || secondLastPart === "localhost";
+  const isLocalhost =
+    domainPart === "localhost" || secondLastPart === "localhost";
 
   let subdomain: string | null = null;
 
@@ -49,7 +50,10 @@ export const parseSubdomain = (hostname: string): string | null => {
     "test",
   ];
 
-  const isValid = subdomain && !reservedSubdomains.includes(subdomain) && subdomain.length >= 3;
+  const isValid =
+    subdomain &&
+    !reservedSubdomains.includes(subdomain) &&
+    subdomain.length >= 3;
 
   return isValid ? subdomain : null;
 };
