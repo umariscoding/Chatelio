@@ -87,12 +87,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
           <button
             type="submit"
             disabled={!message.trim() || loading || disabled}
-            className="flex-shrink-0 w-8 h-8 bg-zinc-700 backdrop-blur-sm hover:bg-zinc-600 hover:shadow-md hover:shadow-zinc-900/50 disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-600 hover:border-zinc-500"
+            className="flex-shrink-0 p-2 hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
           >
             {loading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin" />
             ) : (
-              <Icons.Send className="w-4 h-4 text-white" />
+              <Icons.Send className="w-5 h-5 text-zinc-400" />
             )}
           </button>
         </div>
