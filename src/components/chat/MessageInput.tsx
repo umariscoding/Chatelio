@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import { Icons } from "@/components/ui";
 import type { MessageInputProps } from "@/interfaces/Chat.interface";
 import type { ModelType } from "@/types/chat";
+import { MODEL_OPTIONS } from "@/types/chat";
 
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
@@ -16,10 +17,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
 }) => {
   const [message, setMessage] = useState("");
   const [isMultiline, setIsMultiline] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<ModelType>("Llama-instant");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // Always use OpenAI model as default
-  const selectedModel: ModelType = "OpenAI";
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -94,17 +93,35 @@ const MessageInput: React.FC<MessageInputProps> = ({
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={!message.trim() || loading || disabled}
-            className="flex-shrink-0 w-8 h-8 bg-zinc-700/60 backdrop-blur-sm hover:bg-zinc-600/70 hover:shadow-md hover:shadow-zinc-400/20 disabled:bg-zinc-900/30 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-500/30 hover:border-zinc-400/50"
-          >
-            {loading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Icons.Send className="w-4 h-4 text-white" />
-            )}
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Model Selector Dropdown */}
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value as ModelType)}
+              disabled={loading || disabled}
+              className="text-xs bg-zinc-800/80 text-zinc-300 border border-zinc-600/50 rounded-full px-3 py-1.5 focus:outline-none focus:border-zinc-500 hover:bg-zinc-700/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              title={MODEL_OPTIONS.find(m => m.value === selectedModel)?.description}
+            >
+              {MODEL_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            {/* Send Button */}
+            <button
+              type="submit"
+              disabled={!message.trim() || loading || disabled}
+              className="w-8 h-8 bg-zinc-700/60 backdrop-blur-sm hover:bg-zinc-600/70 hover:shadow-md hover:shadow-zinc-400/20 disabled:bg-zinc-900/30 disabled:text-zinc-600 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-all border border-zinc-500/30 hover:border-zinc-400/50"
+            >
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Icons.Send className="w-4 h-4 text-white" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Hint text */}
